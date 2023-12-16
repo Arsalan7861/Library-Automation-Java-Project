@@ -13,13 +13,18 @@ public class Main {
         LibraryManagementSystem.addBook(book3);
         Books book4 = new Books("0004","The Alchemist","Paulo Coelho","Fantasy",true,1988);
         LibraryManagementSystem.addBook(book4);
-        Books book5 = new Books("The Bridges of Madison County","Robert Waller","0005","Romance",true,1992);
-        Books book6 = new Books("Black Beauty","Anna Sewel","0006","Novel",true,1877);
-        Books book7 = new Books("The Ginger Man","J. Donleavy","0007","Novel",true,1955);
-        Books book8 = new Books("The day lasts more than 100 years","Chyngyz Aytmatov","0008","Romance",true,1975);
-        Books book9 = new Books("The first Teacher","Chyngyz Aytmatov","0009","Novel",true,1987);
-        Books book10 = new Books("Crime and Punishment","Fedor Dostoevsky","0010","Romance",true,1889);
-
+        Books book5 = new Books("0005","The Bridges of Madison County","Robert Waller","Romance",true,1992);
+        LibraryManagementSystem.addBook(book5);
+        Books book6 = new Books("0006","Black Beauty","Anna Sewel","Novel",true,1877);
+        LibraryManagementSystem.addBook(book6);
+        Books book7 = new Books("0007","The Ginger Man","J. Donleavy","Novel",true,1955);
+        LibraryManagementSystem.addBook(book7);
+        Books book8 = new Books("0008","The day lasts more than 100 years","Chyngyz Aytmatov","Romance",true,1975);
+        LibraryManagementSystem.addBook(book8);
+        Books book9 = new Books("0009","The first Teacher","Chyngyz Aytmatov","Novel",true,1987);
+        LibraryManagementSystem.addBook(book9);
+        Books book10 = new Books("0010","Crime and Punishment","Fedor Dostoevsky","Romance",true,1889);
+        LibraryManagementSystem.addBook(book10);
 
         LibraryManagementSystem libraryManagementSystem = new LibraryManagementSystem();
 
