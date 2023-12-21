@@ -2,17 +2,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 public class LibraryManagementApp extends JFrame {
         private JButton loginButton;
         private JButton signUpButton;
 
         public LibraryManagementApp() {
+            setTitle("Library");
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setSize(700,600);
             setLocationRelativeTo(null);
             setResizable(false);//Turns off the minimize button.
             setVisible(true);
+
+            ImageIcon icon = new ImageIcon("icon.jpg");
+            setIconImage(icon.getImage());//Set an icon to the frame.
 
             loginButton = new JButton("Login");
             signUpButton = new JButton("Sign Up");
