@@ -8,8 +8,8 @@ public class Borrowers extends User{
         return tax;
     }
 
-    public Borrowers(String name, String email, int age, String userID, String password, double tax) {
-        super(name, email, age, userID, password);
+    public Borrowers(int userID,String name, String email, int age, String password, double tax) {
+        super(userID,name, email, age,password);
         this.tax = tax;
     }
 

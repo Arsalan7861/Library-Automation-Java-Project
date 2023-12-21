@@ -9,8 +9,8 @@ public class Admin extends User{
         return status;
     }
 
-    public Admin(String name, String email, int age, String userID, String password, String status) {
-        super(name, email, age, userID, password);
+    public Admin(int userID,String name, String email, int age, String password, String status) {
+        super( userID,name, email, age, password);
         this.status = status;
     }
 
