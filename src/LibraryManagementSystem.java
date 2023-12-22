@@ -4,17 +4,17 @@ import java.util.*;
 
 public class LibraryManagementSystem {
 
-    public static List<Books> allbooks = new ArrayList<>();
-    public ArrayList<User> borrowers = new ArrayList<>();
-    public static List<NormalUser> allusers = new ArrayList<>();
-    private ArrayList<Transaction> alltransaction = new ArrayList<>();
+    public static ArrayList<Books> allbooks = new ArrayList<>();
+    public static ArrayList<User> borrowers = new ArrayList<>();
+    public static ArrayList<NormalUser> allusers = new ArrayList<>();
+    private static ArrayList<Transaction> alltransaction = new ArrayList<>();
 
     public static List<Books> getAllbooks() {
         return allbooks;
     }
 
     public static void addUser(NormalUser user) {
-        List<NormalUser> existingUsers = readUsersFromFile("users.txt");
+        ArrayList<NormalUser> existingUsers = readUsersFromFile("users.txt");
         allusers.add(user);
         writeUsersToFile(allusers,"users.txt");
     }
@@ -125,8 +125,8 @@ public class LibraryManagementSystem {
         return false;
     }
     //Read user information from file.
-    public static List<NormalUser> readUsersFromFile(String usersFilePath) {
-        List<NormalUser> users = new ArrayList<>();
+    public static ArrayList<NormalUser> readUsersFromFile(String usersFilePath) {
+        ArrayList<NormalUser> users = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(usersFilePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -169,8 +169,8 @@ public class LibraryManagementSystem {
         return false;
     }
     //Reads book information from file.
-    public static List<Books> readBooksFromFile(String booksFilePath) {
-        List<Books> books = new ArrayList<>();
+    public static ArrayList<Books> readBooksFromFile(String booksFilePath) {
+        ArrayList<Books> books = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(booksFilePath))) {
             String line;
             while ((line = reader.readLine()) != null) {

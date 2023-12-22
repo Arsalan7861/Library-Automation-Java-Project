@@ -2,7 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+
 public class LibraryManagementApp extends JFrame {
+        static String booksFilePath = "books.txt";
+        static String usersFilePAth = "users.txt";
         private JButton loginButton;
         private JButton signUpButton;
 
@@ -47,6 +52,7 @@ public class LibraryManagementApp extends JFrame {
         }
         //When login button is clicked the tasks that are in login page.
         private void openLoginPage() {
+            User admin = new Admin(100, "Arsalan", "arsalan@gmail.com", 21, "12345", "admin");
             JFrame loginFrame = new JFrame("Login Page");
             loginFrame.setSize(300,200);
 
@@ -71,7 +77,7 @@ public class LibraryManagementApp extends JFrame {
                     String password = new String(passwordsChars);
 
                     if (LibraryManagementSystem.authenticateUserbyPassword(userId, password)) {
-                        JOptionPane.showMessageDialog(null, "Login successful!");
+//                        JOptionPane.showMessageDialog(null, "Login successful!");
                         loginFrame.dispose();
                         openMainApplicationPage();
                     } else {
@@ -150,12 +156,58 @@ public class LibraryManagementApp extends JFrame {
             signUpFrame.setVisible(true);
         }
         private void openMainApplicationPage(){
+            JFrame mainFrame = new JFrame("Main page");
+            mainFrame.setSize(700, 600);
+            mainFrame.setLocationRelativeTo(null);
+            mainFrame.setVisible(true);
+            mainFrame.setResizable(false);
 
+            JPanel panel = new JPanel();
+            mainFrame.add(panel);
+
+            JMenuBar menuBar = new JMenuBar();
+            JMenu menu = new JMenu("File");
+            JMenuItem bookMenu = new JMenuItem("Books");
+            ImageIcon bookIcon = new ImageIcon("book.png");
+            bookMenu.setIcon(bookIcon);
+            bookMenu.setIconTextGap(10);
+            bookMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, ActionEvent.CTRL_MASK));
+
+            JTextArea textArea = new JTextArea();
+            textArea.setEditable(false); // Make it non-editable
+            // Set the font for the JTextArea
+            Font customFont = new Font("Arial", Font.PLAIN, 18);
+            textArea.setFont(customFont);
+            mainFrame.add(textArea);
+
+            bookMenu.addActionListener(e -> {
+                ArrayList<Books> books = LibraryManagementSystem.readBooksFromFile(booksFilePath);
+                for (Books book : books) {
+                    textArea.append(book.toString() + "\n");
+                }
+                mainFrame.pack();//Set the frame according to the text.
+                mainFrame.setLocationRelativeTo(null); // Center the frame
+                mainFrame.setResizable(false);
+            });
+
+            JMenuItem exitMenuItem = new JMenuItem("Exit");
+            ImageIcon exitIcon = new ImageIcon("exit.jpg");
+            exitMenuItem.setIcon(exitIcon);
+            exitMenuItem.setIconTextGap(10);
+            exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
+            exitMenuItem.addActionListener(e -> {
+                mainFrame.dispose();
+            });
+
+            menu.add(bookMenu);
+            menu.addSeparator();//Adds line between menu items.
+            menu.add(exitMenuItem);
+            menuBar.add(menu);
+            mainFrame.setJMenuBar(menuBar);
         }
 
         public static void main(String[] args) {
-            String booksFilePath = "books.txt";
-            String usersFilePAth = "users.txt";
+
             LibraryManagementSystem.allbooks=LibraryManagementSystem.readBooksFromFile(booksFilePath);
             LibraryManagementSystem.allusers=LibraryManagementSystem.readUsersFromFile(usersFilePAth);
             SwingUtilities.invokeLater(new Runnable() {
