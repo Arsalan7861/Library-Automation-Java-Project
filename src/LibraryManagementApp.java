@@ -37,7 +37,7 @@ public class LibraryManagementApp extends JFrame {
             JPanel mainPanel = new JPanel(){
                 protected void paintComponent(Graphics g){
                     super.paintComponent(g);
-                    ImageIcon backgroundImage = new ImageIcon("C:\\Users\\Arsalan Khroush\\OneDrive\\Desktop\\Library Automation Java Project\\millet.jpg");
+                    ImageIcon backgroundImage = new ImageIcon("millet.jpg");
                     // Scale the image to fit the panel.
                     Image scaledImage = backgroundImage.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
                     ImageIcon scaledIcon = new ImageIcon(scaledImage);
