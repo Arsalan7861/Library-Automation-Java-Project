@@ -4,18 +4,19 @@ import java.util.*;
 
 public class LibraryManagementSystem {
 
-    public static List<Books> allbooks = new ArrayList<>();
-    public ArrayList<User> borrowers = new ArrayList<>();
-    public static ArrayList<User> allusers = new ArrayList<>();
-    private ArrayList<Transaction> alltransaction = new ArrayList<>();
+    public static ArrayList<Books> allbooks = new ArrayList<>();
+    public static ArrayList<User> borrowers = new ArrayList<>();
+    public static ArrayList<NormalUser> allusers = new ArrayList<>();
+    private static ArrayList<Transaction> alltransaction = new ArrayList<>();
 
     public static List<Books> getAllbooks() {
         return allbooks;
     }
 
     public static void addUser(NormalUser user) {
+        ArrayList<NormalUser> existingUsers = readUsersFromFile("users.txt");
         allusers.add(user);
-
+        writeUsersToFile(allusers,"users.txt");
     }
 
     public void addBorrower(Borrowers borrower) {
@@ -99,10 +100,55 @@ public class LibraryManagementSystem {
             System.out.println(user.getName());
         }
     }
-
-    public static void writeBooksToFile(List<Books> books, String filePath) {
-        List<Books> existingBooks = readBooksFromFile(filePath);
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+    //Writes user information to the file.
+    public static void writeUsersToFile(List<NormalUser> users, String usersFilePath){
+        List<NormalUser> existingUsers = readUsersFromFile(usersFilePath);
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(usersFilePath,true))){
+            for (NormalUser user : users){
+                if (!containsUsersWithId(existingUsers,user.getUserID())){
+                    writer.write(user.getUserID() + ", " + user.getName() + ", " + user.getEmail() + "," + user.getAge() + "," + user.getPassword());
+                    writer.newLine();
+                }
+            }
+            }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    //Used in writeUsersToFile method checking the user ID if they are equal or not.
+    private static boolean containsUsersWithId(List<NormalUser> users, int userId) {
+        for (NormalUser user : users) {
+            if (user.getUserID() == userId) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //Read user information from file.
+    public static ArrayList<NormalUser> readUsersFromFile(String usersFilePath) {
+        ArrayList<NormalUser> users = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(usersFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 5) {
+                    int userId = Integer.parseInt(parts[0]);
+                    String name = parts[1];
+                    String email = parts[2];
+                    int age = Integer.parseInt(parts[3]);
+                    String password = parts[4];
+                    users.add(new NormalUser(userId,name,email,age,password));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+    //Writes book information to the file.
+    public static void writeBooksToFile(List<Books> books, String booksFilePath) {
+        List<Books> existingBooks = readBooksFromFile(booksFilePath);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(booksFilePath, true))) {
             for (Books book : books) {
                 if (!containsBookWithId(existingBooks, book.getBookId())) {
                     writer.write(book.getBookId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getGenre() + "," + book.isAvailable() + "," + book.getYearPublished() + ",");
@@ -113,10 +159,19 @@ public class LibraryManagementSystem {
             e.printStackTrace();
         }
     }
-
-    public static List<Books> readBooksFromFile(String filePath) {
-        List<Books> books = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+    //Used in writeBooksToFile method checking the user ID if they are equal or not.
+    private static boolean containsBookWithId(List<Books> books, String bookId) {
+        for (Books book : books) {
+            if (book.getBookId().equals(bookId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //Reads book information from file.
+    public static ArrayList<Books> readBooksFromFile(String booksFilePath) {
+        ArrayList<Books> books = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(booksFilePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
@@ -135,14 +190,24 @@ public class LibraryManagementSystem {
         }
         return books;
     }
-
-
-    private static boolean containsBookWithId(List<Books> books, String bookId) {
-        for (Books book : books) {
-            if (book.getBookId().equals(bookId)) {
+    //When logging in checks the userId and the password if it is correct or not.
+    public static boolean authenticateUserbyPassword(int userId,String password){
+        for (NormalUser user : allusers){
+            if (user.getUserID() == userId && user.getPassword().equals(password)){
                 return true;
             }
         }
         return false;
+    }
+    //Gives an ID to new user.
+    public static int generateUserId(){
+        int newUserId;
+        if (allusers.isEmpty()){
+            newUserId = 1;
+        }
+        else {
+            newUserId = allusers.getLast().getUserID() + 1;
+        }
+        return newUserId;
     }
 }

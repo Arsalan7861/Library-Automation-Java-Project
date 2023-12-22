@@ -1,10 +1,12 @@
+import javax.swing.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String filePath = "Books.txt";
+        String booksFilePath = "books.txt";
+        String usersFilePAth = "users.txt";
         Books book1 = new Books("0001","The tale of two cities","Charles Dickens","historical fiction",true,1859);
         LibraryManagementSystem.addBook(book1);
         Books book2 = new Books("0002","The little prince","Antoine de SAint Exupery","Fantasy",true,1943);
@@ -13,36 +15,19 @@ public class Main {
         LibraryManagementSystem.addBook(book3);
         Books book4 = new Books("0004","The Alchemist","Paulo Coelho","Fantasy",true,1988);
         LibraryManagementSystem.addBook(book4);
-        Books book5 = new Books("0005","The Bridges of Madison County","Robert Waller","Romance",true,1992);
-        LibraryManagementSystem.addBook(book5);
-        Books book6 = new Books("0006","Black Beauty","Anna Sewel","Novel",true,1877);
-        LibraryManagementSystem.addBook(book6);
-        Books book7 = new Books("0007","The Ginger Man","J. Donleavy","Novel",true,1955);
-        LibraryManagementSystem.addBook(book7);
-        Books book8 = new Books("0008","The day lasts more than 100 years","Chyngyz Aytmatov","Romance",true,1975);
-        LibraryManagementSystem.addBook(book8);
-        Books book9 = new Books("0009","The first Teacher","Chyngyz Aytmatov","Novel",true,1987);
-        LibraryManagementSystem.addBook(book9);
-        Books book10 = new Books("0010","Crime and Punishment","Fedor Dostoevsky","Romance",true,1889);
-        LibraryManagementSystem.addBook(book10);
+        Books book5 = new Books("The Bridges of Madison County","Robert Waller","0005","Romance",true,1992);
+        Books book6 = new Books("Black Beauty","Anna Sewel","0006","Novel",true,1877);
+        Books book7 = new Books("The Ginger Man","J. Donleavy","0007","Novel",true,1955);
+        Books book8 = new Books("The day lasts more than 100 years","Chyngyz Aytmatov","0008","Romance",true,1975);
+        Books book9 = new Books("The first Teacher","Chyngyz Aytmatov","0009","Novel",true,1987);
+        Books book10 = new Books("Crime and Punishment","Fedor Dostoevsky","0010","Romance",true,1889);
+        NormalUser user1 = new NormalUser(6767,"Kazybek Kulmatov","kazy@gmail.com",21,"12345");
+        LibraryManagementSystem.addUser(user1);
+        NormalUser user2 = new NormalUser(002,"Arsalan Khroush","ars@gmail.com",21,"4321");
+        LibraryManagementSystem.addUser(user2);
+
 
         LibraryManagementSystem libraryManagementSystem = new LibraryManagementSystem();
-
-
-//        System.out.println("//Janra gore kitap arama (Fantasy) ");
-//        SearchBook.searchBooksByGenre(LibraryManagementSystem.allbooks,"Fantasy");
-//        System.out.println();
-//        System.out.println("//Yilina gore kitap arama ");
-//        List<Books> byYearbooks = SearchBook.searchBooksByYear(LibraryManagementSystem.allbooks,1948);
-//        for (Books book : byYearbooks){
-//            System.out.println(book.getTitle());
-//        }
-//        System.out.println("//Ilk ve son harfine gore kitap arama");
-//        List<Books> bytitleBooks = SearchBook.searchBooksByTitle('A','J');
-//        for (Books book : bytitleBooks){
-//            System.out.println(book.getTitle());
-//        }
-
         System.out.println("//Yazarin kitaplarini listeleme");
         SearchBook.findBooksbyAuthors("Chyngyz Aytmatov");
 
@@ -57,21 +42,8 @@ public class Main {
         for (Books book : LibraryManagementSystem.allbooks){
             System.out.println(book.getBookId() + " " + book.getTitle());
         }
-        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks,filePath);
-
-        System.out.println("Read: ");
-        List<Books> existingBooks = LibraryManagementSystem.readBooksFromFile(filePath);
-
-        System.out.println("Existing Books:");
-        for (Books book : existingBooks) {
-            System.out.println(book.getBookId() + "," +
-                    book.getTitle() + "," +
-                    book.getAuthor() + "," +
-                    book.getGenre() + "," +
-                    book.isAvailable() + "," +
-                    book.getYearPublished());
-        }
-
+        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks,booksFilePath);
+        LibraryManagementSystem.writeUsersToFile(LibraryManagementSystem.allusers,usersFilePAth);
     }
 
     }

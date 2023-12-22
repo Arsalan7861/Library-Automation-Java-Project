@@ -65,4 +65,14 @@ public class Books{
             System.out.println("The book is already available");
         }
     }
+
+    @Override
+    public String toString() {
+        return  "Book ID = '" + bookId + '\'' +
+                ", Title = '" + title + '\'' +
+                ", Author = '" + author + '\'' +
+                ", Genre = '" + genre + '\'' +
+                ", Availability = " + available +
+                ", Published Year = " + yearPublished;
+    }
 }
