@@ -203,7 +203,7 @@ public class LibraryManagementApp extends JFrame {
             menu.addSeparator();//Adds line between menu items.
             menu.add(exitMenuItem);
             menuBar.add(menu);
-            mainFrame.setJMenuBar(menuBar);//adfadf
+            mainFrame.setJMenuBar(menuBar);
         }
 
         public static void main(String[] args) {
