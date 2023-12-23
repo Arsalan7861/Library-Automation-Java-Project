@@ -236,7 +236,7 @@ public class LibraryManagementApp extends JFrame {
                     userFrame.setSize(700, 600);
 
                     JPanel userPAnel = new JPanel(new GridLayout(5,2)){
-                        protected void paintComponent(Graphics g){
+                        protected void paintComponent(Graphics g){//Change the background od user panel.
                             super.paintComponent(g);
                             ImageIcon backgroundImage = new ImageIcon("user.png");
                             // Scale the image to fit the panel.
