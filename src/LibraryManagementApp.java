@@ -10,8 +10,6 @@ public class LibraryManagementApp extends JFrame {
     static String usersFilePAth = "users.txt";
     private JButton loginButton;
     private JButton signUpButton;
-    private CardLayout cardLayout;
-    private JPanel cardPanel;
 
     public LibraryManagementApp() {
         setTitle("Library");
@@ -186,7 +184,7 @@ public class LibraryManagementApp extends JFrame {
             }catch (CustomException exception){
                 JOptionPane.showMessageDialog(null, exception.getMessage() + ": Name, email and password fields cannot be empty!");
             }catch (NumberFormatException exception){
-                JOptionPane.showMessageDialog(null, "String value is not accepted as an age!");
+                JOptionPane.showMessageDialog(null, "String value is not accepted in the age field!");
                 ageField.setText("");//Clearing the field after the error.
             }
         });
