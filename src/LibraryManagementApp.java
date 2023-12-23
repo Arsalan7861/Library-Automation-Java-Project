@@ -10,6 +10,7 @@ public class LibraryManagementApp extends JFrame {
     static String usersFilePAth = "users.txt";
     private JButton loginButton;
     private JButton signUpButton;
+    public int timelyUserId;//to keep user's ID when logged in.
 
     public LibraryManagementApp() {
         setTitle("Library");
@@ -23,7 +24,9 @@ public class LibraryManagementApp extends JFrame {
         setIconImage(icon.getImage());//Set an icon to the frame.
 
         loginButton = new JButton("Login");
+        loginButton.setFocusPainted(false);//Remove the button focus.
         signUpButton = new JButton("Sign Up");
+        signUpButton.setFocusPainted(false);
 
         Font defaultFont = new Font("Rockwell",Font.PLAIN, 50);
 
@@ -63,6 +66,8 @@ public class LibraryManagementApp extends JFrame {
         passwordField.setFont(textFieldFont);
 
         JButton loginSubmitButton = new JButton("Submit");
+        loginSubmitButton.setFocusPainted(false);//Remove the button focus.
+
         loginSubmitButton.setFont(textFieldFont);
 
         Font labelFont = new Font("Rockwell", Font.PLAIN, 25);//Set font for the labels.
@@ -90,6 +95,7 @@ public class LibraryManagementApp extends JFrame {
                 String password = new String(passwordsChars);
 
                 if (LibraryManagementSystem.authenticateUserbyPassword(userId, password)) {
+                    timelyUserId = userId;
                     JOptionPane.showMessageDialog(null, "Login successful!");
                     loginFrame.dispose();
                     openMainApplicationPage();
@@ -105,6 +111,8 @@ public class LibraryManagementApp extends JFrame {
                 passwordField.setText("");
             }
         });
+        //Set the default(Enter) button to loginSubmitButton
+        loginFrame.getRootPane().setDefaultButton(loginSubmitButton);
 
         loginFrame.setVisible(true);
     }
@@ -125,7 +133,9 @@ public class LibraryManagementApp extends JFrame {
         ageField.setFont(textFieldFont);
         JPasswordField passwordField = new JPasswordField();
         passwordField.setFont(textFieldFont);
+
         JButton signUpSubmitButton = new JButton("Submit");
+        signUpSubmitButton.setFocusPainted(false);//Remove the button focus.
         signUpSubmitButton.setFont(textFieldFont);
 
         JPanel signUpPanel = new JPanel(new GridLayout(5,2));
@@ -188,6 +198,9 @@ public class LibraryManagementApp extends JFrame {
                 ageField.setText("");//Clearing the field after the error.
             }
         });
+        //Set the default(Enter) button to signUpSubmitButton
+        signUpFrame.getRootPane().setDefaultButton(signUpSubmitButton);
+
         signUpFrame.setVisible(true);
     }
     private void openMainApplicationPage(){
@@ -197,59 +210,121 @@ public class LibraryManagementApp extends JFrame {
         mainFrame.setVisible(true);
         mainFrame.setResizable(false);
 
-        JPanel panel = new JPanel();
+//        JPanel panel = new JPanel();
+        //Adding background image to the panel.
+        JPanel panel = new JPanel(){
+            protected void paintComponent(Graphics g){
+                super.paintComponent(g);
+                ImageIcon backgroundImage = new ImageIcon("R.jpeg");
+                // Scale the image to fit the panel.
+                Image scaledImage = backgroundImage.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
+                ImageIcon scaledIcon = new ImageIcon(scaledImage);
+                scaledIcon.paintIcon(this, g, 0, 0);
+            }
+        };
         mainFrame.add(panel);
 
-        JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("File");
-        JMenuItem bookMenu = new JMenuItem("Books");
-        ImageIcon bookIcon = new ImageIcon("book.png");
-        bookMenu.setIcon(bookIcon);
-        bookMenu.setIconTextGap(10);
-        bookMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, ActionEvent.CTRL_MASK));
+        JButton userButton = new JButton("Me");
+        userButton.setFocusPainted(false);//Remove the focus button.
+        panel.add(userButton);
 
-        JTextArea textArea = new JTextArea();
-        textArea.setEditable(false); // Make it non-editable
-        // Set the font for the JTextArea
-        Font customFont = new Font("Arial", Font.PLAIN, 18);
-        textArea.setFont(customFont);
-        mainFrame.add(textArea);
+        userButton.addActionListener(e -> {
+            for (NormalUser user: LibraryManagementSystem.allusers){
+                if (timelyUserId == user.getUserID()){
+                    JFrame userFrame = new JFrame("User Info");
+                    userFrame.setResizable(false);
+                    userFrame.setSize(700, 600);
 
-        bookMenu.addActionListener(e -> {
-            ArrayList<Books> books = LibraryManagementSystem.readBooksFromFile(booksFilePath);
-            for (Books book : books) {
-                textArea.append(book.toString() + "\n");
+                    JPanel userPAnel = new JPanel(new GridLayout(5,2)){
+                        protected void paintComponent(Graphics g){
+                            super.paintComponent(g);
+                            ImageIcon backgroundImage = new ImageIcon("user.png");
+                            // Scale the image to fit the panel.
+                            Image scaledImage = backgroundImage.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
+                            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+                            scaledIcon.paintIcon(this, g, 0, 0);
+                        }
+                    };
+                    userFrame.add(userPAnel);
+
+                    Font labelFont = new Font("Rockwell", Font.PLAIN, 25);//Set font for the labels.
+                    Color labelColor = Color.white;
+                    JLabel userIdLabel = new JLabel("User ID:");
+                    userIdLabel.setFont(labelFont);
+                    userIdLabel.setForeground(labelColor);
+                    userPAnel.add(userIdLabel);
+
+                    JLabel idLabel = new JLabel(String.valueOf(user.getUserID()));
+                    idLabel.setFont(labelFont);
+                    idLabel.setForeground(labelColor);
+                    userPAnel.add(idLabel);
+
+
+                    JLabel nameLabel = new JLabel("Name:");
+                    nameLabel.setFont(labelFont);
+                    nameLabel.setForeground(labelColor);
+                    userPAnel.add(nameLabel);
+
+                    JLabel nameLabel1 = new JLabel(user.getName());
+                    nameLabel1.setFont(labelFont);
+                    nameLabel1.setForeground(labelColor);
+                    userPAnel.add(nameLabel1);
+
+
+                    JLabel emailLabel = new JLabel("Email:");
+                    emailLabel.setFont(labelFont);
+                    emailLabel.setForeground(labelColor);
+                    userPAnel.add(emailLabel);
+
+                    JLabel emailLabel1 = new JLabel(user.getEmail());
+                    emailLabel1.setFont(labelFont);
+                    emailLabel1.setForeground(labelColor);
+                    userPAnel.add(emailLabel1);
+
+                    JLabel ageLabel = new JLabel("Age:");
+                    ageLabel.setFont(labelFont);
+                    ageLabel.setForeground(labelColor);
+                    userPAnel.add(ageLabel);
+
+                    JLabel ageLabel1 = new JLabel(String.valueOf(user.getAge()));
+                    ageLabel1.setFont(labelFont);
+                    ageLabel1.setForeground(labelColor);
+                    userPAnel.add(ageLabel1);
+
+                    JLabel passLabel = new JLabel("Password:");
+                    passLabel.setFont(labelFont);
+                    passLabel.setForeground(labelColor);
+                    userPAnel.add(passLabel);
+
+                    JLabel passLabel1 = new JLabel(user.getPassword());
+                    passLabel1.setFont(labelFont);
+                    passLabel1.setForeground(labelColor);
+                    userPAnel.add(passLabel1);
+
+                    userFrame.setVisible(true);
+                    userFrame.setLocationRelativeTo(null);
+                }
             }
-            mainFrame.pack();//Set the frame according to the text.
-            mainFrame.setLocationRelativeTo(null); // Center the frame
-            mainFrame.setResizable(false);
         });
-
-        JMenuItem exitMenuItem = new JMenuItem("Exit");
-        ImageIcon exitIcon = new ImageIcon("exit.jpg");
-        exitMenuItem.setIcon(exitIcon);
-        exitMenuItem.setIconTextGap(10);
-        exitMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
-        exitMenuItem.addActionListener(e -> {
-            mainFrame.dispose();
-        });
-
-        menu.add(bookMenu);
-        menu.addSeparator();//Adds line between menu items.
-        menu.add(exitMenuItem);
-        menuBar.add(menu);
-        mainFrame.setJMenuBar(menuBar);
     }
 
     public static void main(String[] args) {
+        Admin admin = new Admin(1313, "Kazybek", "kazy@gmail.com", 21, "123", "admin");
 
         LibraryManagementSystem.allbooks=LibraryManagementSystem.readBooksFromFile(booksFilePath);
         LibraryManagementSystem.allusers=LibraryManagementSystem.readUsersFromFile(usersFilePAth);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new LibraryManagementApp();
+        EventQueue.invokeLater(() -> {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    try {
+                        UIManager.setLookAndFeel(info.getClassName());
+                    } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                }
             }
+            new LibraryManagementApp();
         });
         LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks,booksFilePath);
         LibraryManagementSystem.writeUsersToFile(LibraryManagementSystem.allusers,usersFilePAth);
