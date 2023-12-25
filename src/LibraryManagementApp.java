@@ -210,7 +210,6 @@ public class LibraryManagementApp extends JFrame {
         mainFrame.setVisible(true);
         mainFrame.setResizable(false);
 
-//        JPanel panel = new JPanel();
         //Adding background image to the panel.
         JPanel panel = new JPanel(){
             protected void paintComponent(Graphics g){
@@ -223,9 +222,12 @@ public class LibraryManagementApp extends JFrame {
             }
         };
         mainFrame.add(panel);
-
+        Font buttonFont = new Font("Rockwell", Font.BOLD, 20);//Set font for the buttons.
+        //Making me button.
         JButton userButton = new JButton("Me");
         userButton.setFocusPainted(false);//Remove the focus button.
+        userButton.setPreferredSize(new Dimension(150, 80));//Set size of the button manually.
+        userButton.setFont(buttonFont);
         panel.add(userButton);
 
         userButton.addActionListener(e -> {
@@ -236,7 +238,7 @@ public class LibraryManagementApp extends JFrame {
                     userFrame.setSize(700, 600);
 
                     JPanel userPAnel = new JPanel(new GridLayout(5,2)){
-                        protected void paintComponent(Graphics g){
+                        protected void paintComponent(Graphics g){//Change user interface's background.
                             super.paintComponent(g);
                             ImageIcon backgroundImage = new ImageIcon("user.png");
                             // Scale the image to fit the panel.
@@ -258,7 +260,6 @@ public class LibraryManagementApp extends JFrame {
                     idLabel.setFont(labelFont);
                     idLabel.setForeground(labelColor);
                     userPAnel.add(idLabel);
-
 
                     JLabel nameLabel = new JLabel("Name:");
                     nameLabel.setFont(labelFont);
@@ -305,6 +306,30 @@ public class LibraryManagementApp extends JFrame {
                     userFrame.setLocationRelativeTo(null);
                 }
             }
+        });
+        //Making button for seeing the books.
+        JButton booksButton = new JButton("All Books");
+        booksButton.setFont(buttonFont);
+        booksButton.setFocusPainted(false);
+        booksButton.setPreferredSize(new Dimension(150, 80));
+        panel.add(booksButton);
+
+        booksButton.addActionListener(e -> {
+            JFrame bookFrame = new JFrame("Books");
+            bookFrame.setResizable(false);
+            bookFrame.setSize(700, 600);
+
+            JPanel bookPanel = new JPanel();
+            bookPanel.setBackground(Color.CYAN);
+            bookFrame.add(bookPanel);
+
+            JTextArea booksTextArea = new JTextArea();
+            booksTextArea.setEditable(false);
+            booksTextArea.setText(LibraryManagementSystem.readBooksFromFile(booksFilePath));
+
+
+            bookFrame.setLocationRelativeTo(null);
+            bookFrame.setVisible(true);
         });
     }
 
