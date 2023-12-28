@@ -384,14 +384,16 @@ public class LibraryManagementApp extends JFrame {
         addBook.setFocusPainted(false);
         addBook.setPreferredSize(new Dimension(150, 80));
         panel.add(addBook);
+        //When clicked, It opens the frame for adding the book.
         addBook.addActionListener(e -> {
+            //Making new frame for adding new book.
             JFrame addBookFrame = new JFrame("Add Book");
             addBookFrame.setResizable(false);
             addBookFrame.setSize(600, 400);
             addBookFrame.setLocationRelativeTo(null);
             addBookFrame.setVisible(true);
 
-            JPanel addBookPanel = new JPanel(new GridLayout(5, 2));
+            JPanel addBookPanel = new JPanel(new GridLayout(5, 2));//Adding panel to frame.
             addBookFrame.add(addBookPanel);
 
             Font labelFont = new Font("Rockwell", Font.PLAIN, 18);//Set font for the labels.
@@ -443,6 +445,7 @@ public class LibraryManagementApp extends JFrame {
             JButton addButton = new JButton("Add");//Adding button for adding the book to library.
             addBookPanel.add(addButton);
 
+            //Adds the book to library when the button is clicked.
             addButton.addActionListener(e1 -> {
             try {
                 int bookId = LibraryManagementSystem.generateBookId();//Generates new ID for the book.
@@ -468,7 +471,6 @@ public class LibraryManagementApp extends JFrame {
                 JOptionPane.showMessageDialog(null, customException.getMessage() + ": Fields cannot be empty!");
             }
             });
-
         });
     }
 
