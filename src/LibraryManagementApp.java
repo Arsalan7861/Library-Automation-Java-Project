@@ -303,6 +303,7 @@ public class LibraryManagementApp extends JFrame {
                 }
             }
         });
+
         //Making button for seeing the books.
         JButton booksButton = new JButton("All Books");
         booksButton.setFont(buttonFont);
