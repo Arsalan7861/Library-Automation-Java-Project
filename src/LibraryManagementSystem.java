@@ -41,9 +41,9 @@ public class LibraryManagementSystem {
         BorrowedBooks.borrowBook(book);//Adds borrowed books to the ArrayList in BorrowedBooks' class.
     }
     //Searches book with id.
-    public static Books findBookById(String Id){
+    public static Books findBookById(int Id){
         for (Books book :  allbooks){
-            if (book.getBookId().equals(Id)){
+            if (book.getBookId() == (Id)){
                 return book;
             }
         }
@@ -153,9 +153,9 @@ public class LibraryManagementSystem {
         }
     }
     //Used in writeBooksToFile method checking the user ID if they are equal or not.
-    private static boolean containsBookWithId(List<Books> books, String bookId) {
+    private static boolean containsBookWithId(List<Books> books, int bookId) {
         for (Books book : books) {
-            if (book.getBookId().equals(bookId)) {
+            if (book.getBookId() == (bookId)) {
                 return true;
             }
         }
@@ -169,7 +169,7 @@ public class LibraryManagementSystem {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length == 6) {
-                    String bookId = parts[0];
+                    int bookId = Integer.parseInt(parts[0]);
                     String title = parts[1];
                     String author = parts[2];
                     String genre = parts[3];
@@ -184,7 +184,7 @@ public class LibraryManagementSystem {
         return books;
     }
     //When the book is borrowed makes it unavailable.
-    public static void updateBookAvailabilityInFile(String bookId, boolean isAvailable){
+    public static void updateBookAvailabilityInFile(int bookId, boolean isAvailable){
         Path filePath = Paths.get("books.txt");//Gets the path of the Books file.
         List<String> lines;
         try {
@@ -234,7 +234,7 @@ public class LibraryManagementSystem {
                     String userIdString = parts[0];
                     int userId = Integer.parseInt(userIdString);
                     NormalUser borrower = findUserById(userId);
-                    Books book = findBookById(parts[1]);
+                    Books book = findBookById(Integer.parseInt(parts[1]));
                     LocalDate borrowDate = LocalDate.parse(parts[2]);
                     transactions.add(new Transaction(borrower, book, borrowDate));
                 }
@@ -273,5 +273,16 @@ public class LibraryManagementSystem {
             newUserId = allusers.getLast().getUserID() + 1;
         }
         return newUserId;
+    }
+
+    //Gives an ID to new added book.
+    public static int generateBookId(){
+        int bookId;
+        if (allbooks.isEmpty()){
+            bookId = 10001;
+        }else {
+            bookId = allbooks.getLast().getBookId() + 1;
+        }
+        return bookId;
     }
 }
