@@ -18,45 +18,29 @@ public class LibraryManagementSystem {
     }
 
     public static void addUser(NormalUser user) {
-        ArrayList<NormalUser> existingUsers = readUsersFromFile("users.txt");
+        ArrayList<NormalUser> existingUsers = readUsersFromFile(LibraryManagementApp.usersFilePAth);
         allusers.add(user);
-        writeUsersToFile(allusers,"users.txt");
+        writeUsersToFile(allusers,LibraryManagementApp.usersFilePAth);
     }
 
+    //Add borrowers to the borrowers ArrayList.
     public static void addBorrower(NormalUser borrower) {
-        if (borrowers.contains(borrower)) {
-            System.out.println("This user has already borrowed a book.");
-        } else {
-            borrowers.add(borrower);
-        }
+        borrowers.add(borrower);
     }
-
+    //Add books to the allbooks ArrayList.
     public static void addBook(Books book) {
         allbooks.add(book);
-
     }
 
+    //Records the borrowed books and the borrowers to ArrayLists.
     public static void borrowBook(NormalUser borrower, Books book, LocalDate borrowdate) {
-        if (!allbooks.contains(book)) {
-            System.out.println("We apologize.There is no book you're searching");
-            return;
-        }
-        if (!allusers.contains(borrower)) {
-            System.out.println("This user is not found in the system");
-            return;
-        }
-        if (!book.isAvailable()) {
-            System.out.println("Unfortunately, the book is not available for now");
-            return;
-        }
         book.checkout();
         Transaction transaction = new Transaction(borrower, book, borrowdate);
         alltransactions.add(transaction);
         addBorrower(borrower);
-        BorrowedBooks.borrowBook(book);
-        System.out.println("Book borrowed successfully");
-
+        BorrowedBooks.borrowBook(book);//Adds borrowed books to the ArrayList in BorrowedBooks' class.
     }
+    //Searches book with id.
     public static Books findBookById(String Id){
         for (Books book :  allbooks){
             if (book.getBookId().equals(Id)){

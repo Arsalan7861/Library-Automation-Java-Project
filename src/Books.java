@@ -30,16 +30,12 @@ public class Books{
     public String getAuthor() {
         return author;
     }
-    public boolean isAvailable() {
-        return available;
-    }
     public String getGenre() {
         return genre;
     }
     public int getYearPublished() {
         return yearPublished;
     }
-
 
     public Books(String bookId, String title, String author, String genre, boolean available, int yearPublished) {
         this.bookId = bookId;
@@ -49,6 +45,11 @@ public class Books{
         this.available = available;
         this.yearPublished = yearPublished;
     }
+    //Shows the book's availability.
+    public boolean isAvailable() {
+        return available;
+    }
+    //Checks the availability of the book.
     public void checkout(){
         if (available){
             available = false;
@@ -64,15 +65,5 @@ public class Books{
         else {
             System.out.println("The book is already available");
         }
-    }
-
-    @Override
-    public String toString() {
-        return  "Book ID = '" + bookId + '\'' +
-                ", Title = '" + title + '\'' +
-                ", Author = '" + author + '\'' +
-                ", Genre = '" + genre + '\'' +
-                ", Availability = " + available +
-                ", Published Year = " + yearPublished;
     }
 }

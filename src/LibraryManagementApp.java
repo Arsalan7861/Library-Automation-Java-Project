@@ -227,8 +227,8 @@ public class LibraryManagementApp extends JFrame {
         userButton.setPreferredSize(new Dimension(150, 80));//Set size of the button manually.
         userButton.setFont(buttonFont);
         panel.add(userButton);
-
-        userButton.addActionListener(e -> {//Actions me button do when clicked.
+        //Actions me button do when clicked.
+        userButton.addActionListener(e -> {
             for (NormalUser user: LibraryManagementSystem.allusers){
                 if (timelyUserId == user.getUserID()){
                     JFrame userFrame = new JFrame("User Info");
@@ -309,7 +309,7 @@ public class LibraryManagementApp extends JFrame {
         booksButton.setFocusPainted(false);
         booksButton.setPreferredSize(new Dimension(150, 80));
         panel.add(booksButton);
-
+        //Shows the available books when All books' button is clicked
         booksButton.addActionListener(e -> {
             JFrame bookFrame = new JFrame("Books");
             bookFrame.setResizable(false);
@@ -338,8 +338,8 @@ public class LibraryManagementApp extends JFrame {
         borrowAbook.setFont(buttonFont);
         borrowAbook.setPreferredSize(new Dimension(150,80));
         panel.add(borrowAbook);
-
-        borrowAbook.addActionListener(e -> {//Actions that the button do when clicking borrow a book button.
+        //Actions that the button do when clicking borrow a book button.
+        borrowAbook.addActionListener(e -> {
             JFrame borrowFrame = new JFrame();
             borrowFrame.setResizable(false);
             borrowFrame.setSize(700,600);
@@ -356,17 +356,17 @@ public class LibraryManagementApp extends JFrame {
             borrowPanel.add(bookIdLabel);
             borrowPanel.add(bookIdTextField);
             borrowPanel.add(borrowButton);
-
+            //When borrowButton is clicked
             borrowButton.addActionListener(e1 -> {
                 String bookId =  bookIdTextField.getText();
                 Books bookToBorrow = LibraryManagementSystem.findBookById(bookId);
-                boolean isAvailable = bookToBorrow.isAvailable();
+                boolean isAvailable = bookToBorrow.isAvailable();//Checks if the book is available or not.
                 if (bookToBorrow != null && isAvailable){
-                    LocalDate thisDate = LocalDate.now();
-                    LibraryManagementSystem.borrowBook(thisUser,bookToBorrow,thisDate);
-                    JOptionPane.showMessageDialog(null,"Book borrowed successfully");
+                    LocalDate thisDate = LocalDate.now();//The date of borrowed book.
+                    LibraryManagementSystem.borrowBook(thisUser, bookToBorrow, thisDate);//Records the borrowed book's info.
+                    LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions, transactionsFilePath);
+                    JOptionPane.showMessageDialog(null, "Book borrowed successfully");
                     LibraryManagementSystem.updateBookAvailabilityInFile(bookId,false);//After borrowing the book makes it unavailable.
-
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Book not found");
@@ -375,15 +375,6 @@ public class LibraryManagementApp extends JFrame {
             borrowFrame.getRootPane().setDefaultButton(borrowButton);//Set the default(Enter) button to borrowButton.
             borrowFrame.setLocationRelativeTo(null);//Set location to center.
             borrowFrame.setVisible(true);
-        });
-
-        //When closing the frame it writes the transactions that took place to the Transaction.txt file.
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addWindowListener(new WindowAdapter(){
-            public void windowClosing(WindowEvent e){
-                LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions,transactionsFilePath);
-                System.exit(0);
-            }
         });
     }
 
