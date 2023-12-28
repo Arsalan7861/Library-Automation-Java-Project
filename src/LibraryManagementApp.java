@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class LibraryManagementApp extends JFrame {
     static String booksFilePath = "books.txt";
     static String usersFilePAth = "users.txt";
-    static final String transactionsFilePath = "transactions.txt";
+    static final String transactionsFilePath = "Transactions.txt";
     private JButton loginButton;
     private JButton signUpButton;
     public int timelyUserId;//to keep user's ID when logged in.
@@ -361,11 +361,11 @@ public class LibraryManagementApp extends JFrame {
                 String bookId =  bookIdTextField.getText();
                 Books bookToBorrow = LibraryManagementSystem.findBookById(bookId);
                 boolean isAvailable = bookToBorrow.isAvailable();
-                if (bookToBorrow!=null && isAvailable){
+                if (bookToBorrow != null && isAvailable){
                     LocalDate thisDate = LocalDate.now();
                     LibraryManagementSystem.borrowBook(thisUser,bookToBorrow,thisDate);
                     JOptionPane.showMessageDialog(null,"Book borrowed successfully");
-                    LibraryManagementSystem.updateBookAvailabilityInFile(bookId,false);
+                    LibraryManagementSystem.updateBookAvailabilityInFile(bookId,false);//After borrowing the book makes it unavailable.
 
                 }
                 else {
@@ -377,11 +377,11 @@ public class LibraryManagementApp extends JFrame {
             borrowFrame.setVisible(true);
         });
 
+        //When closing the frame it writes the transactions that took place to the Transaction.txt file.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
+        addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent e){
                 LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions,transactionsFilePath);
-//                saveTransactionsOnExit();
                 System.exit(0);
             }
         });
@@ -391,12 +391,12 @@ public class LibraryManagementApp extends JFrame {
         Admin admin = new Admin(1313, "Kazybek", "kazy@gmail.com", 21, "123", "admin");
 
         Books book1 = new Books("0001","The tale of two cities","Charles Dickens","historical fiction",false,1859);
+        LibraryManagementSystem.addBook(book1);//Add book to book Array List.
         Books book2 = new Books("0002","The little prince","Antoine de SAint Exupery","Fantasy",true,1943);
-        Books book3 = new Books("0003"," Hobbit","J.R TolkienThe","Fantasy",true,1937);
-        Books book4 = new Books("0004","The Alchemist","Paulo Coelho","Fantasy",true,1988);
-        LibraryManagementSystem.addBook(book1);
         LibraryManagementSystem.addBook(book2);
+        Books book3 = new Books("0003"," Hobbit","J.R TolkienThe","Fantasy",true,1937);
         LibraryManagementSystem.addBook(book3);
+        Books book4 = new Books("0004","The Alchemist","Paulo Coelho","Fantasy",true,1988);
         LibraryManagementSystem.addBook(book4);
 
         LibraryManagementSystem.alltransactions = LibraryManagementSystem.readTransactionsFromFile(transactionsFilePath);
@@ -420,10 +420,6 @@ public class LibraryManagementApp extends JFrame {
             }
             new LibraryManagementApp();
         });
-
     }
-//    public static void saveTransactionsOnExit(){
-//        LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions,transactionsFilePath);
-//    }
 }
 

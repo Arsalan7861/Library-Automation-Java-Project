@@ -199,21 +199,21 @@ public class LibraryManagementSystem {
         }
         return books;
     }
-
+    //When the book is borrowed makes it unavailable.
     public static void updateBookAvailabilityInFile(String bookId, boolean isAvailable){
-        Path filePath = Paths.get("books.txt");
+        Path filePath = Paths.get("books.txt");//Gets the path of the Books file.
         List<String> lines;
         try {
-            lines = Files.readAllLines(filePath);
+            lines = Files.readAllLines(filePath);//Reads it and saves it in lines variable.
         }
         catch (IOException e){
             e.printStackTrace();
             return;
         }
-        for (int i =0;i<lines.size();i++){
+        for (int i = 0; i < lines.size(); i++){//Looks for the book and changes its availability to true.
             String line = lines.get(i);
             if (line.startsWith(bookId + ",")){
-                lines.set(i,line.replaceFirst(",true," , "," + isAvailable +  ","));
+                lines.set(i, line.replaceFirst(",true," , "," + isAvailable +  ","));
                 break;
             }
         }
@@ -224,18 +224,22 @@ public class LibraryManagementSystem {
             e.printStackTrace();
         }
     }
-
+    //Writes the borrowed books' info to the Transctions.txt file.
     public static void writeTransactionsToFile(ArrayList<Transaction> transactions,String transactionsFilePath){
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(transactionsFilePath,true))){
             for (Transaction transaction : transactions){
-                writer.write(transaction.getBorrower().getUserID() + "," + transaction.getBook().getBookId() + "," + transaction.getBorrowdate());
-                writer.newLine();
+                NormalUser borrower = transaction.getBorrower();
+                if (borrower != null) {
+                    // Check if borrower is not null before accessing its properties
+                    writer.write(borrower.getUserID() + "," + transaction.getBook().getBookId() + "," + transaction.getBorrowdate());
+                    writer.newLine();
+                }
             }
         } catch (IOException e){
             e.printStackTrace();
         }
     }
-
+    //Reads the transactions' info from the Transaction.txt file.
     public static ArrayList<Transaction> readTransactionsFromFile(String transactionsFilePath) {
         ArrayList<Transaction> transactions = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(transactionsFilePath))) {
