@@ -1,16 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class LibraryManagementApp extends JFrame {
     static String booksFilePath = "books.txt";
     static String usersFilePAth = "users.txt";
+    static final String transactionsFilePath = "transactions.txt";
     private JButton loginButton;
     private JButton signUpButton;
     public int timelyUserId;//to keep user's ID when logged in.
+    public NormalUser thisUser;
 
     public LibraryManagementApp() {
         setTitle("Library");
@@ -94,8 +96,9 @@ public class LibraryManagementApp extends JFrame {
                 char[] passwordsChars = passwordField.getPassword();
                 String password = new String(passwordsChars);
 
-                if (LibraryManagementSystem.authenticateUserbyPassword(userId, password)) {
+                if (LibraryManagementSystem.authenticateUserbyPassword(userId, password)) {;
                     timelyUserId = userId;
+                    thisUser = LibraryManagementSystem.findUserById(userId);
                     JOptionPane.showMessageDialog(null, "Login successful!");
                     loginFrame.dispose();
                     openMainApplicationPage();
@@ -319,25 +322,95 @@ public class LibraryManagementApp extends JFrame {
             bookFrame.setResizable(false);
             bookFrame.setSize(700, 600);
 
-            JPanel bookPanel = new JPanel();
+            JPanel bookPanel = new JPanel(new BorderLayout());
             bookPanel.setBackground(Color.CYAN);
             bookFrame.add(bookPanel);
 
             JTextArea booksTextArea = new JTextArea();
             booksTextArea.setEditable(false);
-            booksTextArea.setText(LibraryManagementSystem.readBooksFromFile(booksFilePath));
-
+            ArrayList<Books> booksList = LibraryManagementSystem.readBooksFromFile(booksFilePath);
+            StringBuilder booksText = new StringBuilder();
+            for (Books book : booksList){
+                booksText.append(book.toString()).append("\n");
+            }
+            booksTextArea.setText(booksText.toString());
+            bookPanel.add(new JScrollPane(booksTextArea),BorderLayout.CENTER);//for scrolling books
 
             bookFrame.setLocationRelativeTo(null);
             bookFrame.setVisible(true);
+        });
+
+        JButton borrowAbook = new JButton("Borrow a Book");
+        borrowAbook.setFont(buttonFont);
+        borrowAbook.setPreferredSize(new Dimension(150,80));
+        panel.add(borrowAbook);
+
+        borrowAbook.addActionListener(e -> {
+            JFrame borrowFrame = new JFrame();
+            borrowFrame.setResizable(false);
+            borrowFrame.setSize(700,600);
+
+            JPanel borrowPanel = new JPanel();
+            borrowFrame.add(borrowPanel);
+
+            borrowFrame.setLocationRelativeTo(null);
+            borrowFrame.setVisible(true);
+
+            JLabel bookIdLabel = new JLabel("Enter Book ID");
+            JTextField bookIdTextField = new JTextField(10);
+            JButton borrowButton = new JButton("Borrow book");
+
+            borrowPanel.add(bookIdLabel);
+            borrowPanel.add(bookIdTextField);
+            borrowPanel.add(borrowButton);
+
+            borrowButton.addActionListener(e1 -> {
+                String bookId =  bookIdTextField.getText();
+                Books bookToBorrow = LibraryManagementSystem.findBookById(bookId);
+                boolean isAvailable = bookToBorrow.isAvailable();
+                if (bookToBorrow!=null && isAvailable){
+                    LocalDate thisDate = LocalDate.now();
+                    LibraryManagementSystem.borrowBook(thisUser,bookToBorrow,thisDate);
+                    JOptionPane.showMessageDialog(null,"Book borrowed successfully");
+                    LibraryManagementSystem.updateBokkAvailabilityinFile(bookId,false);
+
+                }
+                else {
+                    JOptionPane.showMessageDialog(null,"Book not found");
+                }
+            });
+            borrowFrame.setLocationRelativeTo(null);
+            borrowFrame.setVisible(true);
+        });
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e){
+                saveTransactionsOnExit();
+                System.exit(0);
+            }
         });
     }
 
     public static void main(String[] args) {
         Admin admin = new Admin(1313, "Kazybek", "kazy@gmail.com", 21, "123", "admin");
 
-        LibraryManagementSystem.allbooks=LibraryManagementSystem.readBooksFromFile(booksFilePath);
-        LibraryManagementSystem.allusers=LibraryManagementSystem.readUsersFromFile(usersFilePAth);
+        Books book1 = new Books("0001","The tale of two cities","Charles Dickens","historical fiction",false,1859);
+        Books book2 = new Books("0002","The little prince","Antoine de SAint Exupery","Fantasy",true,1943);
+        Books book3 = new Books("0003"," Hobbit","J.R TolkienThe","Fantasy",true,1937);
+        Books book4 = new Books("0004","The Alchemist","Paulo Coelho","Fantasy",true,1988);
+        LibraryManagementSystem.addBook(book1);
+        LibraryManagementSystem.addBook(book2);
+        LibraryManagementSystem.addBook(book3);
+        LibraryManagementSystem.addBook(book4);
+
+        LibraryManagementSystem.alltransactions = LibraryManagementSystem.readTransactionsFromFile(transactionsFilePath);
+
+        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks,booksFilePath);
+        LibraryManagementSystem.allbooks = LibraryManagementSystem.readBooksFromFile(booksFilePath);
+
+        LibraryManagementSystem.writeUsersToFile(LibraryManagementSystem.allusers,usersFilePAth);
+        LibraryManagementSystem.allusers = LibraryManagementSystem.readUsersFromFile(usersFilePAth);
         EventQueue.invokeLater(() -> {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -351,8 +424,10 @@ public class LibraryManagementApp extends JFrame {
             }
             new LibraryManagementApp();
         });
-        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks,booksFilePath);
-        LibraryManagementSystem.writeUsersToFile(LibraryManagementSystem.allusers,usersFilePAth);
+
+    }
+    public static void saveTransactionsOnExit(){
+        LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions,transactionsFilePath);
     }
 }
 
