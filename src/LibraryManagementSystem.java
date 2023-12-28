@@ -1,13 +1,17 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.List;
 
 public class LibraryManagementSystem {
 
     public static ArrayList<Books> allbooks = new ArrayList<>();
-    public static ArrayList<User> borrowers = new ArrayList<>();
+    public static ArrayList<NormalUser> borrowers = new ArrayList<>();
     public static ArrayList<NormalUser> allusers = new ArrayList<>();
-    private static ArrayList<Transaction> alltransaction = new ArrayList<>();
+    public static ArrayList<Transaction> alltransactions = new ArrayList<>();
 
     public static List<Books> getAllbooks() {
         return allbooks;
@@ -19,7 +23,7 @@ public class LibraryManagementSystem {
         writeUsersToFile(allusers,"users.txt");
     }
 
-    public void addBorrower(Borrowers borrower) {
+    public static void addBorrower(NormalUser borrower) {
         if (borrowers.contains(borrower)) {
             System.out.println("This user has already borrowed a book.");
         } else {
@@ -32,7 +36,7 @@ public class LibraryManagementSystem {
 
     }
 
-    public void borrowBook(Borrowers borrower, Books book, LocalDate borrowdate) {
+    public static void borrowBook(NormalUser borrower, Books book, LocalDate borrowdate) {
         if (!allbooks.contains(book)) {
             System.out.println("We apologize.There is no book you're searching");
             return;
@@ -45,16 +49,21 @@ public class LibraryManagementSystem {
             System.out.println("Unfortunately, the book is not available for now");
             return;
         }
-        Transaction transaction = new Transaction(borrower, book, borrowdate);
-        alltransaction.add(transaction);
-        addBorrower(borrower);
-
         book.checkout();
-
+        Transaction transaction = new Transaction(borrower, book, borrowdate);
+        alltransactions.add(transaction);
+        addBorrower(borrower);
         BorrowedBooks.borrowBook(book);
-
         System.out.println("Book borrowed successfully");
 
+    }
+    public static Books findBookById(String Id){
+        for (Books book :  allbooks){
+            if (book.getBookId().equals(Id)){
+                return book;
+            }
+        }
+        return null;
     }
 
     public void returnBook(Borrowers borrower, Books book, LocalDate returndate) {
@@ -74,7 +83,7 @@ public class LibraryManagementSystem {
     }
 
     private Transaction findTransaction(Borrowers borrower, Books book) {
-        for (Transaction transaction : alltransaction) {
+        for (Transaction transaction : alltransactions) {
             if (transaction.getBorrower().equals(borrower) && transaction.getBook().equals(book)) {
                 return transaction;
             }
@@ -190,6 +199,67 @@ public class LibraryManagementSystem {
         }
         return books;
     }
+    public static void updateBokkAvailabilityinFile(String bookId, boolean isAvailable){
+        Path filePath = Paths.get("books.txt");
+        List<String> lines;
+        try {
+            lines = Files.readAllLines(filePath);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            return;
+        }
+        for (int i =0;i<lines.size();i++){
+            String line = lines.get(i);
+            if (line.startsWith(bookId + ",")){
+                lines.set(i,line.replaceFirst(",true," , "," + isAvailable +  ","));
+                break;
+            }
+        }
+        try {
+            Files.write(filePath,lines);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    public static void writeTransactionsToFile(ArrayList<Transaction> transactions,String transactionsFilePath){
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(transactionsFilePath,true))){
+            for (Transaction transaction : transactions){
+                writer.write(
+                        transaction.getBorrower().getUserID() + "," +
+                            transaction.getBook().getBookId() + "," +
+                            transaction.getBorrowdate() + ","
+                );
+                writer.newLine();
+            }
+            }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<Transaction> readTransactionsFromFile(String transactionsFilePath) {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(transactionsFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 3) {
+                    String userIdString = parts[0];
+                    int userId = Integer.parseInt(userIdString);
+                    NormalUser borrower = findUserById(userId);
+                    Books book = findBookById(parts[1]);
+                    LocalDate borrowDate = LocalDate.parse(parts[2]);
+                    transactions.add(new Transaction(borrower, book, borrowDate));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return transactions;
+    }
+
     //When logging in checks the userId and the password if it is correct or not.
     public static boolean authenticateUserbyPassword(int userId,String password){
         for (NormalUser user : allusers){
@@ -198,6 +268,14 @@ public class LibraryManagementSystem {
             }
         }
         return false;
+    }
+    public static NormalUser findUserById(int userId){
+        for (NormalUser user : allusers){
+            if (user.getUserID()==userId){
+                return user;
+            }
+        }
+        return null;
     }
     //Gives an ID to new user.
     public static int generateUserId(){
