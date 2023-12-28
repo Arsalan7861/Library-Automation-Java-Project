@@ -114,9 +114,7 @@ public class LibraryManagementApp extends JFrame {
                 passwordField.setText("");
             }
         });
-        //Set the default(Enter) button to loginSubmitButton
-        loginFrame.getRootPane().setDefaultButton(loginSubmitButton);
-
+        loginFrame.getRootPane().setDefaultButton(loginSubmitButton);//Set the default(Enter) button to loginSubmitButton
         loginFrame.setVisible(true);
     }
 
@@ -201,18 +199,15 @@ public class LibraryManagementApp extends JFrame {
                 ageField.setText("");//Clearing the field after the error.
             }
         });
-        //Set the default(Enter) button to signUpSubmitButton
-        signUpFrame.getRootPane().setDefaultButton(signUpSubmitButton);
-
+        signUpFrame.getRootPane().setDefaultButton(signUpSubmitButton);//Set the default(Enter) button to signUpSubmitButton.
         signUpFrame.setVisible(true);
     }
-    private void openMainApplicationPage(){
+    private void openMainApplicationPage(){//Main page after logging in.
         JFrame mainFrame = new JFrame("Main page");
         mainFrame.setSize(700, 600);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
         mainFrame.setResizable(false);
-
         //Adding background image to the panel.
         JPanel panel = new JPanel(){
             protected void paintComponent(Graphics g){
@@ -226,22 +221,21 @@ public class LibraryManagementApp extends JFrame {
         };
         mainFrame.add(panel);
         Font buttonFont = new Font("Rockwell", Font.BOLD, 20);//Set font for the buttons.
-        //Making me button.
+        //Making me button that shows the information of the user.
         JButton userButton = new JButton("Me");
         userButton.setFocusPainted(false);//Remove the focus button.
         userButton.setPreferredSize(new Dimension(150, 80));//Set size of the button manually.
         userButton.setFont(buttonFont);
         panel.add(userButton);
 
-        userButton.addActionListener(e -> {
+        userButton.addActionListener(e -> {//Actions me button do when clicked.
             for (NormalUser user: LibraryManagementSystem.allusers){
                 if (timelyUserId == user.getUserID()){
                     JFrame userFrame = new JFrame("User Info");
                     userFrame.setResizable(false);
                     userFrame.setSize(700, 600);
-
-                    JPanel userPAnel = new JPanel(new GridLayout(5,2)){
-                        protected void paintComponent(Graphics g){//Change user interface's background.
+                    JPanel userPAnel = new JPanel(new GridLayout(5,2)){//Change user frame's background.
+                        protected void paintComponent(Graphics g){
                             super.paintComponent(g);
                             ImageIcon backgroundImage = new ImageIcon("user.png");
                             // Scale the image to fit the panel.
@@ -250,10 +244,10 @@ public class LibraryManagementApp extends JFrame {
                             scaledIcon.paintIcon(this, g, 0, 0);
                         }
                     };
-                    userFrame.add(userPAnel);
-
+                    userFrame.add(userPAnel);//Adding panel to the frame.
                     Font labelFont = new Font("Rockwell", Font.PLAIN, 25);//Set font for the labels.
-                    Color labelColor = Color.white;
+                    Color labelColor = Color.white;//Set font color.
+                    //Adding labels for showing user's information.
                     JLabel userIdLabel = new JLabel("User ID:");
                     userIdLabel.setFont(labelFont);
                     userIdLabel.setForeground(labelColor);
@@ -273,7 +267,6 @@ public class LibraryManagementApp extends JFrame {
                     nameLabel1.setFont(labelFont);
                     nameLabel1.setForeground(labelColor);
                     userPAnel.add(nameLabel1);
-
 
                     JLabel emailLabel = new JLabel("Email:");
                     emailLabel.setFont(labelFont);
@@ -340,21 +333,21 @@ public class LibraryManagementApp extends JFrame {
             bookFrame.setVisible(true);
         });
 
+        //Button for borrowing books.
         JButton borrowAbook = new JButton("Borrow a Book");
         borrowAbook.setFont(buttonFont);
         borrowAbook.setPreferredSize(new Dimension(150,80));
         panel.add(borrowAbook);
 
-        borrowAbook.addActionListener(e -> {
+        borrowAbook.addActionListener(e -> {//Actions that the button do when clicking borrow a book button.
             JFrame borrowFrame = new JFrame();
             borrowFrame.setResizable(false);
             borrowFrame.setSize(700,600);
+            borrowFrame.setLocationRelativeTo(null);
+            borrowFrame.setVisible(true);
 
             JPanel borrowPanel = new JPanel();
             borrowFrame.add(borrowPanel);
-
-            borrowFrame.setLocationRelativeTo(null);
-            borrowFrame.setVisible(true);
 
             JLabel bookIdLabel = new JLabel("Enter Book ID");
             JTextField bookIdTextField = new JTextField(10);
@@ -372,21 +365,23 @@ public class LibraryManagementApp extends JFrame {
                     LocalDate thisDate = LocalDate.now();
                     LibraryManagementSystem.borrowBook(thisUser,bookToBorrow,thisDate);
                     JOptionPane.showMessageDialog(null,"Book borrowed successfully");
-                    LibraryManagementSystem.updateBokkAvailabilityinFile(bookId,false);
+                    LibraryManagementSystem.updateBookAvailabilityInFile(bookId,false);
 
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Book not found");
                 }
             });
-            borrowFrame.setLocationRelativeTo(null);
+            borrowFrame.getRootPane().setDefaultButton(borrowButton);//Set the default(Enter) button to borrowButton.
+            borrowFrame.setLocationRelativeTo(null);//Set location to center.
             borrowFrame.setVisible(true);
         });
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e){
-                saveTransactionsOnExit();
+                LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions,transactionsFilePath);
+//                saveTransactionsOnExit();
                 System.exit(0);
             }
         });
@@ -411,6 +406,7 @@ public class LibraryManagementApp extends JFrame {
 
         LibraryManagementSystem.writeUsersToFile(LibraryManagementSystem.allusers,usersFilePAth);
         LibraryManagementSystem.allusers = LibraryManagementSystem.readUsersFromFile(usersFilePAth);
+
         EventQueue.invokeLater(() -> {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -426,8 +422,8 @@ public class LibraryManagementApp extends JFrame {
         });
 
     }
-    public static void saveTransactionsOnExit(){
-        LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions,transactionsFilePath);
-    }
+//    public static void saveTransactionsOnExit(){
+//        LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions,transactionsFilePath);
+//    }
 }
 

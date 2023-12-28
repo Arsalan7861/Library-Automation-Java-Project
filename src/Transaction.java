@@ -11,11 +11,9 @@ public class Transaction {
     public Books getBook() {
         return book;
     }
-
     public LocalDate getBorrowdate() {
         return borrowdate;
     }
-
     public LocalDate getReturndate() {
         return returndate;
     }

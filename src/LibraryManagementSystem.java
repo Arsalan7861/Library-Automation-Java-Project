@@ -199,7 +199,8 @@ public class LibraryManagementSystem {
         }
         return books;
     }
-    public static void updateBokkAvailabilityinFile(String bookId, boolean isAvailable){
+
+    public static void updateBookAvailabilityInFile(String bookId, boolean isAvailable){
         Path filePath = Paths.get("books.txt");
         List<String> lines;
         try {
@@ -223,18 +224,14 @@ public class LibraryManagementSystem {
             e.printStackTrace();
         }
     }
+
     public static void writeTransactionsToFile(ArrayList<Transaction> transactions,String transactionsFilePath){
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(transactionsFilePath,true))){
             for (Transaction transaction : transactions){
-                writer.write(
-                        transaction.getBorrower().getUserID() + "," +
-                            transaction.getBook().getBookId() + "," +
-                            transaction.getBorrowdate() + ","
-                );
+                writer.write(transaction.getBorrower().getUserID() + "," + transaction.getBook().getBookId() + "," + transaction.getBorrowdate());
                 writer.newLine();
             }
-            }
-        catch (IOException e){
+        } catch (IOException e){
             e.printStackTrace();
         }
     }
@@ -269,6 +266,7 @@ public class LibraryManagementSystem {
         }
         return false;
     }
+
     public static NormalUser findUserById(int userId){
         for (NormalUser user : allusers){
             if (user.getUserID()==userId){
