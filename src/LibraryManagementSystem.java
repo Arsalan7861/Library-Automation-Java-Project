@@ -38,36 +38,34 @@ public class LibraryManagementSystem {
         Transaction transaction = new Transaction(borrower, book, borrowdate);
         alltransactions.add(transaction);
         addBorrower(borrower);
+        borrowers.add(borrower);
         BorrowedBooks.borrowBook(book);//Adds borrowed books to the ArrayList in BorrowedBooks' class.
     }
     //Searches book with id.
-    public static Books findBookById(int Id){
+    public static Books findBookById(int id){
         for (Books book :  allbooks){
-            if (book.getBookId() == (Id)){
+            if (book.getBookId() == (id)){
                 return book;
             }
         }
         return null;
     }
-
     public static void returnBook(NormalUser borrower, Books book, LocalDate returndate) {
         if (!BorrowedBooks.getBorrowedBooks().contains(book)) {
             System.out.println("Sorry,the book is not currently borrowed by the user");
             return;
         }
-        Transaction transaction = findTransaction(borrower, book);
-        if (transaction == null) {
-            System.out.println("Error.The transaction is not found");
-        }
-        transaction.setReturndate(returndate);
+////        Transaction transaction = findTransaction(borrower, book);
+//        if (transaction == null) {
+//            System.out.println("Error.The transaction is not found");
+//        }
+//        transaction.setReturndate(returndate);
         book.returnBook();//Makes the returned book available.
         BorrowedBooks.returnBook(book);//Removes returned book from the borrowed books ArrayList.
-
         borrowers.remove(borrower);
         System.out.println("Book returned successfully.");
     }
-
-    private static Transaction findTransaction(NormalUser borrower, Books book) {
+    public static Transaction findTransaction(NormalUser borrower, Books book) {
         for (Transaction transaction : alltransactions) {
             if (transaction.getBorrower().equals(borrower) && transaction.getBook().equals(book)) {
                 return transaction;
@@ -262,9 +260,12 @@ public class LibraryManagementSystem {
                 }
             }
 
-            for (Transaction transaction : transactions){
-                if (transaction.getBorrower().getUserID() == userId && transaction.getBook().getBookId() == bookId){
-                    transactions.remove(transaction);
+            // Use iterator to remove elements while iterating
+            Iterator<Transaction> iterator = transactions.iterator();
+            while (iterator.hasNext()) {
+                Transaction transaction = iterator.next();
+                if (transaction.getBorrower().getUserID() == userId && transaction.getBook().getBookId() == bookId) {
+                    iterator.remove();
                 }
             }
         } catch (IOException e) {
@@ -281,7 +282,6 @@ public class LibraryManagementSystem {
         }
         return false;
     }
-
     public static NormalUser findUserById(int userId){
         for (NormalUser user : allusers){
             if (user.getUserID()==userId){

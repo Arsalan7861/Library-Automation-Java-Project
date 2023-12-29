@@ -517,7 +517,7 @@ public class LibraryManagementApp extends JFrame {
             //Updates the Transaction file after clicking return button.
             returnButton.addActionListener(e1 -> {
                 int bookId =  Integer.parseInt(idField.getText());
-                Books bookToReturn = LibraryManagementSystem.findBookById(bookId);//Checks if the book exists or not.
+                Books bookToReturn = BorrowedBooks.findBorrowedBookById(bookId);//Checks if the book exists or not.
                 boolean isAvailable;
                 if (bookToReturn != null){//Controls availability of the book.
                     isAvailable = bookToReturn.isAvailable();//Checks if the book is available or not.
