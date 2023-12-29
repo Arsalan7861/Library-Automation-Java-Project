@@ -58,6 +58,7 @@ public class Books{
             System.out.println("We apologize.The book is not available");
         }
     }
+    //Makes the returned book available.
     public void returnBook(){
         if (!available){
             available = true;

@@ -50,7 +50,7 @@ public class LibraryManagementSystem {
         return null;
     }
 
-    public void returnBook(Borrowers borrower, Books book, LocalDate returndate) {
+    public static void returnBook(NormalUser borrower, Books book, LocalDate returndate) {
         if (!BorrowedBooks.getBorrowedBooks().contains(book)) {
             System.out.println("Sorry,the book is not currently borrowed by the user");
             return;
@@ -60,13 +60,14 @@ public class LibraryManagementSystem {
             System.out.println("Error.The transaction is not found");
         }
         transaction.setReturndate(returndate);
-        book.returnBook();
-        BorrowedBooks.returnBook(book);
+        book.returnBook();//Makes the returned book available.
+        BorrowedBooks.returnBook(book);//Removes returned book from the borrowed books ArrayList.
+
         borrowers.remove(borrower);
         System.out.println("Book returned successfully.");
     }
 
-    private Transaction findTransaction(Borrowers borrower, Books book) {
+    private static Transaction findTransaction(NormalUser borrower, Books book) {
         for (Transaction transaction : alltransactions) {
             if (transaction.getBorrower().equals(borrower) && transaction.getBook().equals(book)) {
                 return transaction;
@@ -209,7 +210,7 @@ public class LibraryManagementSystem {
         }
     }
     //Writes the borrowed books' info to the Transctions.txt file.
-    public static void writeTransactionsToFile(ArrayList<Transaction> transactions,String transactionsFilePath){
+    public static void writeTransactionsToFile(ArrayList<Transaction> transactions, String transactionsFilePath){
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(transactionsFilePath,true))){
             for (Transaction transaction : transactions){
                 NormalUser borrower = transaction.getBorrower();
@@ -244,7 +245,33 @@ public class LibraryManagementSystem {
         }
         return transactions;
     }
+    //Read the transactions and remove the returned books. Method overload.
+    public static ArrayList<Transaction> readTransactionsFromFile(String transactionsFilePath, int userId, int bookId) {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(transactionsFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 3) {
+                    String userIdString = parts[0];
+                    int userId1 = Integer.parseInt(userIdString);
+                    NormalUser borrower = findUserById(userId1);
+                    Books book = findBookById(Integer.parseInt(parts[1]));
+                    LocalDate borrowDate = LocalDate.parse(parts[2]);
+                    transactions.add(new Transaction(borrower, book, borrowDate));//Add it to the ArrayList.
+                }
+            }
 
+            for (Transaction transaction : transactions){
+                if (transaction.getBorrower().getUserID() == userId && transaction.getBook().getBookId() == bookId){
+                    transactions.remove(transaction);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return transactions;
+    }
     //When logging in checks the userId and the password if it is correct or not.
     public static boolean authenticateUserbyPassword(int userId,String password){
         for (NormalUser user : allusers){

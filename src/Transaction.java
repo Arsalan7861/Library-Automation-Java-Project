@@ -1,4 +1,6 @@
 import java.time.LocalDate;
+import java.util.ArrayList;
+
 public class Transaction {
     private NormalUser borrower;
     private Books book;
@@ -30,5 +32,11 @@ public class Transaction {
             return true;
         }
        return false;
+    }
+
+    //Removes the returned book from the ArrayList and updates the Transaction file.
+    public static void removeTransaction(int userId, int bookId){
+        ArrayList<Transaction> updatedTransactions = LibraryManagementSystem.readTransactionsFromFile(LibraryManagementApp.transactionsFilePath, userId, bookId);
+        LibraryManagementSystem.writeTransactionsToFile(updatedTransactions, LibraryManagementApp.transactionsFilePath);
     }
 }

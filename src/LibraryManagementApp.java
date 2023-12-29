@@ -359,7 +359,12 @@ public class LibraryManagementApp extends JFrame {
             borrowButton.addActionListener(e1 -> {
                 int bookId =  Integer.parseInt(bookIdTextField.getText());
                 Books bookToBorrow = LibraryManagementSystem.findBookById(bookId);
-                boolean isAvailable = bookToBorrow.isAvailable();//Checks if the book is available or not.
+                boolean isAvailable;
+                if (bookToBorrow != null){//Controls availability of the book.
+                    isAvailable = bookToBorrow.isAvailable();//Checks if the book is available or not.
+                }else {
+                    isAvailable = false;
+                }
                 if (bookToBorrow != null && isAvailable){
                     LocalDate thisDate = LocalDate.now();//The date of borrowed book.
                     LibraryManagementSystem.borrowBook(thisUser, bookToBorrow, thisDate);//Records the borrowed book's info.
@@ -443,6 +448,7 @@ public class LibraryManagementApp extends JFrame {
 
             JButton addButton = new JButton("Add");//Adding button for adding the book to library.
             addBookPanel.add(addButton);
+            addButton.setFocusPainted(false);//Turns off focusing on button.
 
             //Adds the book to library when the button is clicked.
             addButton.addActionListener(e1 -> {
@@ -470,6 +476,67 @@ public class LibraryManagementApp extends JFrame {
                 JOptionPane.showMessageDialog(null, customException.getMessage() + ": Fields cannot be empty!");
             }
             });
+        });
+
+        JButton returnBook = new JButton("Return Book");
+        returnBook.setFont(buttonFont);
+        returnBook.setFocusPainted(false);
+        returnBook.setPreferredSize(new Dimension(150, 80));
+        panel.add(returnBook);
+
+        returnBook.addActionListener(e -> {
+            JFrame returnFrame = new JFrame("Return Book");
+            returnFrame.setResizable(false);
+            returnFrame.setSize(400, 300);
+            returnFrame.setLocationRelativeTo(null);
+            returnFrame.setVisible(true);
+
+            JPanel returnPanel = new JPanel(new GridLayout(2, 2));
+            returnFrame.add(returnPanel);
+
+            Font labelFont = new Font("Rockwell", Font.PLAIN, 22);//Set font for the labels.
+            Font textFieldFont = new Font("Arial", Font.PLAIN, 22);//Set font for textFields.
+            Color labelColor = Color.DARK_GRAY;//Set font color.
+            //Adding labels and text fields to the panel.
+            JLabel idLabel = new JLabel("Enter Book's ID:");
+            idLabel.setFont(labelFont);
+            idLabel.setForeground(labelColor);
+            returnPanel.add(idLabel);
+
+            JTextField idField = new JTextField();
+            idField.setFont(textFieldFont);
+            returnPanel.add(idField);
+
+            returnPanel.add(new JLabel());//Adding label for spacing.
+            //Adding button for submitting the task.
+            JButton returnButton = new JButton("Submit");
+            returnPanel.add(returnButton);
+            returnButton.setFocusPainted(false);
+            returnButton.setFont(textFieldFont);
+
+            //Updates the Transaction file after clicking return button.
+            returnButton.addActionListener(e1 -> {
+                int bookId =  Integer.parseInt(idField.getText());
+                Books bookToReturn = LibraryManagementSystem.findBookById(bookId);//Checks if the book exists or not.
+                boolean isAvailable;
+                if (bookToReturn != null){//Controls availability of the book.
+                    isAvailable = bookToReturn.isAvailable();//Checks if the book is available or not.
+                }else {
+                    isAvailable = true;
+                }
+
+                if (bookToReturn != null && !isAvailable){
+                    LocalDate thisDate = LocalDate.now();//The date of returned book.
+                    LibraryManagementSystem.returnBook(thisUser, bookToReturn, thisDate);//Records the returned book's info.
+                    Transaction.removeTransaction(thisUser.getUserID(), bookId);//removes the returned book from the file.
+                    LibraryManagementSystem.updateBookAvailabilityInFile(bookId,true);//After returning the book makes it unavailable.
+                    JOptionPane.showMessageDialog(null, "Book returned successfully");
+                    returnFrame.dispose();//Frame closes when the book is returned.
+                }else {
+                    JOptionPane.showMessageDialog(null, "Book not found");
+                }
+            });
+            returnFrame.getRootPane().setDefaultButton(returnButton);//Set the default(Enter) button to loginSubmitButton
         });
     }
 

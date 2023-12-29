@@ -15,6 +15,7 @@ public class BorrowedBooks extends Books {
     public static void borrowBook(Books book) {
         borrowedBooks.add(book);
     }
+    //Remove borrowed books from the ArrayList.
     public static void returnBook(Books book) {
         borrowedBooks.remove(book);
     }
