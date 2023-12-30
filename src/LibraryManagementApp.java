@@ -517,7 +517,7 @@ public class LibraryManagementApp extends JFrame {
             //Updates the Transaction file after clicking return button.
             returnButton.addActionListener(e1 -> {
                 int bookId =  Integer.parseInt(idField.getText());
-                Books bookToReturn = BorrowedBooks.findBorrowedBookById(bookId);//Checks if the book exists or not.
+                Books bookToReturn = LibraryManagementSystem.findBorrowedBookById(bookId);//Checks if the book exists or not.
                 boolean isAvailable;
                 if (bookToReturn != null){//Controls availability of the book.
                     isAvailable = bookToReturn.isAvailable();//Checks if the book is available or not.
@@ -529,7 +529,7 @@ public class LibraryManagementApp extends JFrame {
                     LocalDate thisDate = LocalDate.now();//The date of returned book.
                     LibraryManagementSystem.returnBook(thisUser, bookToReturn, thisDate);//Records the returned book's info.
                     Transaction.removeTransaction(thisUser.getUserID(), bookId);//removes the returned book from the file.
-                    LibraryManagementSystem.updateBookAvailabilityInFile(bookId,true);//After returning the book makes it unavailable.
+                    LibraryManagementSystem.updateBookAvailabilityInFile(true, bookId);//After returning the book makes it available.
                     JOptionPane.showMessageDialog(null, "Book returned successfully");
                     returnFrame.dispose();//Frame closes when the book is returned.
                 }else {
