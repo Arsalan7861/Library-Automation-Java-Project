@@ -7,7 +7,6 @@ import java.util.*;
 import java.util.List;
 
 public class LibraryManagementSystem {
-
     public static ArrayList<Books> allbooks = new ArrayList<>();
     public static ArrayList<NormalUser> borrowers = new ArrayList<>();
     public static ArrayList<NormalUser> allusers = new ArrayList<>();
@@ -16,13 +15,12 @@ public class LibraryManagementSystem {
     public static List<Books> getAllbooks() {
         return allbooks;
     }
-
+    //Adds user to allusers ArrayList
     public static void addUser(NormalUser user) {
         ArrayList<NormalUser> existingUsers = readUsersFromFile(LibraryManagementApp.usersFilePAth);
         allusers.add(user);
         writeUsersToFile(allusers,LibraryManagementApp.usersFilePAth);
     }
-
     //Add borrowers to the borrowers ArrayList.
     public static void addBorrower(NormalUser borrower) {
         borrowers.add(borrower);
@@ -31,7 +29,6 @@ public class LibraryManagementSystem {
     public static void addBook(Books book) {
         allbooks.add(book);
     }
-
     //Records the borrowed books and the borrowers to ArrayLists.
     public static void borrowBook(NormalUser borrower, Books book, LocalDate borrowdate) {
         book.checkout();
@@ -50,15 +47,6 @@ public class LibraryManagementSystem {
         return null;
     }
     public static void returnBook(NormalUser borrower, Books book, LocalDate returndate) {
-        if (!BorrowedBooks.borrowedBooks.contains(book)) {
-            System.out.println("Sorry,the book is not currently borrowed by the user");
-            return;
-        }
-////        Transaction transaction = findTransaction(borrower, book);
-//        if (transaction == null) {
-//            System.out.println("Error.The transaction is not found");
-//        }
-//        transaction.setReturndate(returndate);
         BorrowedBooks.returnBook(book);//Removes returned book from the borrowed books ArrayList.
         borrowers.remove(borrower);//Removes borrower from ArrayList.
         System.out.println("Book returned successfully.");
@@ -249,26 +237,15 @@ public class LibraryManagementSystem {
     }
     //Writes the borrowed books' info to the Transctions.txt file.
     public static void writeTransactionsToFile(ArrayList<Transaction> transactions, String transactionsFilePath){
-        ArrayList<Transaction> existingTranstaction = readTransactionsFromFile(LibraryManagementApp.transactionsFilePath);
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(transactionsFilePath,true))){
+        ArrayList<Transaction> existingTransaction = readTransactionsFromFile(LibraryManagementApp.transactionsFilePath);
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(transactionsFilePath))){
             for (Transaction transaction : transactions){
-                if (!controlTransactions(existingTranstaction, transaction.getBook().getBookId())) {
                     writer.write(transaction.getBorrower().getUserID() + "," + transaction.getBook().getBookId() + "," + transaction.getBorrowdate());
                     writer.newLine();
-                }
             }
         }catch (IOException e){
             e.printStackTrace();
         }
-    }
-    //Used in writeTransactionsToFile method, checks the ArrayList if transaction exist doesn't write it to the file.
-    public static boolean controlTransactions(ArrayList<Transaction> transactions, int bookId){
-        for (Transaction tr : transactions){
-            if (tr.getBook().getBookId() == bookId){
-                return true;
-            }
-        }
-        return false;
     }
     //Reads the transactions' info from the Transaction.txt file.
     public static ArrayList<Transaction> readTransactionsFromFile(String transactionsFilePath) {
@@ -307,12 +284,11 @@ public class LibraryManagementSystem {
                     transactions.add(new Transaction(borrower, book, borrowDate));//Add it to the ArrayList.
                 }
             }
-
-            // Use iterator to remove elements while iterating
+            //Removes existing transaction.
             Iterator<Transaction> iterator = transactions.iterator();
             while (iterator.hasNext()) {
-                Transaction transaction = iterator.next();
-                if (transaction.getBorrower().getUserID() == userId && transaction.getBook().getBookId() == bookId) {
+                Transaction tr = iterator.next();
+                if (tr.getBorrower().getUserID() == userId && tr.getBook().getBookId() == bookId) {
                     iterator.remove();
                 }
             }
@@ -351,7 +327,6 @@ public class LibraryManagementSystem {
         }
         return newUserId;
     }
-
     //Gives an ID to new added book.
     public static int generateBookId(){
         int bookId;

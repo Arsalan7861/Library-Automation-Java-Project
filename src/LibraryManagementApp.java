@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class LibraryManagementApp extends JFrame {
     static String booksFilePath = "books.txt";
@@ -528,9 +529,9 @@ public class LibraryManagementApp extends JFrame {
                 if (bookToReturn != null && !isAvailable){
                     LocalDate thisDate = LocalDate.now();//The date of returned book.
                     LibraryManagementSystem.returnBook(thisUser, bookToReturn, thisDate);//Records the returned book's info.
-                    Transaction.removeTransaction(thisUser.getUserID(), bookId);//removes the returned book from the file.
                     LibraryManagementSystem.updateBookAvailabilityInFile(true, bookId);//After returning the book makes it available.
                     JOptionPane.showMessageDialog(null, "Book returned successfully");
+                    Transaction.removeTransaction(thisUser.getUserID(), bookId);//removes the returned book from the file.
                     returnFrame.dispose();//Frame closes when the book is returned.
                 }else {
                     JOptionPane.showMessageDialog(null, "Book not found");
@@ -541,16 +542,31 @@ public class LibraryManagementApp extends JFrame {
     }
 
     public static void main(String[] args) {
-        Books book1 = new Books(10001,"The tale of two cities","Charles Dickens","historical fiction",false,1859);
+        Books book1 = new Books(1001,"The tale of two cities","Charles Dickens","historical fiction",true,1859);
         LibraryManagementSystem.addBook(book1);//Add book to book Array List.
-        Books book2 = new Books(10002,"The little prince","Antoine de Saint Exupery","Fantasy",true,1943);
+        Books book2 = new Books(1002,"The little prince","Antoine de Saint Exupery","Fantasy",true,1943);
         LibraryManagementSystem.addBook(book2);
-        Books book3 = new Books(10003," Hobbit","J.R TolkienThe","Fantasy",true,1937);
+        Books book3 = new Books(1003," Hobbit","J.R TolkienThe","Fantasy",true,1937);
         LibraryManagementSystem.addBook(book3);
-        Books book4 = new Books(10004,"The Alchemist","Paulo Coelho","Fantasy",true,1988);
+        Books book4 = new Books(1004,"The Alchemist","Paulo Coelho","Fantasy",true,1988);
         LibraryManagementSystem.addBook(book4);
 
         LibraryManagementSystem.alltransactions = LibraryManagementSystem.readTransactionsFromFile(transactionsFilePath);
+
+//        for (Transaction tr: LibraryManagementSystem.alltransactions){
+//            System.out.println(tr.getBorrower().getUserID() + "," + tr.getBook().getBookId());
+//        }
+//        NormalUser user = new NormalUser();
+//        LocalDate date = LocalDate.now();
+//        Transaction transaction = new Transaction(user, book3, date);
+//
+//        LibraryManagementSystem.alltransactions.add(transaction);
+//        LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions, transactionsFilePath);
+//
+//        for (Transaction tr: LibraryManagementSystem.alltransactions){
+//            System.out.println(tr.getBorrower().getUserID() + "," + tr.getBook().getBookId());
+//        }
+
 
         LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks,booksFilePath);
         LibraryManagementSystem.allbooks = LibraryManagementSystem.readBooksFromFile(booksFilePath);
