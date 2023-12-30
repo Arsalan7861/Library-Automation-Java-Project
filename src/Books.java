@@ -58,15 +58,6 @@ public class Books{
             System.out.println("We apologize.The book is not available");
         }
     }
-    //Makes the returned book available.
-    public void returnBook(){
-        if (!available){
-            available = true;
-        }
-        else {
-            System.out.println("The book is already available");
-        }
-    }
 
     @Override
     public String toString() {
