@@ -1,4 +1,4 @@
 1001,The tale of two cities,Charles Dickens,historical fiction,true,1859,
-1002,The little prince,Antoine de Saint Exupery,Fantasy,true,1943,
-1003, Hobbit,J.R TolkienThe,Fantasy,true,1937,
+1002,The little prince,Antoine de Saint Exupery,Fantasy,false,1943,
+1003, Hobbit,J.R TolkienThe,Fantasy,false,1937,
 1004,The Alchemist,Paulo Coelho,Fantasy,true,1988,

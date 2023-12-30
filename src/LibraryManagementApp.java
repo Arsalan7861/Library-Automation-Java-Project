@@ -16,7 +16,7 @@ public class LibraryManagementApp extends JFrame {
     public LibraryManagementApp() {
         setTitle("Library");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(700,600);
+        setSize(700, 600);
         setLocationRelativeTo(null);
         setResizable(false);//Turns off the minimize button.
         setVisible(true);
@@ -26,10 +26,11 @@ public class LibraryManagementApp extends JFrame {
 
         loginButton = new JButton("Login");
         loginButton.setFocusPainted(false);//Remove the button focus.
+
         signUpButton = new JButton("Sign Up");
         signUpButton.setFocusPainted(false);
 
-        Font defaultFont = new Font("Rockwell",Font.PLAIN, 50);
+        Font defaultFont = new Font("Rockwell", Font.PLAIN, 50);
 
         loginButton.setFont(defaultFont);
         signUpButton.setFont(defaultFont);
@@ -38,8 +39,8 @@ public class LibraryManagementApp extends JFrame {
         loginButton.addActionListener(e -> openLoginPage());
         signUpButton.addActionListener(e -> openSignUpPage());
         //Adding background image to the panel.
-        JPanel mainPanel = new JPanel(){
-            protected void paintComponent(Graphics g){
+        JPanel mainPanel = new JPanel() {
+            protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 ImageIcon backgroundImage = new ImageIcon("millet.jpg");
                 // Scale the image to fit the panel.
@@ -54,10 +55,11 @@ public class LibraryManagementApp extends JFrame {
         mainPanel.add(signUpButton);
         add(mainPanel);
     }
+
     //When login button is clicked the tasks that are in login page.
     private void openLoginPage() {
         JFrame loginFrame = new JFrame("Login Page");
-        loginFrame.setSize(600,400);
+        loginFrame.setSize(600, 400);
         loginFrame.setLocationRelativeTo(null);
 
         JTextField userIdField = new JTextField();
@@ -73,7 +75,7 @@ public class LibraryManagementApp extends JFrame {
 
         Font labelFont = new Font("Rockwell", Font.PLAIN, 25);//Set font for the labels.
 
-        JPanel loginPanel = new JPanel(new GridLayout(3,2));
+        JPanel loginPanel = new JPanel(new GridLayout(3, 2));
 
         JLabel userIdLabel = new JLabel("User ID:");
         userIdLabel.setFont(labelFont);
@@ -95,7 +97,8 @@ public class LibraryManagementApp extends JFrame {
                 char[] passwordsChars = passwordField.getPassword();
                 String password = new String(passwordsChars);
 
-                if (LibraryManagementSystem.authenticateUserbyPassword(userId, password)) {;
+                if (LibraryManagementSystem.authenticateUserbyPassword(userId, password)) {
+                    ;
                     timelyUserId = userId;
                     thisUser = LibraryManagementSystem.findUserById(userId);
                     JOptionPane.showMessageDialog(null, "Login successful!");
@@ -119,7 +122,7 @@ public class LibraryManagementApp extends JFrame {
 
     private void openSignUpPage() {
         JFrame signUpFrame = new JFrame("Sign Up Page");
-        signUpFrame.setSize(600,400);
+        signUpFrame.setSize(600, 400);
         signUpFrame.setLocationRelativeTo(null);
 
         Font textFieldFont = new Font("Arial", Font.PLAIN, 25);
@@ -138,7 +141,7 @@ public class LibraryManagementApp extends JFrame {
         signUpSubmitButton.setFocusPainted(false);//Remove the button focus.
         signUpSubmitButton.setFont(textFieldFont);
 
-        JPanel signUpPanel = new JPanel(new GridLayout(5,2));
+        JPanel signUpPanel = new JPanel(new GridLayout(5, 2));
         Font labelFont = new Font("Rockwell", Font.PLAIN, 25);//Set font for the labels.
         JLabel nameLabel = new JLabel("Name:");
         nameLabel.setFont(labelFont);
@@ -176,7 +179,8 @@ public class LibraryManagementApp extends JFrame {
                 }
                 int age = Integer.parseInt(ageField.getText());
                 String password1 = new String(passwordField.getPassword());//Casting password to String to check if it is empty or not.
-                if(emailField.getText().isEmpty() || nameField.getText().isEmpty() || password1.isEmpty()) throw new CustomException();
+                if (emailField.getText().isEmpty() || nameField.getText().isEmpty() || password1.isEmpty())
+                    throw new CustomException();
                 char[] passwordChars = passwordField.getPassword();
                 String password = new String(passwordChars);
                 int userId = LibraryManagementSystem.generateUserId();
@@ -191,9 +195,9 @@ public class LibraryManagementApp extends JFrame {
                 ageField.setText("");
                 passwordField.setText("");
                 JOptionPane.showMessageDialog(null, "Your User Id: " + userId);//Showing user Id to user.
-            }catch (CustomException exception){
+            } catch (CustomException exception) {
                 JOptionPane.showMessageDialog(null, exception.getMessage() + ": Fields cannot be empty!");
-            }catch (NumberFormatException exception){
+            } catch (NumberFormatException exception) {
                 JOptionPane.showMessageDialog(null, "String value is not accepted in the age field!");
                 ageField.setText("");//Clearing the field after the error.
             }
@@ -201,15 +205,16 @@ public class LibraryManagementApp extends JFrame {
         signUpFrame.getRootPane().setDefaultButton(signUpSubmitButton);//Set the default(Enter) button to signUpSubmitButton.
         signUpFrame.setVisible(true);
     }
-    private void openMainApplicationPage(){//Main page after logging in.
+
+    private void openMainApplicationPage() {//Main page after logging in.
         JFrame mainFrame = new JFrame("Main page");
         mainFrame.setSize(700, 600);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
         mainFrame.setResizable(false);
         //Adding background image to the panel.
-        JPanel panel = new JPanel(){
-            protected void paintComponent(Graphics g){
+        JPanel panel = new JPanel() {
+            protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 ImageIcon backgroundImage = new ImageIcon("R.jpeg");
                 // Scale the image to fit the panel.
@@ -228,13 +233,13 @@ public class LibraryManagementApp extends JFrame {
         panel.add(userButton);
         //Actions me button do when clicked.
         userButton.addActionListener(e -> {
-            for (NormalUser user: LibraryManagementSystem.allusers){
-                if (timelyUserId == user.getUserID()){
+            for (NormalUser user : LibraryManagementSystem.allusers) {
+                if (timelyUserId == user.getUserID()) {
                     JFrame userFrame = new JFrame("User Info");
                     userFrame.setResizable(false);
                     userFrame.setSize(700, 600);
-                    JPanel userPAnel = new JPanel(new GridLayout(5,2)){//Change user frame's background.
-                        protected void paintComponent(Graphics g){
+                    JPanel userPAnel = new JPanel(new GridLayout(5, 2)) {//Change user frame's background.
+                        protected void paintComponent(Graphics g) {
                             super.paintComponent(g);
                             ImageIcon backgroundImage = new ImageIcon("user.png");
                             // Scale the image to fit the panel.
@@ -309,7 +314,7 @@ public class LibraryManagementApp extends JFrame {
         booksButton.setFocusPainted(false);
         booksButton.setPreferredSize(new Dimension(150, 80));
         panel.add(booksButton);
-        //Shows the available books when All books' button is clicked.
+        //Shows the available books when All books' button is clicked. Also includes search books area.
         booksButton.addActionListener(e -> {
             JFrame bookFrame = new JFrame("Books");
             bookFrame.setResizable(false);
@@ -319,30 +324,96 @@ public class LibraryManagementApp extends JFrame {
             bookPanel.setBackground(Color.CYAN);
             bookFrame.add(bookPanel);
 
+            // Add a search bar with JTextField and JButton
+            JPanel searchPanel = new JPanel();
+            JTextField searchField = new JTextField(20);
+
+            JButton searchButton = new JButton("Search");
+            searchButton.setFocusPainted(false);//Turns off focus on button.
+
+            searchPanel.add(new JLabel("Enter Book ID: "));
+            bookPanel.add(searchPanel, BorderLayout.NORTH);
+            searchPanel.add(searchField);
+            searchPanel.add(searchButton);
+
             JTextArea booksTextArea = new JTextArea();
             booksTextArea.setEditable(false);
             ArrayList<Books> booksList = LibraryManagementSystem.readBooksFromFile(booksFilePath);
             StringBuilder booksText = new StringBuilder();
-            for (Books book : booksList){
+            for (Books book : booksList) {
                 booksText.append(book.toString()).append("\n");
             }
             booksTextArea.setText(booksText.toString());
-            bookPanel.add(new JScrollPane(booksTextArea),BorderLayout.CENTER);//for scrolling books
+            bookPanel.add(new JScrollPane(booksTextArea), BorderLayout.CENTER);//for scrolling books
 
+            //When search button is clicked, writes it to the screen.
+            searchButton.addActionListener(e1 -> {
+                try {
+                    String searchText = searchField.getText();
+                    if (!searchText.isEmpty()) {
+                        // Finds the searched book from the Books file and write it to the screen.
+                        Books foundBook = LibraryManagementSystem.findBookById(Integer.parseInt(searchText));
+                        if (foundBook != null) {
+                            booksTextArea.setText(foundBook.toString());
+                        } else {
+                            booksTextArea.setText("Book does not exist!");
+                        }
+                    } else {
+                        // If search field is empty, show all books
+                        booksTextArea.setText(booksText.toString());
+                    }
+                }catch (NumberFormatException e2){
+                    JOptionPane.showMessageDialog(null, "Can not be characters.");
+                    searchField.setText("");//Clearing the search field after error.
+                }
+            });
+            bookFrame.getRootPane().setDefaultButton(searchButton);
             bookFrame.setLocationRelativeTo(null);
             bookFrame.setVisible(true);
         });
 
+        //Making button for seeing user's books.
+        JButton mybooksButton = new JButton("My Books");
+        mybooksButton.setFont(buttonFont);
+        mybooksButton.setFocusPainted(false);
+        mybooksButton.setPreferredSize(new Dimension(150, 80));
+        panel.add(mybooksButton);
+        //Shows the user's books when My books' button is clicked.
+        mybooksButton.addActionListener(e -> {
+            JFrame mybookFrame = new JFrame("My Books");
+            mybookFrame.setResizable(false);
+            mybookFrame.setSize(700, 600);
+
+            JPanel mybook = new JPanel(new BorderLayout());
+            mybook.setBackground(Color.WHITE);
+            mybookFrame.add(mybook);
+
+            JTextArea booksTextArea1 = new JTextArea();
+            booksTextArea1.setEditable(false);//Makes it uneditable.
+            ArrayList<Transaction> mytransactionsList = LibraryManagementSystem.readTransactionsFromFile(transactionsFilePath);
+            StringBuilder booksText1 = new StringBuilder();
+            for (Transaction transaction : mytransactionsList) {//Writes borrowed books' info and last delivery date.
+                if (transaction.getBorrower().getUserID() == thisUser.getUserID()) {
+                    booksText1.append(transaction.getBook().toString() + ", Last Delivery Date = " + transaction.getBorrowdate().plusDays(14)).append("\n");
+                }
+            }
+            booksTextArea1.setText(booksText1.toString());
+            mybook.add(new JScrollPane(booksTextArea1), BorderLayout.CENTER);//for scrolling books
+
+            mybookFrame.setLocationRelativeTo(null);
+            mybookFrame.setVisible(true);
+        });
+
         //Button for borrowing books.
-        JButton borrowAbook = new JButton("Borrow a Book");
-        borrowAbook.setFont(buttonFont);
-        borrowAbook.setPreferredSize(new Dimension(150,80));
-        panel.add(borrowAbook);
+        JButton borrowBook = new JButton("Borrow a Book");
+        borrowBook.setFont(buttonFont);
+        borrowBook.setPreferredSize(new Dimension(150, 80));
+        panel.add(borrowBook);
         //Actions that the button do when clicking borrow a book button.
-        borrowAbook.addActionListener(e -> {
+        borrowBook.addActionListener(e -> {
             JFrame borrowFrame = new JFrame();
             borrowFrame.setResizable(false);
-            borrowFrame.setSize(700,600);
+            borrowFrame.setSize(700, 600);
             borrowFrame.setLocationRelativeTo(null);
             borrowFrame.setVisible(true);
 
@@ -358,24 +429,23 @@ public class LibraryManagementApp extends JFrame {
             borrowPanel.add(borrowButton);
             //When borrowButton is clicked
             borrowButton.addActionListener(e1 -> {
-                int bookId =  Integer.parseInt(bookIdTextField.getText());
+                int bookId = Integer.parseInt(bookIdTextField.getText());
                 Books bookToBorrow = LibraryManagementSystem.findBookById(bookId);
                 boolean isAvailable;
-                if (bookToBorrow != null){//Controls availability of the book.
+                if (bookToBorrow != null) {//Controls availability of the book.
                     isAvailable = bookToBorrow.isAvailable();//Checks if the book is available or not.
-                }else {
+                } else {
                     isAvailable = false;
                 }
-                if (bookToBorrow != null && isAvailable){
+                if (bookToBorrow != null && isAvailable) {
                     LocalDate thisDate = LocalDate.now();//The date of borrowed book.
                     LibraryManagementSystem.borrowBook(thisUser, bookToBorrow, thisDate);//Records the borrowed book's info.
                     LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions, transactionsFilePath);
                     JOptionPane.showMessageDialog(null, "Book borrowed successfully");
-                    LibraryManagementSystem.updateBookAvailabilityInFile(bookId,false);//After borrowing the book makes it unavailable.
+                    LibraryManagementSystem.updateBookAvailabilityInFile(bookId, false);//After borrowing the book makes it unavailable.
                     borrowFrame.dispose();//Frame closes when the book is borrowed.
-                }
-                else {
-                    JOptionPane.showMessageDialog(null,"Book not found");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Book not found");
                 }
             });
             borrowFrame.getRootPane().setDefaultButton(borrowButton);//Set the default(Enter) button to borrowButton.
@@ -453,38 +523,42 @@ public class LibraryManagementApp extends JFrame {
 
             //Adds the book to library when the button is clicked.
             addButton.addActionListener(e1 -> {
-            try {
-                int bookId = LibraryManagementSystem.generateBookId();//Generates new ID for the book.
-                int publishedYear = Integer.parseInt((yearField.getText()));//Change the published year to integer value.
-                if (nameField.getText().isEmpty() || authorField.getText().isEmpty() || genreField.getText().isEmpty()) throw new CustomException();//If the fields are empty throws the exception.
                 try {
-                    for (char c : authorField.getText().toCharArray()) {//Checking the author's name if it contains number or not.
-                        if (Character.isDigit(c)) throw new CustomException();//If it contains a number throws an exception.
+                    int bookId = LibraryManagementSystem.generateBookId();//Generates new ID for the book.
+                    int publishedYear = Integer.parseInt((yearField.getText()));//Change the published year to integer value.
+                    if (nameField.getText().isEmpty() || authorField.getText().isEmpty() || genreField.getText().isEmpty())
+                        throw new CustomException();//If the fields are empty throws the exception.
+                    try {
+                        for (char c : authorField.getText().toCharArray()) {//Checking the author's name if it contains number or not.
+                            if (Character.isDigit(c))
+                                throw new CustomException();//If it contains a number throws an exception.
+                        }
+                        Books book = new Books(bookId, nameField.getText(), authorField.getText(), genreField.getText(), true, publishedYear);//Makes a book object.
+                        LibraryManagementSystem.addBook(book);//Adds the books to the ArrayList.
+                        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks, booksFilePath);//Writes the added book to the file.
+                        JOptionPane.showMessageDialog(null, "The book has been added.");
+                        addBookFrame.dispose();//Frame closes after adding the book.
+                    } catch (CustomException exception) {
+                        JOptionPane.showMessageDialog(null, exception.getMessage() + ": Author cannot be a number!");
+                        authorField.setText("");//Clears the field after error.
                     }
-                    Books book = new Books(bookId, nameField.getText(), authorField.getText(), genreField.getText(), true, publishedYear);//Makes a book object.
-                    LibraryManagementSystem.addBook(book);//Adds the books to the ArrayList.
-                    LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks, booksFilePath);//Writes the added book to the file.
-                    JOptionPane.showMessageDialog(null, "The book has been added.");
-                    addBookFrame.dispose();//Frame closes after adding the book.
-                }catch (CustomException exception){
-                    JOptionPane.showMessageDialog(null, exception.getMessage() + ": Author cannot be a number!");
-                    authorField.setText("");//Clears the field after error.
+                } catch (
+                        NumberFormatException exception) {//When String value is entered in year field catches the error.
+                    JOptionPane.showMessageDialog(null, "Year can not be String");
+                    yearField.setText("");//Clears the text field after the error.
+                } catch (CustomException customException) {//When the fields are empty catches the error.
+                    JOptionPane.showMessageDialog(null, customException.getMessage() + ": Fields cannot be empty!");
                 }
-            }catch (NumberFormatException exception){//When String value is entered in year field catches the error.
-                JOptionPane.showMessageDialog(null, "Year can not be String");
-                yearField.setText("");//Clears the text field after the error.
-            }catch (CustomException customException){//When the fields are empty catches the error.
-                JOptionPane.showMessageDialog(null, customException.getMessage() + ": Fields cannot be empty!");
-            }
             });
         });
 
+        //Adding button for returning book.
         JButton returnBook = new JButton("Return Book");
         returnBook.setFont(buttonFont);
         returnBook.setFocusPainted(false);
         returnBook.setPreferredSize(new Dimension(150, 80));
         panel.add(returnBook);
-
+        //When return book button is clicked, actions that happen.
         returnBook.addActionListener(e -> {
             JFrame returnFrame = new JFrame("Return Book");
             returnFrame.setResizable(false);
@@ -517,38 +591,37 @@ public class LibraryManagementApp extends JFrame {
 
             //Updates the Transaction file after clicking return button.
             returnButton.addActionListener(e1 -> {
-                int bookId =  Integer.parseInt(idField.getText());
+                int bookId = Integer.parseInt(idField.getText());
                 Books bookToReturn = LibraryManagementSystem.findBorrowedBookById(bookId);//Checks if the book exists or not.
                 boolean isAvailable;
-                if (bookToReturn != null){//Controls availability of the book.
+                if (bookToReturn != null) {//Controls availability of the book.
                     isAvailable = bookToReturn.isAvailable();//Checks if the book is available or not.
-                }else {
+                } else {
                     isAvailable = true;
                 }
 
-                if (bookToReturn != null && !isAvailable){
+                if (bookToReturn != null && !isAvailable) {
                     LocalDate thisDate = LocalDate.now();//The date of returned book.
                     LibraryManagementSystem.returnBook(thisUser, bookToReturn, thisDate);//Records the returned book's info.
                     LibraryManagementSystem.updateBookAvailabilityInFile(true, bookId);//After returning the book makes it available.
                     JOptionPane.showMessageDialog(null, "Book returned successfully");
                     Transaction.removeTransaction(thisUser.getUserID(), bookId);//removes the returned book from the file.
                     returnFrame.dispose();//Frame closes when the book is returned.
-                }else {
+                } else {
                     JOptionPane.showMessageDialog(null, "Book not found");
                 }
             });
             returnFrame.getRootPane().setDefaultButton(returnButton);//Set the default(Enter) button to loginSubmitButton
         });
     }
-
-    public static void main(String[] args) {
-        Books book1 = new Books(1001,"The tale of two cities","Charles Dickens","historical fiction",true,1859);
+    public static void main(String[] args){
+        Books book1 = new Books(101, "The tale of two cities", "Charles Dickens", "historical fiction", true, 1859);
         LibraryManagementSystem.addBook(book1);//Add book to book Array List.
-        Books book2 = new Books(1002,"The little prince","Antoine de Saint Exupery","Fantasy",true,1943);
+        Books book2 = new Books(102, "The little prince", "Antoine de Saint Exupery", "Fantasy", true, 1943);
         LibraryManagementSystem.addBook(book2);
-        Books book3 = new Books(1003," Hobbit","J.R TolkienThe","Fantasy",true,1937);
+        Books book3 = new Books(103, " Hobbit", "J.R TolkienThe", "Fantasy", true, 1937);
         LibraryManagementSystem.addBook(book3);
-        Books book4 = new Books(1004,"The Alchemist","Paulo Coelho","Fantasy",true,1988);
+        Books book4 = new Books(104, "The Alchemist", "Paulo Coelho", "Fantasy", true, 1988);
         LibraryManagementSystem.addBook(book4);
 
         LibraryManagementSystem.alltransactions = LibraryManagementSystem.readTransactionsFromFile(transactionsFilePath);
@@ -568,10 +641,10 @@ public class LibraryManagementApp extends JFrame {
 //        }
 
 
-        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks,booksFilePath);
+        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks, booksFilePath);
         LibraryManagementSystem.allbooks = LibraryManagementSystem.readBooksFromFile(booksFilePath);
 
-        LibraryManagementSystem.writeUsersToFile(LibraryManagementSystem.allusers,usersFilePAth);
+        LibraryManagementSystem.writeUsersToFile(LibraryManagementSystem.allusers, usersFilePAth);
         LibraryManagementSystem.allusers = LibraryManagementSystem.readUsersFromFile(usersFilePAth);
 
         EventQueue.invokeLater(() -> {
@@ -579,7 +652,8 @@ public class LibraryManagementApp extends JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     try {
                         UIManager.setLookAndFeel(info.getClassName());
-                    } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException e) {
+                    } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException |
+                             InstantiationException e) {
                         throw new RuntimeException(e);
                     }
                     break;
