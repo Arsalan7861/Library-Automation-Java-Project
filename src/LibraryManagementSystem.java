@@ -193,7 +193,7 @@ public class LibraryManagementSystem {
             e.printStackTrace();
         }
     }
-    //When the book is returned makes it available.
+    //When the book is returned makes it available. Method overloading.
     public static void updateBookAvailabilityInFile(boolean isAvailable, int bookId){
         Path filePath = Paths.get("books.txt");//Gets the path of the Books file.
         List<String> lines;
@@ -237,7 +237,6 @@ public class LibraryManagementSystem {
     }
     //Writes the borrowed books' info to the Transctions.txt file.
     public static void writeTransactionsToFile(ArrayList<Transaction> transactions, String transactionsFilePath){
-        ArrayList<Transaction> existingTransaction = readTransactionsFromFile(LibraryManagementApp.transactionsFilePath);
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(transactionsFilePath))){
             for (Transaction transaction : transactions){
                     writer.write(transaction.getBorrower().getUserID() + "," + transaction.getBook().getBookId() + "," + transaction.getBorrowdate());
@@ -331,7 +330,7 @@ public class LibraryManagementSystem {
     public static int generateBookId(){
         int bookId;
         if (allbooks.isEmpty()){
-            bookId = 10001;
+            bookId = 101;
         }else {
             bookId = allbooks.getLast().getBookId() + 1;
         }
