@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class LibraryManagementApp extends JFrame {
-    static String booksFilePath = "books.txt";
-    static String usersFilePAth = "users.txt";
+    static final String booksFilePath = "books.txt";
+    static final String usersFilePAth = "users.txt";
     static final String transactionsFilePath = "Transactions.txt";
+    static final String adminFilePath = "Admins.txt";
     private JButton loginButton;
     private JButton signUpButton;
     public int timelyUserId;//to keep user's ID when logged in.
@@ -96,15 +97,15 @@ public class LibraryManagementApp extends JFrame {
                 int userId = Integer.parseInt(userIdField.getText());
                 char[] passwordsChars = passwordField.getPassword();
                 String password = new String(passwordsChars);
-
-                if (LibraryManagementSystem.authenticateUserbyPassword(userId, password)) {
-                    ;
+                if (LibraryManagementSystem.authenticateAdminByPassword(userId, password)){//Controls admins' IDs and passwords.
+                    adminPage();
+                }else if (LibraryManagementSystem.authenticateUserbyPassword(userId, password)){
                     timelyUserId = userId;
                     thisUser = LibraryManagementSystem.findUserById(userId);
                     JOptionPane.showMessageDialog(null, "Login successful!");
                     loginFrame.dispose();
                     openMainApplicationPage();
-                } else {
+                }else {
                     JOptionPane.showMessageDialog(null, "Invalid userId or password");
                 }
                 userIdField.setText("");//Clear the userId input.
@@ -204,6 +205,195 @@ public class LibraryManagementApp extends JFrame {
         });
         signUpFrame.getRootPane().setDefaultButton(signUpSubmitButton);//Set the default(Enter) button to signUpSubmitButton.
         signUpFrame.setVisible(true);
+    }
+    //Method for making button for showing books. Used in two frame.
+    private void allBooksButton(JPanel panel){
+        Font buttonFont = new Font("Rockwell", Font.BOLD, 20);//Set font for the buttons.
+        //Making button for seeing the books.
+        JButton booksButton = new JButton("All Books");
+        booksButton.setFont(buttonFont);
+        booksButton.setFocusPainted(false);
+        booksButton.setPreferredSize(new Dimension(150, 80));
+        panel.add(booksButton);
+        //Shows the available books when All books' button is clicked. Also includes search books area.
+        booksButton.addActionListener(e -> {
+            JFrame bookFrame = new JFrame("Books");
+            bookFrame.setResizable(false);
+            bookFrame.setSize(700, 600);
+
+            JPanel bookPanel = new JPanel(new BorderLayout());
+            bookPanel.setBackground(Color.CYAN);
+            bookFrame.add(bookPanel);
+
+            // Add a search bar with JTextField and JButton
+            JPanel searchPanel = new JPanel();
+            JTextField searchField = new JTextField(20);
+
+            JButton searchButton = new JButton("Search");
+            searchButton.setFocusPainted(false);//Turns off focus on button.
+
+            searchPanel.add(new JLabel("Enter Book ID: "));
+            bookPanel.add(searchPanel, BorderLayout.NORTH);
+            searchPanel.add(searchField);
+            searchPanel.add(searchButton);
+
+            JTextArea booksTextArea = new JTextArea();
+            booksTextArea.setEditable(false);
+            ArrayList<Books> booksList = LibraryManagementSystem.readBooksFromFile(booksFilePath);
+            StringBuilder booksText = new StringBuilder();
+            for (Books book : booksList) {
+                booksText.append(book.toString()).append("\n");
+            }
+            booksTextArea.setText(booksText.toString());
+            bookPanel.add(new JScrollPane(booksTextArea), BorderLayout.CENTER);//for scrolling books
+
+            //When search button is clicked, writes it to the screen.
+            searchButton.addActionListener(e1 -> {
+                try {
+                    String searchText = searchField.getText();
+                    if (!searchText.isEmpty()) {
+                        // Finds the searched book from the Books file and write it to the screen.
+                        Books foundBook = LibraryManagementSystem.findBookById(Integer.parseInt(searchText));
+                        if (foundBook != null) {
+                            booksTextArea.setText(foundBook.toString());
+                        } else {
+                            booksTextArea.setText("Book does not exist!");
+                        }
+                    } else {
+                        // If search field is empty, show all books
+                        booksTextArea.setText(booksText.toString());
+                    }
+                }catch (NumberFormatException e2){
+                    JOptionPane.showMessageDialog(null, "Can not be characters.");
+                    searchField.setText("");//Clearing the search field after error.
+                }
+            });
+            bookFrame.getRootPane().setDefaultButton(searchButton);
+            bookFrame.setLocationRelativeTo(null);
+            bookFrame.setVisible(true);
+        });
+    }
+
+    private void adminPage(){
+        JFrame adminFrame = new JFrame("Admin Page");
+        adminFrame.setResizable(false);
+        adminFrame.setSize(700, 600);
+        adminFrame.setLocationRelativeTo(null);
+        adminFrame.setVisible(true);
+        //Add background to admin panel.
+        JPanel adminPanel = new JPanel(){
+            protected void paintComponent(Graphics g){
+                super.paintComponent(g);
+                ImageIcon backgroundImage = new ImageIcon("admin.jpg");
+                // Scale the image to fit the panel.
+                Image scaledImage = backgroundImage.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
+                ImageIcon scaledIcon = new ImageIcon(scaledImage);
+                scaledIcon.paintIcon(this, g, 0, 0);
+            }
+        };
+        adminFrame.add(adminPanel);
+
+        allBooksButton(adminPanel);//Invokes all books button method
+
+        Font buttonFont = new Font("Rockwell", Font.BOLD, 20);//Set font for the buttons.
+        //Adding button that adds the book.
+        JButton addBook = new JButton("Add Book");
+        addBook.setFont(buttonFont);
+        addBook.setFocusPainted(false);
+        addBook.setPreferredSize(new Dimension(150, 80));
+        adminPanel.add(addBook);
+        //When clicked, It opens the frame for adding the book.
+        addBook.addActionListener(e -> {
+            //Making new frame for adding new book.
+            JFrame addBookFrame = new JFrame("Add Book");
+            addBookFrame.setResizable(false);
+            addBookFrame.setSize(600, 400);
+            addBookFrame.setLocationRelativeTo(null);
+            addBookFrame.setVisible(true);
+
+            JPanel addBookPanel = new JPanel(new GridLayout(5, 2));//Adding panel to frame.
+            addBookFrame.add(addBookPanel);
+
+            Font labelFont = new Font("Rockwell", Font.PLAIN, 18);//Set font for the labels.
+            Font textFieldFont = new Font("Arial", Font.PLAIN, 18);//Set font for textFields.
+            Color labelColor = Color.DARK_GRAY;//Set font color.
+            //Adding labels and text fields to the panel.
+            JLabel nameLabel = new JLabel("Enter Book's Name:");
+            nameLabel.setFont(labelFont);
+            nameLabel.setForeground(labelColor);
+            addBookPanel.add(nameLabel);
+
+            JTextField nameField = new JTextField();
+            nameField.setFont(textFieldFont);
+            nameField.setToolTipText("Enter Book's name.");//When hover over it, shows this.
+            addBookPanel.add(nameField);
+
+            JLabel authorLabel = new JLabel("Enter Book's Author:");
+            authorLabel.setFont(labelFont);
+            authorLabel.setForeground(labelColor);
+            addBookPanel.add(authorLabel);
+
+            JTextField authorField = new JTextField();
+            authorField.setFont(textFieldFont);
+            authorField.setToolTipText("Enter Book's author.");//When hover over it, shows this.
+            addBookPanel.add(authorField);
+
+            JLabel genreLabel = new JLabel("Enter Book's Genre:");
+            genreLabel.setFont(labelFont);
+            genreLabel.setForeground(labelColor);
+            addBookPanel.add(genreLabel);
+
+            JTextField genreField = new JTextField();
+            genreField.setFont(textFieldFont);
+            genreField.setToolTipText("Enter Book's genre.");//When hover over it, shows this.
+            addBookPanel.add(genreField);
+
+            JLabel yearLabel = new JLabel("Enter Book's Published Year:");
+            yearLabel.setFont(labelFont);
+            yearLabel.setForeground(labelColor);
+            addBookPanel.add(yearLabel);
+
+            JTextField yearField = new JTextField();
+            yearField.setFont(textFieldFont);
+            yearField.setToolTipText("Enter Book's published year.\nCan't be characters");//When hover over it, shows this.
+            addBookPanel.add(yearField);
+
+            addBookPanel.add(new JLabel());//Empty label for spacing.
+
+            JButton addButton = new JButton("Add");//Adding button for adding the book to library.
+            addBookPanel.add(addButton);
+            addButton.setFocusPainted(false);//Turns off focusing on button.
+
+            //Adds the book to library when the button is clicked.
+            addButton.addActionListener(e1 -> {
+                try {
+                    int bookId = LibraryManagementSystem.generateBookId();//Generates new ID for the book.
+                    int publishedYear = Integer.parseInt((yearField.getText()));//Change the published year to integer value.
+                    if (nameField.getText().isEmpty() || authorField.getText().isEmpty() || genreField.getText().isEmpty())
+                        throw new CustomException();//If the fields are empty throws the exception.
+                    try {
+                        for (char c : authorField.getText().toCharArray()) {//Checking the author's name if it contains number or not.
+                            if (Character.isDigit(c))
+                                throw new CustomException();//If it contains a number throws an exception.
+                        }
+                        Books book = new Books(bookId, nameField.getText(), authorField.getText(), genreField.getText(), true, publishedYear);//Makes a book object.
+                        LibraryManagementSystem.addBook(book);//Adds the books to the ArrayList.
+                        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks, booksFilePath);//Writes the added book to the file.
+                        JOptionPane.showMessageDialog(null, "The book has been added.");
+                        addBookFrame.dispose();//Frame closes after adding the book.
+                    } catch (CustomException exception) {
+                        JOptionPane.showMessageDialog(null, exception.getMessage() + ": Author cannot be a number!");
+                        authorField.setText("");//Clears the field after error.
+                    }
+                } catch (
+                        NumberFormatException exception) {//When String value is entered in year field catches the error.
+                    JOptionPane.showMessageDialog(null, "Year can not be String");
+                    yearField.setText("");//Clears the text field after the error.
+                } catch (CustomException customException) {//When the fields are empty catches the error.
+                    JOptionPane.showMessageDialog(null, customException.getMessage() + ": Fields cannot be empty!");
+                }
+            });
+        });
     }
 
     private void openMainApplicationPage() {//Main page after logging in.
@@ -308,69 +498,7 @@ public class LibraryManagementApp extends JFrame {
             }
         });
 
-        //Making button for seeing the books.
-        JButton booksButton = new JButton("All Books");
-        booksButton.setFont(buttonFont);
-        booksButton.setFocusPainted(false);
-        booksButton.setPreferredSize(new Dimension(150, 80));
-        panel.add(booksButton);
-        //Shows the available books when All books' button is clicked. Also includes search books area.
-        booksButton.addActionListener(e -> {
-            JFrame bookFrame = new JFrame("Books");
-            bookFrame.setResizable(false);
-            bookFrame.setSize(700, 600);
-
-            JPanel bookPanel = new JPanel(new BorderLayout());
-            bookPanel.setBackground(Color.CYAN);
-            bookFrame.add(bookPanel);
-
-            // Add a search bar with JTextField and JButton
-            JPanel searchPanel = new JPanel();
-            JTextField searchField = new JTextField(20);
-
-            JButton searchButton = new JButton("Search");
-            searchButton.setFocusPainted(false);//Turns off focus on button.
-
-            searchPanel.add(new JLabel("Enter Book ID: "));
-            bookPanel.add(searchPanel, BorderLayout.NORTH);
-            searchPanel.add(searchField);
-            searchPanel.add(searchButton);
-
-            JTextArea booksTextArea = new JTextArea();
-            booksTextArea.setEditable(false);
-            ArrayList<Books> booksList = LibraryManagementSystem.readBooksFromFile(booksFilePath);
-            StringBuilder booksText = new StringBuilder();
-            for (Books book : booksList) {
-                booksText.append(book.toString()).append("\n");
-            }
-            booksTextArea.setText(booksText.toString());
-            bookPanel.add(new JScrollPane(booksTextArea), BorderLayout.CENTER);//for scrolling books
-
-            //When search button is clicked, writes it to the screen.
-            searchButton.addActionListener(e1 -> {
-                try {
-                    String searchText = searchField.getText();
-                    if (!searchText.isEmpty()) {
-                        // Finds the searched book from the Books file and write it to the screen.
-                        Books foundBook = LibraryManagementSystem.findBookById(Integer.parseInt(searchText));
-                        if (foundBook != null) {
-                            booksTextArea.setText(foundBook.toString());
-                        } else {
-                            booksTextArea.setText("Book does not exist!");
-                        }
-                    } else {
-                        // If search field is empty, show all books
-                        booksTextArea.setText(booksText.toString());
-                    }
-                }catch (NumberFormatException e2){
-                    JOptionPane.showMessageDialog(null, "Can not be characters.");
-                    searchField.setText("");//Clearing the search field after error.
-                }
-            });
-            bookFrame.getRootPane().setDefaultButton(searchButton);
-            bookFrame.setLocationRelativeTo(null);
-            bookFrame.setVisible(true);
-        });
+        allBooksButton(panel);//Invoke all books button method.
 
         //Making button for seeing user's books.
         JButton mybooksButton = new JButton("My Books");
@@ -453,104 +581,7 @@ public class LibraryManagementApp extends JFrame {
             borrowFrame.setVisible(true);
         });
 
-        //Adding button that adds the book.
-        JButton addBook = new JButton("Add Book");
-        addBook.setFont(buttonFont);
-        addBook.setFocusPainted(false);
-        addBook.setPreferredSize(new Dimension(150, 80));
-        panel.add(addBook);
-        //When clicked, It opens the frame for adding the book.
-        addBook.addActionListener(e -> {
-            //Making new frame for adding new book.
-            JFrame addBookFrame = new JFrame("Add Book");
-            addBookFrame.setResizable(false);
-            addBookFrame.setSize(600, 400);
-            addBookFrame.setLocationRelativeTo(null);
-            addBookFrame.setVisible(true);
 
-            JPanel addBookPanel = new JPanel(new GridLayout(5, 2));//Adding panel to frame.
-            addBookFrame.add(addBookPanel);
-
-            Font labelFont = new Font("Rockwell", Font.PLAIN, 18);//Set font for the labels.
-            Font textFieldFont = new Font("Arial", Font.PLAIN, 18);//Set font for textFields.
-            Color labelColor = Color.DARK_GRAY;//Set font color.
-            //Adding labels and text fields to the panel.
-            JLabel nameLabel = new JLabel("Enter Book's Name:");
-            nameLabel.setFont(labelFont);
-            nameLabel.setForeground(labelColor);
-            addBookPanel.add(nameLabel);
-
-            JTextField nameField = new JTextField();
-            nameField.setFont(textFieldFont);
-            nameField.setToolTipText("Enter Book's name.");//When hover over it, shows this.
-            addBookPanel.add(nameField);
-
-            JLabel authorLabel = new JLabel("Enter Book's Author:");
-            authorLabel.setFont(labelFont);
-            authorLabel.setForeground(labelColor);
-            addBookPanel.add(authorLabel);
-
-            JTextField authorField = new JTextField();
-            authorField.setFont(textFieldFont);
-            authorField.setToolTipText("Enter Book's author.");//When hover over it, shows this.
-            addBookPanel.add(authorField);
-
-            JLabel genreLabel = new JLabel("Enter Book's Genre:");
-            genreLabel.setFont(labelFont);
-            genreLabel.setForeground(labelColor);
-            addBookPanel.add(genreLabel);
-
-            JTextField genreField = new JTextField();
-            genreField.setFont(textFieldFont);
-            genreField.setToolTipText("Enter Book's genre.");//When hover over it, shows this.
-            addBookPanel.add(genreField);
-
-            JLabel yearLabel = new JLabel("Enter Book's Published Year:");
-            yearLabel.setFont(labelFont);
-            yearLabel.setForeground(labelColor);
-            addBookPanel.add(yearLabel);
-
-            JTextField yearField = new JTextField();
-            yearField.setFont(textFieldFont);
-            yearField.setToolTipText("Enter Book's published year.\nCan't be characters");//When hover over it, shows this.
-            addBookPanel.add(yearField);
-
-            addBookPanel.add(new JLabel());//Empty label for spacing.
-
-            JButton addButton = new JButton("Add");//Adding button for adding the book to library.
-            addBookPanel.add(addButton);
-            addButton.setFocusPainted(false);//Turns off focusing on button.
-
-            //Adds the book to library when the button is clicked.
-            addButton.addActionListener(e1 -> {
-                try {
-                    int bookId = LibraryManagementSystem.generateBookId();//Generates new ID for the book.
-                    int publishedYear = Integer.parseInt((yearField.getText()));//Change the published year to integer value.
-                    if (nameField.getText().isEmpty() || authorField.getText().isEmpty() || genreField.getText().isEmpty())
-                        throw new CustomException();//If the fields are empty throws the exception.
-                    try {
-                        for (char c : authorField.getText().toCharArray()) {//Checking the author's name if it contains number or not.
-                            if (Character.isDigit(c))
-                                throw new CustomException();//If it contains a number throws an exception.
-                        }
-                        Books book = new Books(bookId, nameField.getText(), authorField.getText(), genreField.getText(), true, publishedYear);//Makes a book object.
-                        LibraryManagementSystem.addBook(book);//Adds the books to the ArrayList.
-                        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks, booksFilePath);//Writes the added book to the file.
-                        JOptionPane.showMessageDialog(null, "The book has been added.");
-                        addBookFrame.dispose();//Frame closes after adding the book.
-                    } catch (CustomException exception) {
-                        JOptionPane.showMessageDialog(null, exception.getMessage() + ": Author cannot be a number!");
-                        authorField.setText("");//Clears the field after error.
-                    }
-                } catch (
-                        NumberFormatException exception) {//When String value is entered in year field catches the error.
-                    JOptionPane.showMessageDialog(null, "Year can not be String");
-                    yearField.setText("");//Clears the text field after the error.
-                } catch (CustomException customException) {//When the fields are empty catches the error.
-                    JOptionPane.showMessageDialog(null, customException.getMessage() + ": Fields cannot be empty!");
-                }
-            });
-        });
 
         //Adding button for returning book.
         JButton returnBook = new JButton("Return Book");
@@ -615,6 +646,8 @@ public class LibraryManagementApp extends JFrame {
         });
     }
     public static void main(String[] args){
+        Admin admin1 = new Admin(1, "Kazybek", "kazy@gmail.com", 21, "gazi", "admin");//Creating admin.
+        LibraryManagementSystem.admins.add(admin1);
         Books book1 = new Books(101, "The tale of two cities", "Charles Dickens", "historical fiction", true, 1859);
         LibraryManagementSystem.addBook(book1);//Add book to book Array List.
         Books book2 = new Books(102, "The little prince", "Antoine de Saint Exupery", "Fantasy", true, 1943);
@@ -625,21 +658,6 @@ public class LibraryManagementApp extends JFrame {
         LibraryManagementSystem.addBook(book4);
 
         LibraryManagementSystem.alltransactions = LibraryManagementSystem.readTransactionsFromFile(transactionsFilePath);
-
-//        for (Transaction tr: LibraryManagementSystem.alltransactions){
-//            System.out.println(tr.getBorrower().getUserID() + "," + tr.getBook().getBookId());
-//        }
-//        NormalUser user = new NormalUser();
-//        LocalDate date = LocalDate.now();
-//        Transaction transaction = new Transaction(user, book3, date);
-//
-//        LibraryManagementSystem.alltransactions.add(transaction);
-//        LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions, transactionsFilePath);
-//
-//        for (Transaction tr: LibraryManagementSystem.alltransactions){
-//            System.out.println(tr.getBorrower().getUserID() + "," + tr.getBook().getBookId());
-//        }
-
 
         LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks, booksFilePath);
         LibraryManagementSystem.allbooks = LibraryManagementSystem.readBooksFromFile(booksFilePath);
@@ -663,4 +681,3 @@ public class LibraryManagementApp extends JFrame {
         });
     }
 }
-

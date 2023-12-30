@@ -1,7 +1,6 @@
 import java.util.Iterator;
 public class Admin extends User{
     private String status;
-
     public void setStatus(String status) {
         this.status = status;
     }
@@ -34,4 +33,6 @@ public class Admin extends User{
             }
         }
     }
+
+
 }

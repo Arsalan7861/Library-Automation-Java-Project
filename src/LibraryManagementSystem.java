@@ -11,6 +11,7 @@ public class LibraryManagementSystem {
     public static ArrayList<NormalUser> borrowers = new ArrayList<>();
     public static ArrayList<NormalUser> allusers = new ArrayList<>();
     public static ArrayList<Transaction> alltransactions = new ArrayList<>();
+    public static ArrayList<Admin> admins = new ArrayList<>();
 
     public static List<Books> getAllbooks() {
         return allbooks;
@@ -305,6 +306,15 @@ public class LibraryManagementSystem {
         }
         return false;
     }
+    //Controls admins ID and password when logging in.
+    public static boolean authenticateAdminByPassword(int userId, String password){
+        for (Admin admin : LibraryManagementSystem.admins){
+            if (admin.getUserID() == userId && admin.getPassword().equals(password)){
+                return true;
+            }
+        }
+        return false;
+    }
     //Searches the user ID from the User file and returns it.
     public static NormalUser findUserById(int userId){
         ArrayList<NormalUser> allusers = readUsersFromFile(LibraryManagementApp.usersFilePAth);
@@ -319,7 +329,7 @@ public class LibraryManagementSystem {
     public static int generateUserId(){
         int newUserId;
         if (allusers.isEmpty()){
-            newUserId = 1;
+            newUserId = 101;
         }
         else {
             newUserId = allusers.getLast().getUserID() + 1;
