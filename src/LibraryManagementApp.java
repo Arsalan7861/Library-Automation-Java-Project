@@ -3,6 +3,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 public class LibraryManagementApp extends JFrame {
     static final String booksFilePath = "books.txt";
@@ -99,12 +100,13 @@ public class LibraryManagementApp extends JFrame {
                 String password = new String(passwordsChars);
                 if (LibraryManagementSystem.authenticateAdminByPassword(userId, password)){//Controls admins' IDs and passwords.
                     adminPage();
+                    loginFrame.dispose();
                 }else if (LibraryManagementSystem.authenticateUserbyPassword(userId, password)){
                     timelyUserId = userId;
                     thisUser = LibraryManagementSystem.findUserById(userId);
                     JOptionPane.showMessageDialog(null, "Login successful!");
-                    loginFrame.dispose();
                     openMainApplicationPage();
+                    loginFrame.dispose();
                 }else {
                     JOptionPane.showMessageDialog(null, "Invalid userId or password");
                 }
@@ -308,8 +310,6 @@ public class LibraryManagementApp extends JFrame {
             JFrame addBookFrame = new JFrame("Add Book");
             addBookFrame.setResizable(false);
             addBookFrame.setSize(600, 400);
-            addBookFrame.setLocationRelativeTo(null);
-            addBookFrame.setVisible(true);
 
             JPanel addBookPanel = new JPanel(new GridLayout(5, 2));//Adding panel to frame.
             addBookFrame.add(addBookPanel);
@@ -393,8 +393,202 @@ public class LibraryManagementApp extends JFrame {
                     JOptionPane.showMessageDialog(null, customException.getMessage() + ": Fields cannot be empty!");
                 }
             });
+            addBookFrame.getRootPane().setDefaultButton(addButton);
+            addBookFrame.setLocationRelativeTo(null);
+            addBookFrame.setVisible(true);
+        });
+        //Adding button that delete book
+        JButton deleteBook = new JButton("Delete Book");
+        deleteBook.setFont(buttonFont);
+        deleteBook.setFocusPainted(false);
+        deleteBook.setPreferredSize(new Dimension(150,80));
+        adminPanel.add(deleteBook);
+        deleteBook.addActionListener(e -> {
+            //Making new frame for delete book
+            JFrame deleteBookFrame = new JFrame("Delete book");
+            deleteBookFrame.setResizable(false);
+            deleteBookFrame.setSize(400,300);
+            deleteBookFrame.setLocationRelativeTo(null);
+            deleteBookFrame.setVisible(true);
+
+            JPanel deleteBookPanel = new JPanel(new GridLayout(2,2));
+            deleteBookFrame.add(deleteBookPanel);
+
+            Font labelFont = new Font("Rockwell",Font.PLAIN,22);
+            Font textFieldFont = new Font("Arial",Font.BOLD,22);
+            Color labelColor = Color.DARK_GRAY;
+            //Adding Labels and text fields to the panel
+            JLabel idLabel = new JLabel("Enter book's ID:");
+            idLabel.setFont(labelFont);
+            idLabel.setForeground(labelColor);
+            deleteBookPanel.add(idLabel);
+
+            JTextField idField = new JTextField();
+            idField.setFont(textFieldFont);
+            deleteBookPanel.add(idField);
+
+            deleteBookPanel.add(new JLabel());//Adding label for spacing
+            //Adding button for submitting the task
+            JButton deleteButton = new JButton("Delete");
+            deleteBookPanel.add(deleteButton);
+            deleteButton.setFocusPainted(false);
+            deleteButton.setFont(textFieldFont);
+
+            //Adding an Action Listener
+            deleteButton.addActionListener(e1 -> {
+                try {
+                    int bookId = Integer.parseInt(idField.getText());
+                    ArrayList<Books> books = LibraryManagementSystem.readBooksFromFile(booksFilePath);
+                    Iterator<Books> iterator = books.iterator();
+                    while (iterator.hasNext()) {
+                        Books book = iterator.next();
+                        if (book.getBookId() == bookId) {
+                            iterator.remove();
+                            JOptionPane.showMessageDialog(null, "Book deleted successfully");
+                            deleteBookFrame.dispose();
+                            break;
+                        }
+                        if (!iterator.hasNext()) {
+                            JOptionPane.showMessageDialog(null, "Book not found");
+                        }
+                    }
+                    LibraryManagementSystem.dwriteBooksToFile(books, booksFilePath);
+                }
+                catch (NumberFormatException ex){
+                    JOptionPane.showMessageDialog(null,"Please enter an integer value");
+                }
+            });
+            deleteBookFrame.getRootPane().setDefaultButton(deleteButton);
+        });
+
+        //Adding delete user button
+        JButton deleteUser = new JButton("Delete User");
+        deleteUser.setFont(buttonFont);
+        deleteUser.setFocusPainted(false);
+        deleteUser.setPreferredSize(new Dimension(150,80));
+        adminPanel.add(deleteUser);
+        deleteUser.addActionListener(e -> {
+            //Making new frame for delete book
+            JFrame deleteUserFrame = new JFrame("Delete user");
+            deleteUserFrame.setResizable(false);
+            deleteUserFrame.setSize(400, 300);
+            deleteUserFrame.setLocationRelativeTo(null);
+            deleteUserFrame.setVisible(true);
+
+            JPanel deleteUserPanel = new JPanel(new GridLayout(2, 2));
+            deleteUserFrame.add(deleteUserPanel);
+
+            Font labelFont = new Font("Rockwell", Font.PLAIN, 22);
+            Font textFieldFont = new Font("Arial", Font.BOLD, 22);
+            Color labelColor = Color.DARK_GRAY;
+            //Adding Labels and text fields to the panel
+            JLabel idLabel = new JLabel("Enter user's ID:");
+            idLabel.setFont(labelFont);
+            idLabel.setForeground(labelColor);
+            deleteUserPanel.add(idLabel);
+
+            JTextField idField = new JTextField();
+            idField.setFont(textFieldFont);
+            deleteUserPanel.add(idField);
+
+            deleteUserPanel.add(new JLabel());//Adding label for spacing
+            //Adding button for submitting the task
+            JButton deleteButton = new JButton("Delete");
+            deleteUserPanel.add(deleteButton);
+            deleteButton.setFocusPainted(false);
+            deleteButton.setFont(textFieldFont);
+
+            deleteButton.addActionListener(e1 -> {
+                try {
+                    int userId = Integer.parseInt(idField.getText());
+                    ArrayList<NormalUser> users = LibraryManagementSystem.readUsersFromFile(usersFilePAth);
+                    Iterator<NormalUser> iterator = users.iterator();
+                    while (iterator.hasNext()) {
+                        NormalUser user = iterator.next();
+                        if (user.getUserID() == userId) {
+                            iterator.remove();
+                            JOptionPane.showMessageDialog(null, "User deleted successfully");
+                            deleteUserFrame.dispose();
+                            break;
+                        }
+                        if (!iterator.hasNext()) {
+                            JOptionPane.showMessageDialog(null, "Book not found");
+                        }
+                    }
+                    LibraryManagementSystem.dwriteUsersToFile(users,usersFilePAth);
+                }
+                catch (NumberFormatException ex){
+                    JOptionPane.showMessageDialog(null,"Please enter an integer value");
+                }
+            });
+            deleteUserFrame.getRootPane().setDefaultButton(deleteButton);
+        });
+
+        //Adding all users button
+        JButton usersButton = new JButton("All Users");
+        usersButton.setFont(buttonFont);
+        usersButton.setFocusPainted(false);
+        usersButton.setPreferredSize(new Dimension(150, 80));
+        adminPanel.add(usersButton);
+        //Shows the users when All users' button is clicked. Also includes search books area.
+        usersButton.addActionListener(e -> {
+            JFrame usersFrame = new JFrame("Users");
+            usersFrame.setResizable(false);
+            usersFrame.setSize(700, 600);
+
+            JPanel usersPanel = new JPanel(new BorderLayout());
+            usersPanel.setBackground(Color.GREEN);
+            usersFrame.add(usersPanel);
+
+            // Add a search bar with JTextField and JButton
+            JPanel searchPanel = new JPanel();
+            JTextField searchField = new JTextField(20);
+
+            JButton searchButton = new JButton("Search");
+            searchButton.setFocusPainted(false);//Turns off focus on button.
+
+            searchPanel.add(new JLabel("Enter User ID: "));
+            usersPanel.add(searchPanel, BorderLayout.NORTH);
+            searchPanel.add(searchField);
+            searchPanel.add(searchButton);
+
+            JTextArea usersTextArea = new JTextArea();
+            usersTextArea.setEditable(false);
+            ArrayList<NormalUser> usersList = LibraryManagementSystem.readUsersFromFile(usersFilePAth);
+            StringBuilder usersText = new StringBuilder();
+            for (NormalUser user : usersList) {
+                usersText.append(user.toString()).append("\n");
+            }
+            usersTextArea.setText(usersText.toString());
+            usersPanel.add(new JScrollPane(usersTextArea), BorderLayout.CENTER);//for scrolling books
+
+            //When search button is clicked, writes it to the screen.
+            searchButton.addActionListener(e1 -> {
+                try {
+                    String searchText = searchField.getText();
+                    if (!searchText.isEmpty()) {
+                        // Finds the searched book from the Books file and write it to the screen.
+                        NormalUser foundUser = LibraryManagementSystem.findUserById(Integer.parseInt(searchText));
+                        if (foundUser != null) {
+                            usersTextArea.setText(foundUser.toString());
+                        } else {
+                            usersTextArea.setText("User does not exist!");
+                        }
+                    } else {
+                        // If search field is empty, show all users
+                        usersTextArea.setText(usersText.toString());
+                    }
+                }catch (NumberFormatException e2){
+                    JOptionPane.showMessageDialog(null, "Can not be characters.");
+                    searchField.setText("");//Clearing the search field after error.
+                }
+            });
+            usersFrame.getRootPane().setDefaultButton(searchButton);
+            usersFrame.setLocationRelativeTo(null);
+            usersFrame.setVisible(true);
         });
     }
+
 
     private void openMainApplicationPage() {//Main page after logging in.
         JFrame mainFrame = new JFrame("Main page");
@@ -431,7 +625,7 @@ public class LibraryManagementApp extends JFrame {
                     JPanel userPAnel = new JPanel(new GridLayout(5, 2)) {//Change user frame's background.
                         protected void paintComponent(Graphics g) {
                             super.paintComponent(g);
-                            ImageIcon backgroundImage = new ImageIcon("user.png");
+                            ImageIcon backgroundImage = new ImageIcon("C:\\JavaKazybek\\images\\read2.jpg");
                             // Scale the image to fit the panel.
                             Image scaledImage = backgroundImage.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
                             ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -439,8 +633,8 @@ public class LibraryManagementApp extends JFrame {
                         }
                     };
                     userFrame.add(userPAnel);//Adding panel to the frame.
-                    Font labelFont = new Font("Rockwell", Font.PLAIN, 25);//Set font for the labels.
-                    Color labelColor = Color.white;//Set font color.
+                    Font labelFont = new Font("Rockwell", Font.BOLD, 25);//Set font for the labels.
+                    Color labelColor = Color.black;//Set font color.
                     //Adding labels for showing user's information.
                     JLabel userIdLabel = new JLabel("User ID:");
                     userIdLabel.setFont(labelFont);

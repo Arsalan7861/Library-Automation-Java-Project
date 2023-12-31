@@ -13,13 +13,6 @@ public class Admin extends User{
         this.status = status;
     }
 
-    @Override
-    public void displayInfo() {
-        System.out.println("ID : " + getUserID());
-        System.out.println("Name : " + getName());
-        System.out.println("Status : " + status);
-    }
-
     public static void deleteBookfromList(int bookId){
         Iterator<Books> iterator = LibraryManagementSystem.allbooks.iterator();
         if (LibraryManagementSystem.allbooks.isEmpty()){
