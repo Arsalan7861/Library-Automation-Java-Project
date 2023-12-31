@@ -53,6 +53,12 @@ public abstract class User{
     public User(){
 
     }
-
-    public abstract void displayInfo();
+    public String toString() {
+        return "User ID: " + getUserID() +
+                ", Name: " + getName() +
+                ", Email: " + getEmail() +
+                ", Age: " + getAge() +
+                ", Password: " + getPassword();
+        // Add other fields as needed
+    }
 }

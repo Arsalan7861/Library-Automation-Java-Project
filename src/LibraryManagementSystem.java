@@ -94,6 +94,18 @@ public class LibraryManagementSystem {
             e.printStackTrace();
         }
     }
+    //Adding write method after deleting a user
+    public static void dwriteUsersToFile(ArrayList<NormalUser> users, String usersFilePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(usersFilePath))) {
+            for (NormalUser user : users) {
+                writer.write(user.getUserID() + "," + user.getName() + "," + user.getEmail() + "," + user.getAge() + "," + user.getPassword());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     //Used in writeUsersToFile method checking the user ID if they are equal or not.
     private static boolean containsUsersWithId(List<NormalUser> users, int userId) {
         for (NormalUser user : users) {
@@ -133,6 +145,17 @@ public class LibraryManagementSystem {
                     writer.write(book.getBookId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getGenre() + "," + book.isAvailable() + "," + book.getYearPublished() + ",");
                     writer.newLine();
                 }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    //it writes books after all cleaning the file
+    public static void dwriteBooksToFile(ArrayList<Books> books, String booksFilePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(booksFilePath))) {
+            for (Books book : books) {
+                writer.write(book.getBookId() + "," + book.getTitle() + "," + book.getAuthor() + "," + book.getGenre() + "," + book.isAvailable() + "," + book.getYearPublished() + ",");
+                writer.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
