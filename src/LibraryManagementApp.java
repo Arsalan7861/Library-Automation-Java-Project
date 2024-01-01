@@ -709,7 +709,7 @@ public class LibraryManagementApp extends JFrame {
                                 JOptionPane.showMessageDialog(null, "Name updated successfully");
                                 updateNameFrame.dispose();
                             } catch (CustomException exception){
-                                JOptionPane.showMessageDialog(null, exception.getMessage() + ":Name cannot be empty and can only be charachters!");
+                                JOptionPane.showMessageDialog(null, exception.getMessage() + ": Name cannot be empty and can only be charachters!");
                             }
                         });
                         updateNameFrame.getRootPane().setDefaultButton(saveButton);
@@ -762,18 +762,16 @@ public class LibraryManagementApp extends JFrame {
                         saveButton.setFocusPainted(false);
                         saveButton.setFont(textFieldFont);
 
-                        //Adding change of name to a new name
+                        //Adding changed name to a new name.
                         saveButton.addActionListener(e2 -> {
                             try {
-                                if (emailField.getText().isEmpty() || emailField.getText().contains("@") && emailField.getText().endsWith(".com")) throw new CustomException();
+                                if (emailField.getText().isEmpty() || !emailField.getText().contains("@") || !emailField.getText().endsWith(".com")) throw new CustomException();
                                 LibraryManagementSystem.updateUserEmailInFile(thisUser.getUserID(), emailField.getText());
                                 emailLabel1.setText(emailField.getText());
                                 JOptionPane.showMessageDialog(null, "Email updated successfully");
                                 updateEmailFrame.dispose();
-                            } catch (NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(null, "Input only string characters");
                             } catch (CustomException exception) {
-                                JOptionPane.showMessageDialog(null, exception.getMessage() + ":Email cannot be empty and should contain '@' with '.com'");
+                                JOptionPane.showMessageDialog(null, exception.getMessage() + ": Email cannot be empty and should contain '@' with '.com'");
                             }
                         });
                         updateEmailFrame.getRootPane().setDefaultButton(saveButton);
@@ -828,22 +826,20 @@ public class LibraryManagementApp extends JFrame {
 
                         //Adding change of name to a new name
                         saveButton.addActionListener(e2 -> {
-                            String newAgeString = ageField.getText().trim();//control is it only digital
-                            if (!newAgeString.isEmpty() && newAgeString.matches("\\d+")) {
-                                int newAge = Integer.parseInt(newAgeString);
-                                try {
-                                    LibraryManagementSystem.updateUserAgeInFile(thisUser.getUserID(), newAge);
-                                    ageLabel1.setText(newAgeString);
-                                    JOptionPane.showMessageDialog(null, "Age updated successfully");
-                                    updateAgeFrame.dispose();
-                                } catch (NumberFormatException exception) {
-                                    JOptionPane.showMessageDialog(null, "Input only integer characters");
-                                }
-                            }else JOptionPane.showMessageDialog(null,"Age cannot be empty or String");
+                            try {
+                                if (ageField.getText().isEmpty()) throw new CustomException();
+                                LibraryManagementSystem.updateUserAgeInFile(thisUser.getUserID(), Integer.parseInt(ageField.getText()));
+                                ageLabel1.setText(ageField.getText());
+                                JOptionPane.showMessageDialog(null, "Age updated successfully");
+                                updateAgeFrame.dispose();
+                            } catch (NumberFormatException exception) {
+                                JOptionPane.showMessageDialog(null, "Input only integer values!");
+                            } catch (CustomException exception){
+                                JOptionPane.showMessageDialog(null,exception.getMessage() + ": Age cannot be empty!");
+                            }
                         });
                         updateAgeFrame.getRootPane().setDefaultButton(saveButton);
                     });
-
 
                     JLabel passwordLabel = new JLabel("Password:");
                     passwordLabel.setFont(labelFont);
@@ -894,17 +890,16 @@ public class LibraryManagementApp extends JFrame {
 
                         //Adding change of name to a new name
                         saveButton.addActionListener(e2 -> {
-                            String newPassword = passwordField.getText().trim();//for prevent an integer
-                            if (!newPassword.isEmpty()) {
-                                try {
-                                    LibraryManagementSystem.updateUserPasswordInFile(thisUser.getUserID(), newPassword);
-                                    passwordLabel1.setText(newPassword);
-                                    JOptionPane.showMessageDialog(null, "Password updated successfully");
-                                    updatePasswordFrame.dispose();
-                                } catch (Exception exception) {
-                                    JOptionPane.showMessageDialog(null, "Input valid password");
-                                }
-                            }else JOptionPane.showMessageDialog(null,"Password cannot be empty");
+                            try {
+                                if (passwordField.getText().isEmpty()) throw new CustomException();
+                                LibraryManagementSystem.updateUserPasswordInFile(thisUser.getUserID(), passwordField.getText());
+                                passwordLabel1.setText(passwordField.getText());
+                                JOptionPane.showMessageDialog(null, "Password updated successfully");
+                                updatePasswordFrame.dispose();
+                            } catch (CustomException exception) {
+                                JOptionPane.showMessageDialog(null,exception.getMessage() + ": Password cannot be empty");
+                            }
+
                         });
                         updatePasswordFrame.getRootPane().setDefaultButton(saveButton);
                     });

@@ -242,10 +242,9 @@ public class LibraryManagementSystem {
             e.printStackTrace();
         }
     }
-
-    //Update user's name in the file
+    //Updates user's name in the file.
     public static void updateUserNameInFile(int userId, String newName) {
-        Path filePath = Paths.get("users.txt"); // Adjust the file path as needed
+        Path filePath = Paths.get("users.txt");
         List<String> lines;
         try {
             lines = Files.readAllLines(filePath);
@@ -266,86 +265,75 @@ public class LibraryManagementSystem {
             e.printStackTrace();
         }
     }
-    //Update user email in file
+    //Updates user email in file.
     public static void updateUserEmailInFile(int userId, String newEmail) {
-        Path filePath = Paths.get("users.txt"); // Adjust the file path as needed
+        Path filePath = Paths.get("users.txt");
         List<String> lines;
         try {
             lines = Files.readAllLines(filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            if (line.startsWith(userId + ",")) {
-                // Assuming the user information is stored as "userId,userName,email,age,password"
-                String[] parts = line.split(",");
-                parts[2] = newEmail; // Update the user's email
-                lines.set(i, String.join(",", parts));
-                break;
-            }
-        }
 
-        try {
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                if (line.startsWith(userId + ",")) {
+                    // Assuming the user information is stored as "userId,userName,email,age,password"
+                    String[] parts = line.split(",");
+                    parts[2] = newEmail; // Update the user's email
+                    lines.set(i, String.join(",", parts));
+                    break;
+                }
+            }
+
             Files.write(filePath, lines);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
+    //Updates user's age in the file.
     public static void updateUserAgeInFile(int userId, int newAge) {
         Path filePath = Paths.get("users.txt"); // Adjust the file path as needed
         List<String> lines;
         try {
             lines = Files.readAllLines(filePath);
+
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                if (line.startsWith(userId + ",")) {
+                    // Assuming the user information is stored as "userId,userName,email,age,password"
+                    String[] parts = line.split(",");
+                    parts[3] = String.valueOf(newAge); // Update the user's email
+                    lines.set(i, String.join(",", parts));
+                    break;
+                }
+            }
+
+            Files.write(filePath, lines);
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            if (line.startsWith(userId + ",")) {
-                // Assuming the user information is stored as "userId,userName,email,age,password"
-                String[] parts = line.split(",");
-                parts[3] = String.valueOf(newAge); // Update the user's email
-                lines.set(i, String.join(",", parts));
-                break;
-            }
-        }
-
-        try {
-            Files.write(filePath, lines);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
-
-    //update password in the file
+    //updates user's password in the file.
     public static void updateUserPasswordInFile(int userId, String newPassword) {
         Path filePath = Paths.get("users.txt"); // Adjust the file path as needed
         List<String> lines;
         try {
             lines = Files.readAllLines(filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            if (line.startsWith(userId + ",")) {
-                // Assuming the user information is stored as "userId,userName,email,age,password"
-                String[] parts = line.split(",");
-                parts[4] = newPassword; // Update the user's email
-                lines.set(i, String.join(",", parts));
-                break;
-            }
-        }
 
-        try {
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                if (line.startsWith(userId + ",")) {
+                    // Assuming the user information is stored as "userId,userName,email,age,password"
+                    String[] parts = line.split(",");
+                    parts[4] = newPassword; // Update the user's email
+                    lines.set(i, String.join(",", parts));
+                    break;
+                }
+            }
+
             Files.write(filePath, lines);
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
     }
     //return book from books file by bookId
