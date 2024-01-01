@@ -594,7 +594,7 @@ public class LibraryManagementApp extends JFrame {
         JPanel panel = new JPanel() {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon backgroundImage = new ImageIcon("R.jpeg");
+                ImageIcon backgroundImage = new ImageIcon("mainFrame.jpeg");
                 // Scale the image to fit the panel.
                 Image scaledImage = backgroundImage.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -619,7 +619,7 @@ public class LibraryManagementApp extends JFrame {
                     JPanel userDetailPanel = new JPanel(new GridLayout(5,3,10,10)) {//Change user frame's background.
                         protected void paintComponent(Graphics g) {
                             super.paintComponent(g);
-                            ImageIcon backgroundImage = new ImageIcon("read2.jpg");
+                            ImageIcon backgroundImage = new ImageIcon("user1.jpeg");
                             // Scale the image to fit the panel.
                             Image scaledImage = backgroundImage.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
                             ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -872,7 +872,7 @@ public class LibraryManagementApp extends JFrame {
                         Font textFieldFont = new Font("Arial", Font.PLAIN, 22);//Set font for textFields.
                         Color labelColor1 = Color.DARK_GRAY;//Set font color.
                         //Adding labels and text fields to the panel.
-                        JLabel passwordLabel2 = new JLabel("Enter Updated Email:");
+                        JLabel passwordLabel2 = new JLabel("Enter Email:");
                         passwordLabel2.setFont(labelFont1);
                         passwordLabel2.setForeground(labelColor1);
                         updatePasswordPanel.add(passwordLabel2);
