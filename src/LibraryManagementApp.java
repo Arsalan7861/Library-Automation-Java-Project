@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-
 public class LibraryManagementApp extends JFrame {
     static final String booksFilePath = "books.txt";
     static final String usersFilePAth = "users.txt";
@@ -570,6 +569,7 @@ public class LibraryManagementApp extends JFrame {
                         // Finds the searched book from the Books file and write it to the screen.
                         NormalUser foundUser = LibraryManagementSystem.findUserById(Integer.parseInt(searchText));
                         if (foundUser != null) {
+
                             usersTextArea.setText(foundUser.toString());
                         } else {
                             usersTextArea.setText("User does not exist!");
@@ -622,7 +622,7 @@ public class LibraryManagementApp extends JFrame {
                     JFrame userFrame = new JFrame("User Info");
                     userFrame.setResizable(false);
                     userFrame.setSize(700, 600);
-                    JPanel userPAnel = new JPanel(new GridLayout(5, 2)) {//Change user frame's background.
+                    JPanel userDetailPanel = new JPanel(new GridLayout(5,3,10,10)) {//Change user frame's background.
                         protected void paintComponent(Graphics g) {
                             super.paintComponent(g);
                             ImageIcon backgroundImage = new ImageIcon("C:\\JavaKazybek\\images\\read2.jpg");
@@ -632,65 +632,292 @@ public class LibraryManagementApp extends JFrame {
                             scaledIcon.paintIcon(this, g, 0, 0);
                         }
                     };
-                    userFrame.add(userPAnel);//Adding panel to the frame.
+                    userDetailPanel.setPreferredSize(new Dimension(400,300));
+                    userFrame.add(userDetailPanel);//Adding panel to the frame.
                     Font labelFont = new Font("Rockwell", Font.BOLD, 25);//Set font for the labels.
+                    Font updateButtonFont = new Font("Rockwell",Font.BOLD,20);
                     Color labelColor = Color.black;//Set font color.
                     //Adding labels for showing user's information.
                     JLabel userIdLabel = new JLabel("User ID:");
                     userIdLabel.setFont(labelFont);
                     userIdLabel.setForeground(labelColor);
-                    userPAnel.add(userIdLabel);
+                    userDetailPanel.add(userIdLabel);
 
                     JLabel idLabel = new JLabel(String.valueOf(user.getUserID()));
                     idLabel.setFont(labelFont);
                     idLabel.setForeground(labelColor);
-                    userPAnel.add(idLabel);
+                    userDetailPanel.add(idLabel);
+
+                    JLabel userIdLabelSpace = new JLabel("");
+                    userIdLabelSpace.setFont(labelFont);
+                    userIdLabelSpace.setForeground(labelColor);
+                    userDetailPanel.add(userIdLabelSpace);
 
                     JLabel nameLabel = new JLabel("Name:");
                     nameLabel.setFont(labelFont);
                     nameLabel.setForeground(labelColor);
-                    userPAnel.add(nameLabel);
+                    userDetailPanel.add(nameLabel);
 
                     JLabel nameLabel1 = new JLabel(user.getName());
                     nameLabel1.setFont(labelFont);
                     nameLabel1.setForeground(labelColor);
-                    userPAnel.add(nameLabel1);
+                    userDetailPanel.add(nameLabel1);
+
+                    // Add update button for name
+                    JButton updateNameButton = new JButton("Update Name");
+                    updateNameButton.setPreferredSize(new Dimension(60,40));
+                    updateNameButton.setFocusPainted(false);
+                    updateNameButton.setFont(updateButtonFont);
+                    userDetailPanel.add(updateNameButton);
+
+                    //Adding update name action listener
+                    updateNameButton.addActionListener(e1 -> {
+                        JFrame updateNameFrame = new JFrame("Update Name");
+                        updateNameFrame.setResizable(false);
+                        updateNameFrame.setSize(350, 200);
+                        updateNameFrame.setLocationRelativeTo(null);
+                        updateNameFrame.setVisible(true);
+
+                        JPanel updateNamePanel = new JPanel(new GridLayout(2, 2));
+                        updateNameFrame.add(updateNamePanel);
+
+                        Font labelFont1 = new Font("Rockwell", Font.PLAIN, 22);//Set font for the labels.
+                        Font textFieldFont = new Font("Arial", Font.PLAIN, 22);//Set font for textFields.
+                        Color labelColor1 = Color.DARK_GRAY;//Set font color.
+                        //Adding labels and text fields to the panel.
+                        JLabel nameLabel2 = new JLabel("Enter Updated Name:");
+                        nameLabel2.setFont(labelFont1);
+                        nameLabel2.setForeground(labelColor1);
+                        updateNamePanel.add(nameLabel2);
+
+                        JTextField nameField = new JTextField();
+                        nameField.setFont(textFieldFont);
+                        updateNamePanel.add(nameField);
+
+                        updateNamePanel.add(new JLabel());//Adding label for spacing.
+                        //Adding button for submitting the task.
+                        JButton saveButton = new JButton("Save");
+                        updateNamePanel.add(saveButton);
+                        saveButton.setFocusPainted(false);
+                        saveButton.setFont(textFieldFont);
+
+                        //Adding change of name to a new name
+                        saveButton.addActionListener(e2 -> {
+                            String newName = nameField.getText().trim();//for prevent an integer
+                            if (!newName.isEmpty() && newName.matches("[a-zA-A]+")) {
+                                try {
+                                    LibraryManagementSystem.updateUserNameInFile(thisUser.getUserID(), newName);
+                                    nameLabel1.setText(newName);
+                                    JOptionPane.showMessageDialog(null, "Name updated successfully");
+                                    updateNameFrame.dispose();
+                                } catch (NumberFormatException exception) {
+                                    JOptionPane.showMessageDialog(null, "Input only string characters");
+                                }
+                            }else JOptionPane.showMessageDialog(null,"Name cannot be empty or an integer");
+                        });
+                        updateNameFrame.getRootPane().setDefaultButton(saveButton);
+                    });
 
                     JLabel emailLabel = new JLabel("Email:");
                     emailLabel.setFont(labelFont);
                     emailLabel.setForeground(labelColor);
-                    userPAnel.add(emailLabel);
+                    userDetailPanel.add(emailLabel);
 
                     JLabel emailLabel1 = new JLabel(user.getEmail());
                     emailLabel1.setFont(labelFont);
                     emailLabel1.setForeground(labelColor);
-                    userPAnel.add(emailLabel1);
+                    userDetailPanel.add(emailLabel1);
+
+                    JButton updateEmailButton = new JButton("Update Email");
+                    updateEmailButton.setPreferredSize(new Dimension(60,40));
+                    updateEmailButton.setFocusPainted(false);
+                    updateEmailButton.setFont(updateButtonFont);
+                    userDetailPanel.add(updateEmailButton);
+
+                    //add  action listener for updating email
+                    updateEmailButton.addActionListener(e1 -> {
+                        JFrame updateEmailFrame = new JFrame("Update Email");
+                        updateEmailFrame.setResizable(false);
+                        updateEmailFrame.setSize(350, 200);
+                        updateEmailFrame.setLocationRelativeTo(null);
+                        updateEmailFrame.setVisible(true);
+
+                        JPanel updateEmailPanel = new JPanel(new GridLayout(2, 2));
+                        updateEmailFrame.add(updateEmailPanel);
+
+                        Font labelFont1 = new Font("Rockwell", Font.PLAIN, 22);//Set font for the labels.
+                        Font textFieldFont = new Font("Arial", Font.PLAIN, 22);//Set font for textFields.
+                        Color labelColor1 = Color.DARK_GRAY;//Set font color.
+                        //Adding labels and text fields to the panel.
+                        JLabel emailLabel2 = new JLabel("Enter Updated Email:");
+                        emailLabel2.setFont(labelFont1);
+                        emailLabel2.setForeground(labelColor1);
+                        updateEmailPanel.add(emailLabel2);
+
+                        JTextField emailField = new JTextField();
+                        emailField.setFont(textFieldFont);
+                        updateEmailPanel.add(emailField);
+
+                        updateEmailPanel.add(new JLabel());//Adding label for spacing.
+                        //Adding button for submitting the task.
+                        JButton saveButton = new JButton("Save");
+                        updateEmailPanel.add(saveButton);
+                        saveButton.setFocusPainted(false);
+                        saveButton.setFont(textFieldFont);
+
+                        //Adding change of name to a new name
+                        saveButton.addActionListener(e2 -> {
+                            String newEmail = emailField.getText().trim();//for prevent an integer
+                            if (!newEmail.isEmpty() && newEmail.contains("@") && newEmail.endsWith(".com")) {
+                                try {
+                                    LibraryManagementSystem.updateUserEmailInFile(thisUser.getUserID(), newEmail);
+                                    emailLabel1.setText(newEmail);
+                                    JOptionPane.showMessageDialog(null, "Email updated successfully");
+                                    updateEmailFrame.dispose();
+                                } catch (NumberFormatException exception) {
+                                    JOptionPane.showMessageDialog(null, "Input only string characters");
+                                }
+                            }else JOptionPane.showMessageDialog(null,"Email cannot be empty and should contain '@' with '.com'");
+                        });
+                        updateEmailFrame.getRootPane().setDefaultButton(saveButton);
+                    });
 
                     JLabel ageLabel = new JLabel("Age:");
                     ageLabel.setFont(labelFont);
                     ageLabel.setForeground(labelColor);
-                    userPAnel.add(ageLabel);
+                    userDetailPanel.add(ageLabel);
 
                     JLabel ageLabel1 = new JLabel(String.valueOf(user.getAge()));
                     ageLabel1.setFont(labelFont);
                     ageLabel1.setForeground(labelColor);
-                    userPAnel.add(ageLabel1);
+                    userDetailPanel.add(ageLabel1);
 
-                    JLabel passLabel = new JLabel("Password:");
-                    passLabel.setFont(labelFont);
-                    passLabel.setForeground(labelColor);
-                    userPAnel.add(passLabel);
+                    JButton updateAgeButton = new JButton("Update Age");
+                    updateAgeButton.setPreferredSize(new Dimension(60,40));
+                    updateAgeButton.setFocusPainted(false);
+                    updateAgeButton.setFont(updateButtonFont);
+                    userDetailPanel.add(updateAgeButton);
 
-                    JLabel passLabel1 = new JLabel(user.getPassword());
-                    passLabel1.setFont(labelFont);
-                    passLabel1.setForeground(labelColor);
-                    userPAnel.add(passLabel1);
+                    //Adding action listener for updating an age
+                    updateAgeButton.addActionListener(e1 -> {
+                        JFrame updateAgeFrame = new JFrame("Update Age");
+                        updateAgeFrame.setResizable(false);
+                        updateAgeFrame.setSize(350, 200);
+                        updateAgeFrame.setLocationRelativeTo(null);
+                        updateAgeFrame.setVisible(true);
+
+                        JPanel updateAgePanel = new JPanel(new GridLayout(2, 2));
+                        updateAgeFrame.add(updateAgePanel);
+
+                        Font labelFont1 = new Font("Rockwell", Font.PLAIN, 22);//Set font for the labels.
+                        Font textFieldFont = new Font("Arial", Font.PLAIN, 22);//Set font for textFields.
+                        Color labelColor1 = Color.DARK_GRAY;//Set font color.
+                        //Adding labels and text fields to the panel.
+                        JLabel AgeLabel2 = new JLabel("Enter Updated Age:");
+                        AgeLabel2.setFont(labelFont1);
+                        AgeLabel2.setForeground(labelColor1);
+                        updateAgePanel.add(AgeLabel2);
+
+                        JTextField ageField = new JTextField();
+                        ageField.setFont(textFieldFont);
+                        updateAgePanel.add(ageField);
+
+                        updateAgePanel.add(new JLabel());//Adding label for spacing.
+                        //Adding button for submitting the task.
+                        JButton saveButton = new JButton("Save");
+                        updateAgePanel.add(saveButton);
+                        saveButton.setFocusPainted(false);
+                        saveButton.setFont(textFieldFont);
+
+                        //Adding change of name to a new name
+                        saveButton.addActionListener(e2 -> {
+                            String newAgeString = ageField.getText().trim();//control is it only digital
+                            if (!newAgeString.isEmpty() && newAgeString.matches("\\d+")) {
+                                int newAge = Integer.parseInt(newAgeString);
+                                try {
+                                    LibraryManagementSystem.updateUserAgeInFile(thisUser.getUserID(), newAge);
+                                    ageLabel1.setText(newAgeString);
+                                    JOptionPane.showMessageDialog(null, "Age updated successfully");
+                                    updateAgeFrame.dispose();
+                                } catch (NumberFormatException exception) {
+                                    JOptionPane.showMessageDialog(null, "Input only integer characters");
+                                }
+                            }else JOptionPane.showMessageDialog(null,"Age cannot be empty or String");
+                        });
+                        updateAgeFrame.getRootPane().setDefaultButton(saveButton);
+                    });
+
+
+                    JLabel passwordLabel = new JLabel("Password:");
+                    passwordLabel.setFont(labelFont);
+                    passwordLabel.setForeground(labelColor);
+                    userDetailPanel.add(passwordLabel);
+
+                    JLabel passwordLabel1 = new JLabel(user.getPassword());
+                    passwordLabel1.setFont(labelFont);
+                    passwordLabel1.setForeground(labelColor);
+                    userDetailPanel.add(passwordLabel1);
+
+                    JButton updatePasswordButton = new JButton("Update Password");
+                    updatePasswordButton.setPreferredSize(new Dimension(60,40));
+                    updatePasswordButton.setFocusPainted(false);
+                    updatePasswordButton.setFont(updateButtonFont);
+                    userDetailPanel.add(updatePasswordButton);
+
+                    //Add action listener for updating password
+                    updatePasswordButton.addActionListener(e1 -> {
+                        JFrame updatePasswordFrame = new JFrame("Update Password");
+                        updatePasswordFrame.setResizable(false);
+                        updatePasswordFrame.setSize(350, 200);
+                        updatePasswordFrame.setLocationRelativeTo(null);
+                        updatePasswordFrame.setVisible(true);
+
+                        JPanel updatePasswordPanel = new JPanel(new GridLayout(2, 2));
+                        updatePasswordFrame.add(updatePasswordPanel);
+
+                        Font labelFont1 = new Font("Rockwell", Font.PLAIN, 22);//Set font for the labels.
+                        Font textFieldFont = new Font("Arial", Font.PLAIN, 22);//Set font for textFields.
+                        Color labelColor1 = Color.DARK_GRAY;//Set font color.
+                        //Adding labels and text fields to the panel.
+                        JLabel passwordLabel2 = new JLabel("Enter Updated Email:");
+                        passwordLabel2.setFont(labelFont1);
+                        passwordLabel2.setForeground(labelColor1);
+                        updatePasswordPanel.add(passwordLabel2);
+
+                        JTextField passwordField = new JTextField();
+                        passwordField.setFont(textFieldFont);
+                        updatePasswordPanel.add(passwordField);
+
+                        updatePasswordPanel.add(new JLabel());//Adding label for spacing.
+                        //Adding button for submitting the task.
+                        JButton saveButton = new JButton("Save");
+                        updatePasswordPanel.add(saveButton);
+                        saveButton.setFocusPainted(false);
+                        saveButton.setFont(textFieldFont);
+
+                        //Adding change of name to a new name
+                        saveButton.addActionListener(e2 -> {
+                            String newPassword = passwordField.getText().trim();//for prevent an integer
+                            if (!newPassword.isEmpty()) {
+                                try {
+                                    LibraryManagementSystem.updateUserPasswordInFile(thisUser.getUserID(), newPassword);
+                                    passwordLabel1.setText(newPassword);
+                                    JOptionPane.showMessageDialog(null, "Password updated successfully");
+                                    updatePasswordFrame.dispose();
+                                } catch (Exception exception) {
+                                    JOptionPane.showMessageDialog(null, "Input valid password");
+                                }
+                            }else JOptionPane.showMessageDialog(null,"Password cannot be empty");
+                        });
+                        updatePasswordFrame.getRootPane().setDefaultButton(saveButton);
+                    });
 
                     userFrame.setVisible(true);
                     userFrame.setLocationRelativeTo(null);
                 }
             }
         });
+
 
         allBooksButton(panel);//Invoke all books button method.
 
