@@ -695,17 +695,17 @@ public class LibraryManagementApp extends JFrame {
                         saveButton.setFocusPainted(false);
                         saveButton.setFont(textFieldFont);
 
-                        //Adding change of name to a new name
+                        //Adding changed name to a new name.
                         saveButton.addActionListener(e2 -> {
                             try {
-                                LibraryManagementSystem.updateUserNameInFile(thisUser.getUserID(), nameField.getText());
-                                nameLabel1.setText(nameField.getText());
                                 if (nameField.getText().isEmpty()) throw new CustomException();
-                                for (char c : nameField.getText().toCharArray()) {//Isimde sayinin olup olmadigi kontrol edip Exception'a firlatmak.
+                                for (char c : nameField.getText().toCharArray()) {//Controls if it contains integer value or not.
                                     if (Character.isDigit(c)) {
                                         throw new CustomException();
                                     }
                                 }
+                                nameLabel1.setText(nameField.getText());
+                                LibraryManagementSystem.updateUserNameInFile(thisUser.getUserID(), nameField.getText());
                                 JOptionPane.showMessageDialog(null, "Name updated successfully");
                                 updateNameFrame.dispose();
                             } catch (CustomException exception){
@@ -746,7 +746,7 @@ public class LibraryManagementApp extends JFrame {
                         Font textFieldFont = new Font("Arial", Font.PLAIN, 22);//Set font for textFields.
                         Color labelColor1 = Color.DARK_GRAY;//Set font color.
                         //Adding labels and text fields to the panel.
-                        JLabel emailLabel2 = new JLabel("Enter Updated Email:");
+                        JLabel emailLabel2 = new JLabel("Enter Email:");
                         emailLabel2.setFont(labelFont1);
                         emailLabel2.setForeground(labelColor1);
                         updateEmailPanel.add(emailLabel2);
@@ -764,17 +764,17 @@ public class LibraryManagementApp extends JFrame {
 
                         //Adding change of name to a new name
                         saveButton.addActionListener(e2 -> {
-                            String newEmail = emailField.getText().trim();//for prevent an integer
-                            if (!newEmail.isEmpty() && newEmail.contains("@") && newEmail.endsWith(".com")) {
-                                try {
-                                    LibraryManagementSystem.updateUserEmailInFile(thisUser.getUserID(), newEmail);
-                                    emailLabel1.setText(newEmail);
-                                    JOptionPane.showMessageDialog(null, "Email updated successfully");
-                                    updateEmailFrame.dispose();
-                                } catch (NumberFormatException exception) {
-                                    JOptionPane.showMessageDialog(null, "Input only string characters");
-                                }
-                            }else JOptionPane.showMessageDialog(null,"Email cannot be empty and should contain '@' with '.com'");
+                            try {
+                                if (emailField.getText().isEmpty() || emailField.getText().contains("@") && emailField.getText().endsWith(".com")) throw new CustomException();
+                                LibraryManagementSystem.updateUserEmailInFile(thisUser.getUserID(), emailField.getText());
+                                emailLabel1.setText(emailField.getText());
+                                JOptionPane.showMessageDialog(null, "Email updated successfully");
+                                updateEmailFrame.dispose();
+                            } catch (NumberFormatException exception) {
+                                JOptionPane.showMessageDialog(null, "Input only string characters");
+                            } catch (CustomException exception) {
+                                JOptionPane.showMessageDialog(null, exception.getMessage() + ":Email cannot be empty and should contain '@' with '.com'");
+                            }
                         });
                         updateEmailFrame.getRootPane().setDefaultButton(saveButton);
                     });
@@ -810,7 +810,7 @@ public class LibraryManagementApp extends JFrame {
                         Font textFieldFont = new Font("Arial", Font.PLAIN, 22);//Set font for textFields.
                         Color labelColor1 = Color.DARK_GRAY;//Set font color.
                         //Adding labels and text fields to the panel.
-                        JLabel AgeLabel2 = new JLabel("Enter Updated Age:");
+                        JLabel AgeLabel2 = new JLabel("Enter Age:");
                         AgeLabel2.setFont(labelFont1);
                         AgeLabel2.setForeground(labelColor1);
                         updateAgePanel.add(AgeLabel2);
