@@ -994,8 +994,6 @@ public class LibraryManagementApp extends JFrame {
             borrowFrame.setVisible(true);
         });
 
-
-
         //Adding button for returning book.
         JButton returnBook = new JButton("Return Book");
         returnBook.setFont(buttonFont);
