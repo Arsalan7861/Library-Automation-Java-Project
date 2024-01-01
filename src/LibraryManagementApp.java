@@ -119,6 +119,7 @@ public class LibraryManagementApp extends JFrame {
         loginFrame.getRootPane().setDefaultButton(loginSubmitButton);//Set the default(Enter) button to loginSubmitButton
         loginFrame.setVisible(true);
     }
+    //Sign Up page for creating a new account.
     private void openSignUpPage() {
         JFrame signUpFrame = new JFrame("Sign Up Page");
         signUpFrame.setSize(600, 400);
@@ -616,7 +617,7 @@ public class LibraryManagementApp extends JFrame {
                     JFrame userFrame = new JFrame("User Info");
                     userFrame.setResizable(false);
                     userFrame.setSize(700, 600);
-                    JPanel userDetailPanel = new JPanel(new GridLayout(5,3,10,10)) {//Change user frame's background.
+                    JPanel userDetailPanel = new JPanel(new GridLayout(7,5,10,10)) {//Change user frame's background.
                         protected void paintComponent(Graphics g) {
                             super.paintComponent(g);
                             ImageIcon backgroundImage = new ImageIcon("user1.jpeg");
@@ -659,7 +660,7 @@ public class LibraryManagementApp extends JFrame {
 
                     // Add update button for name
                     JButton updateNameButton = new JButton("Update Name");
-                    updateNameButton.setPreferredSize(new Dimension(50,40));
+                    updateNameButton.setPreferredSize(new Dimension(100,40));
                     updateNameButton.setFocusPainted(false);
                     updateNameButton.setFont(updateButtonFont);
                     userDetailPanel.add(updateNameButton);
@@ -910,7 +911,6 @@ public class LibraryManagementApp extends JFrame {
             }
         });
 
-
         allBooksButton(panel);//Invoke all books button method.
 
         //Making button for seeing user's books.
@@ -1069,8 +1069,6 @@ public class LibraryManagementApp extends JFrame {
         LibraryManagementSystem.addBook(book3);
         Books book4 = new Books(104, "The Alchemist", "Paulo Coelho", "Fantasy", true, 1988);
         LibraryManagementSystem.addBook(book4);
-
-        LibraryManagementSystem.alltransactions = LibraryManagementSystem.readTransactionsFromFile(transactionsFilePath);
 
         LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks, booksFilePath);
         LibraryManagementSystem.allbooks = LibraryManagementSystem.readBooksFromFile(booksFilePath);
