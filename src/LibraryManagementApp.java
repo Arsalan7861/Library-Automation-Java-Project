@@ -61,6 +61,9 @@ public class LibraryManagementApp extends JFrame {
         loginFrame.setSize(600, 400);
         loginFrame.setLocationRelativeTo(null);
 
+        ImageIcon icon = new ImageIcon("icon.jpg");
+        loginFrame.setIconImage(icon.getImage());//Set an icon to the frame.
+
         JTextField userIdField = new JTextField();
         Font textFieldFont = new Font("Arial", Font.PLAIN, 25);
         userIdField.setFont(textFieldFont);
@@ -101,17 +104,17 @@ public class LibraryManagementApp extends JFrame {
                 }else if (LibraryManagementSystem.authenticateUserbyPassword(userId, password)){
                     timelyUserId = userId;
                     thisUser = LibraryManagementSystem.findUserById(userId);
-                    JOptionPane.showMessageDialog(null, "Login successful!");
+                    JOptionPane.showMessageDialog(null, "Login successful!", "Login", JOptionPane.INFORMATION_MESSAGE);
                     openMainApplicationPage();
                     loginFrame.dispose();
                 }else {
-                    JOptionPane.showMessageDialog(null, "Invalid userId or password");
+                    JOptionPane.showMessageDialog(null, "Invalid userId or password", "Login Failed", JOptionPane.ERROR_MESSAGE);
                 }
                 userIdField.setText("");//Clear the userId input.
                 passwordField.setText("");//Clear the password input.
             } catch (NumberFormatException ex) {
                 // Handle the case where the user entered a non-numeric value for userId
-                JOptionPane.showMessageDialog(null, "Invalid userId. Please enter a numeric value.");
+                JOptionPane.showMessageDialog(null, "Please enter a numeric value.", "Invalid User ID", JOptionPane.ERROR_MESSAGE);
                 userIdField.setText(""); // Clear the invalid input
                 passwordField.setText("");
             }
@@ -124,6 +127,9 @@ public class LibraryManagementApp extends JFrame {
         JFrame signUpFrame = new JFrame("Sign Up Page");
         signUpFrame.setSize(600, 400);
         signUpFrame.setLocationRelativeTo(null);
+
+        ImageIcon icon = new ImageIcon("icon.jpg");
+        signUpFrame.setIconImage(icon.getImage());//Set an icon to the frame.
 
         Font textFieldFont = new Font("Arial", Font.PLAIN, 25);
         JTextField nameField = new JTextField();
@@ -174,7 +180,7 @@ public class LibraryManagementApp extends JFrame {
                 if (emailField.getText().contains("@") && emailField.getText().endsWith(".com")) {//Controlling the email.
                     email = emailField.getText();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Wrong mail.");
+                    JOptionPane.showMessageDialog(null, "Wrong mail.", "Error", JOptionPane.ERROR_MESSAGE);
                     emailField.setText("");
                 }
                 int age = Integer.parseInt(ageField.getText());
@@ -195,9 +201,10 @@ public class LibraryManagementApp extends JFrame {
                 passwordField.setText("");
                 JOptionPane.showMessageDialog(null, "Your User Id: " + userId);//Showing user Id to user.
             } catch (CustomException exception) {
-                JOptionPane.showMessageDialog(null, exception.getMessage() + ": Fields cannot be empty!");
+                JOptionPane.showMessageDialog(null, exception.getMessage() + ": Fields cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                ageField.setText("");//Clearing the field after the error.
             } catch (NumberFormatException exception) {
-                JOptionPane.showMessageDialog(null, "String value is not accepted in the age field!");
+                JOptionPane.showMessageDialog(null, "String value is not accepted in the age field!", "Error", JOptionPane.ERROR_MESSAGE);
                 ageField.setText("");//Clearing the field after the error.
             }
         });
@@ -218,6 +225,9 @@ public class LibraryManagementApp extends JFrame {
             JFrame bookFrame = new JFrame("Books");
             bookFrame.setResizable(false);
             bookFrame.setSize(700, 600);
+
+            ImageIcon icon = new ImageIcon("icon.jpg");
+            bookFrame.setIconImage(icon.getImage());//Set an icon to the frame.
 
             JPanel bookPanel = new JPanel(new BorderLayout());
             bookPanel.setBackground(Color.CYAN);
@@ -262,7 +272,7 @@ public class LibraryManagementApp extends JFrame {
                         booksTextArea.setText(booksText.toString());
                     }
                 }catch (NumberFormatException e2){
-                    JOptionPane.showMessageDialog(null, "Can not be characters.");
+                    JOptionPane.showMessageDialog(null, "Can not be characters!", "Error", JOptionPane.ERROR_MESSAGE);
                     searchField.setText("");//Clearing the search field after error.
                 }
             });
@@ -277,6 +287,9 @@ public class LibraryManagementApp extends JFrame {
         adminFrame.setSize(700, 600);
         adminFrame.setLocationRelativeTo(null);
         adminFrame.setVisible(true);
+
+        ImageIcon icon = new ImageIcon("icon.jpg");
+        adminFrame.setIconImage(icon.getImage());//Set an icon to the frame.
         //Add background to admin panel.
         JPanel adminPanel = new JPanel(){
             protected void paintComponent(Graphics g){
@@ -305,6 +318,7 @@ public class LibraryManagementApp extends JFrame {
             JFrame addBookFrame = new JFrame("Add Book");
             addBookFrame.setResizable(false);
             addBookFrame.setSize(600, 400);
+            addBookFrame.setIconImage(icon.getImage());//Set an icon to the frame.
 
             JPanel addBookPanel = new JPanel(new GridLayout(5, 2));//Adding panel to frame.
             addBookFrame.add(addBookPanel);
@@ -374,18 +388,18 @@ public class LibraryManagementApp extends JFrame {
                         Books book = new Books(bookId, nameField.getText(), authorField.getText(), genreField.getText(), true, publishedYear);//Makes a book object.
                         LibraryManagementSystem.addBook(book);//Adds the books to the ArrayList.
                         LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks, booksFilePath);//Writes the added book to the file.
-                        JOptionPane.showMessageDialog(null, "The book has been added.");
+                        JOptionPane.showMessageDialog(null, "The book has been added.", "Done", JOptionPane.INFORMATION_MESSAGE);
                         addBookFrame.dispose();//Frame closes after adding the book.
                     } catch (CustomException exception) {
-                        JOptionPane.showMessageDialog(null, exception.getMessage() + ": Author cannot be a number!");
+                        JOptionPane.showMessageDialog(null, exception.getMessage() + ": Author cannot be a number!", "Error", JOptionPane.ERROR_MESSAGE);
                         authorField.setText("");//Clears the field after error.
                     }
                 } catch (
                         NumberFormatException exception) {//When String value is entered in year field catches the error.
-                    JOptionPane.showMessageDialog(null, "Year can not be String");
+                    JOptionPane.showMessageDialog(null, "Year can not be String", "Error", JOptionPane.ERROR_MESSAGE);
                     yearField.setText("");//Clears the text field after the error.
                 } catch (CustomException customException) {//When the fields are empty catches the error.
-                    JOptionPane.showMessageDialog(null, customException.getMessage() + ": Fields cannot be empty!");
+                    JOptionPane.showMessageDialog(null, customException.getMessage() + ": Fields cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             addBookFrame.getRootPane().setDefaultButton(addButton);
@@ -405,6 +419,7 @@ public class LibraryManagementApp extends JFrame {
             deleteBookFrame.setSize(400,300);
             deleteBookFrame.setLocationRelativeTo(null);
             deleteBookFrame.setVisible(true);
+            deleteBookFrame.setIconImage(icon.getImage());//Set icon to the frame.
 
             JPanel deleteBookPanel = new JPanel(new GridLayout(2,2));
             deleteBookFrame.add(deleteBookPanel);
@@ -439,18 +454,18 @@ public class LibraryManagementApp extends JFrame {
                         Books book = iterator.next();
                         if (book.getBookId() == bookId) {
                             iterator.remove();
-                            JOptionPane.showMessageDialog(null, "Book deleted successfully");
+                            JOptionPane.showMessageDialog(null, "Book deleted successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
                             deleteBookFrame.dispose();
                             break;
                         }
                         if (!iterator.hasNext()) {
-                            JOptionPane.showMessageDialog(null, "Book not found");
+                            JOptionPane.showMessageDialog(null, "Book not found!", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     }
                     LibraryManagementSystem.dwriteBooksToFile(books, booksFilePath);
                 }
                 catch (NumberFormatException ex){
-                    JOptionPane.showMessageDialog(null,"Please enter an integer value");
+                    JOptionPane.showMessageDialog(null,"Please enter an integer value!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             deleteBookFrame.getRootPane().setDefaultButton(deleteButton);
@@ -469,6 +484,7 @@ public class LibraryManagementApp extends JFrame {
             deleteUserFrame.setSize(400, 300);
             deleteUserFrame.setLocationRelativeTo(null);
             deleteUserFrame.setVisible(true);
+            deleteUserFrame.setIconImage(icon.getImage());//Set icon to the frame.
 
             JPanel deleteUserPanel = new JPanel(new GridLayout(2, 2));
             deleteUserFrame.add(deleteUserPanel);
@@ -502,18 +518,18 @@ public class LibraryManagementApp extends JFrame {
                         NormalUser user = iterator.next();
                         if (user.getUserID() == userId) {
                             iterator.remove();
-                            JOptionPane.showMessageDialog(null, "User deleted successfully");
+                            JOptionPane.showMessageDialog(null, "User deleted successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
                             deleteUserFrame.dispose();
                             break;
                         }
                         if (!iterator.hasNext()) {
-                            JOptionPane.showMessageDialog(null, "User not found");
+                            JOptionPane.showMessageDialog(null, "User not found!", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     }
                     LibraryManagementSystem.dwriteUsersToFile(users,usersFilePAth);
                 }
                 catch (NumberFormatException ex){
-                    JOptionPane.showMessageDialog(null,"Please enter an integer value");
+                    JOptionPane.showMessageDialog(null,"Please enter an integer value", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             deleteUserFrame.getRootPane().setDefaultButton(deleteButton);
@@ -530,6 +546,7 @@ public class LibraryManagementApp extends JFrame {
             JFrame usersFrame = new JFrame("Users");
             usersFrame.setResizable(false);
             usersFrame.setSize(700, 600);
+            usersFrame.setIconImage(icon.getImage());//Set icon to the frame.
 
             JPanel usersPanel = new JPanel(new BorderLayout());
             usersPanel.setBackground(Color.GREEN);
@@ -565,7 +582,6 @@ public class LibraryManagementApp extends JFrame {
                         // Finds the searched book from the Books file and write it to the screen.
                         NormalUser foundUser = LibraryManagementSystem.findUserById(Integer.parseInt(searchText));
                         if (foundUser != null) {
-
                             usersTextArea.setText(foundUser.toString());
                         } else {
                             usersTextArea.setText("User does not exist!");
@@ -575,7 +591,7 @@ public class LibraryManagementApp extends JFrame {
                         usersTextArea.setText(usersText.toString());
                     }
                 }catch (NumberFormatException e2){
-                    JOptionPane.showMessageDialog(null, "Can not be characters.");
+                    JOptionPane.showMessageDialog(null, "Can not be characters.", "Error", JOptionPane.ERROR_MESSAGE);
                     searchField.setText("");//Clearing the search field after error.
                 }
             });
