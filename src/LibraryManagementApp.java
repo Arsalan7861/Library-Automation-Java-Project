@@ -8,7 +8,6 @@ public class LibraryManagementApp extends JFrame {
     static final String booksFilePath = "books.txt";
     static final String usersFilePAth = "users.txt";
     static final String transactionsFilePath = "Transactions.txt";
-    static final String adminFilePath = "Admins.txt";
     private JButton loginButton;
     private JButton signUpButton;
     public int timelyUserId;//to keep user's ID when logged in.
@@ -56,7 +55,6 @@ public class LibraryManagementApp extends JFrame {
         mainPanel.add(signUpButton);
         add(mainPanel);
     }
-
     //When login button is clicked the tasks that are in login page.
     private void openLoginPage() {
         JFrame loginFrame = new JFrame("Login Page");
@@ -121,7 +119,6 @@ public class LibraryManagementApp extends JFrame {
         loginFrame.getRootPane().setDefaultButton(loginSubmitButton);//Set the default(Enter) button to loginSubmitButton
         loginFrame.setVisible(true);
     }
-
     private void openSignUpPage() {
         JFrame signUpFrame = new JFrame("Sign Up Page");
         signUpFrame.setSize(600, 400);
@@ -181,11 +178,10 @@ public class LibraryManagementApp extends JFrame {
                 }
                 int age = Integer.parseInt(ageField.getText());
                 String password1 = new String(passwordField.getPassword());//Casting password to String to check if it is empty or not.
-                if (emailField.getText().isEmpty() || nameField.getText().isEmpty() || password1.isEmpty())
-                    throw new CustomException();
+                if (emailField.getText().isEmpty() || nameField.getText().isEmpty() || password1.isEmpty()) throw new CustomException();
                 char[] passwordChars = passwordField.getPassword();
                 String password = new String(passwordChars);
-                int userId = LibraryManagementSystem.generateUserId();
+                int userId = LibraryManagementSystem.generateUserId();//Giving new ID to new user.
                 NormalUser newUser = new NormalUser(name, email, age, password);
                 newUser.setUserID(userId);
                 LibraryManagementSystem.addUser(newUser);
@@ -274,7 +270,6 @@ public class LibraryManagementApp extends JFrame {
             bookFrame.setVisible(true);
         });
     }
-
     private void adminPage(){
         JFrame adminFrame = new JFrame("Admin Page");
         adminFrame.setResizable(false);
@@ -467,7 +462,7 @@ public class LibraryManagementApp extends JFrame {
         deleteUser.setPreferredSize(new Dimension(150,80));
         adminPanel.add(deleteUser);
         deleteUser.addActionListener(e -> {
-            //Making new frame for delete book
+            //Making new frame for delete user.
             JFrame deleteUserFrame = new JFrame("Delete user");
             deleteUserFrame.setResizable(false);
             deleteUserFrame.setSize(400, 300);
@@ -511,7 +506,7 @@ public class LibraryManagementApp extends JFrame {
                             break;
                         }
                         if (!iterator.hasNext()) {
-                            JOptionPane.showMessageDialog(null, "Book not found");
+                            JOptionPane.showMessageDialog(null, "User not found");
                         }
                     }
                     LibraryManagementSystem.dwriteUsersToFile(users,usersFilePAth);
@@ -589,7 +584,6 @@ public class LibraryManagementApp extends JFrame {
         });
     }
 
-
     private void openMainApplicationPage() {//Main page after logging in.
         JFrame mainFrame = new JFrame("Main page");
         mainFrame.setSize(700, 600);
@@ -625,7 +619,7 @@ public class LibraryManagementApp extends JFrame {
                     JPanel userDetailPanel = new JPanel(new GridLayout(5,3,10,10)) {//Change user frame's background.
                         protected void paintComponent(Graphics g) {
                             super.paintComponent(g);
-                            ImageIcon backgroundImage = new ImageIcon("C:\\JavaKazybek\\images\\read2.jpg");
+                            ImageIcon backgroundImage = new ImageIcon("read2.jpg");
                             // Scale the image to fit the panel.
                             Image scaledImage = backgroundImage.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
                             ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -665,7 +659,7 @@ public class LibraryManagementApp extends JFrame {
 
                     // Add update button for name
                     JButton updateNameButton = new JButton("Update Name");
-                    updateNameButton.setPreferredSize(new Dimension(60,40));
+                    updateNameButton.setPreferredSize(new Dimension(50,40));
                     updateNameButton.setFocusPainted(false);
                     updateNameButton.setFont(updateButtonFont);
                     userDetailPanel.add(updateNameButton);
@@ -685,7 +679,7 @@ public class LibraryManagementApp extends JFrame {
                         Font textFieldFont = new Font("Arial", Font.PLAIN, 22);//Set font for textFields.
                         Color labelColor1 = Color.DARK_GRAY;//Set font color.
                         //Adding labels and text fields to the panel.
-                        JLabel nameLabel2 = new JLabel("Enter Updated Name:");
+                        JLabel nameLabel2 = new JLabel("Enter Name:");
                         nameLabel2.setFont(labelFont1);
                         nameLabel2.setForeground(labelColor1);
                         updateNamePanel.add(nameLabel2);
@@ -703,17 +697,20 @@ public class LibraryManagementApp extends JFrame {
 
                         //Adding change of name to a new name
                         saveButton.addActionListener(e2 -> {
-                            String newName = nameField.getText().trim();//for prevent an integer
-                            if (!newName.isEmpty() && newName.matches("[a-zA-A]+")) {
-                                try {
-                                    LibraryManagementSystem.updateUserNameInFile(thisUser.getUserID(), newName);
-                                    nameLabel1.setText(newName);
-                                    JOptionPane.showMessageDialog(null, "Name updated successfully");
-                                    updateNameFrame.dispose();
-                                } catch (NumberFormatException exception) {
-                                    JOptionPane.showMessageDialog(null, "Input only string characters");
+                            try {
+                                LibraryManagementSystem.updateUserNameInFile(thisUser.getUserID(), nameField.getText());
+                                nameLabel1.setText(nameField.getText());
+                                if (nameField.getText().isEmpty()) throw new CustomException();
+                                for (char c : nameField.getText().toCharArray()) {//Isimde sayinin olup olmadigi kontrol edip Exception'a firlatmak.
+                                    if (Character.isDigit(c)) {
+                                        throw new CustomException();
+                                    }
                                 }
-                            }else JOptionPane.showMessageDialog(null,"Name cannot be empty or an integer");
+                                JOptionPane.showMessageDialog(null, "Name updated successfully");
+                                updateNameFrame.dispose();
+                            } catch (CustomException exception){
+                                JOptionPane.showMessageDialog(null, exception.getMessage() + ":Name cannot be empty and can only be charachters!");
+                            }
                         });
                         updateNameFrame.getRootPane().setDefaultButton(saveButton);
                     });

@@ -249,22 +249,18 @@ public class LibraryManagementSystem {
         List<String> lines;
         try {
             lines = Files.readAllLines(filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            if (line.startsWith(userId + ",")) {
-                // Assuming the user information is stored as "userId,userName,email,age,password"
-                String[] parts = line.split(",");
-                parts[1] = newName; // Update the user's name
-                lines.set(i, String.join(",", parts));
-                break;
-            }
-        }
 
-        try {
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                if (line.startsWith(userId + ",")) {
+                    // Assuming the user information is stored as "userId,userName,email,age,password"
+                    String[] parts = line.split(",");
+                    parts[1] = newName; // Update the user's name
+                    lines.set(i, String.join(",", parts));
+                    break;
+                }
+            }
+
             Files.write(filePath, lines);
         } catch (IOException e) {
             e.printStackTrace();
