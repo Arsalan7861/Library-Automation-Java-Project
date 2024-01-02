@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 public class LibraryManagementApp extends JFrame {
     static final String booksFilePath = "books.txt";
@@ -21,7 +20,7 @@ public class LibraryManagementApp extends JFrame {
         setResizable(false);//Turns off the minimize button.
         setVisible(true);
 
-        ImageIcon icon = new ImageIcon("icon.jpg");
+        ImageIcon icon = new ImageIcon("Images/icon.jpg");
         setIconImage(icon.getImage());//Set an icon to the frame.
 
         loginButton = new JButton("Login");
@@ -42,7 +41,7 @@ public class LibraryManagementApp extends JFrame {
         JPanel mainPanel = new JPanel() {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon backgroundImage = new ImageIcon("millet.jpg");
+                ImageIcon backgroundImage = new ImageIcon("Images/millet.jpg");
                 // Scale the image to fit the panel.
                 Image scaledImage = backgroundImage.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -61,7 +60,7 @@ public class LibraryManagementApp extends JFrame {
         loginFrame.setSize(600, 400);
         loginFrame.setLocationRelativeTo(null);
 
-        ImageIcon icon = new ImageIcon("icon.jpg");
+        ImageIcon icon = new ImageIcon("Images/icon.jpg");
         loginFrame.setIconImage(icon.getImage());//Set an icon to the frame.
 
         JTextField userIdField = new JTextField();
@@ -128,7 +127,7 @@ public class LibraryManagementApp extends JFrame {
         signUpFrame.setSize(600, 400);
         signUpFrame.setLocationRelativeTo(null);
 
-        ImageIcon icon = new ImageIcon("icon.jpg");
+        ImageIcon icon = new ImageIcon("Images/icon.jpg");
         signUpFrame.setIconImage(icon.getImage());//Set an icon to the frame.
 
         Font textFieldFont = new Font("Arial", Font.PLAIN, 25);
@@ -215,7 +214,7 @@ public class LibraryManagementApp extends JFrame {
     private void allBooksButton(JPanel panel){
         Font buttonFont = new Font("Rockwell", Font.BOLD, 20);//Set font for the buttons.
         //Making button for seeing the books.
-        ImageIcon allBooksIcon = new ImageIcon("booksIcon.jpg");//Icon for the button.
+        ImageIcon allBooksIcon = new ImageIcon("Images/booksIcon.jpg");//Icon for the button.
         JButton booksButton = new JButton("All Books");
         booksButton.setFont(buttonFont);
         booksButton.setFocusPainted(false);
@@ -229,7 +228,7 @@ public class LibraryManagementApp extends JFrame {
             bookFrame.setResizable(false);
             bookFrame.setSize(700, 600);
 
-            ImageIcon icon = new ImageIcon("icon.jpg");
+            ImageIcon icon = new ImageIcon("Images/icon.jpg");
             bookFrame.setIconImage(icon.getImage());//Set an icon to the frame.
 
             JPanel bookPanel = new JPanel(new BorderLayout());
@@ -284,6 +283,7 @@ public class LibraryManagementApp extends JFrame {
             bookFrame.setVisible(true);
         });
     }
+    //Admin page.
     private void adminPage(){
         JFrame adminFrame = new JFrame("Admin Page");
         adminFrame.setResizable(false);
@@ -291,13 +291,13 @@ public class LibraryManagementApp extends JFrame {
         adminFrame.setLocationRelativeTo(null);
         adminFrame.setVisible(true);
 
-        ImageIcon icon = new ImageIcon("icon.jpg");
+        ImageIcon icon = new ImageIcon("Images/icon.jpg");
         adminFrame.setIconImage(icon.getImage());//Set an icon to the frame.
         //Add background to admin panel.
         JPanel adminPanel = new JPanel(){
             protected void paintComponent(Graphics g){
                 super.paintComponent(g);
-                ImageIcon backgroundImage = new ImageIcon("admin.jpg");
+                ImageIcon backgroundImage = new ImageIcon("Images/admin.jpg");
                 // Scale the image to fit the panel.
                 Image scaledImage = backgroundImage.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -310,7 +310,7 @@ public class LibraryManagementApp extends JFrame {
 
         Font buttonFont = new Font("Rockwell", Font.BOLD, 20);//Set font for the buttons.
         //Adding button that adds the book.
-        ImageIcon addBookIcon = new ImageIcon("icon1.png");//Icon for the button.
+        ImageIcon addBookIcon = new ImageIcon("Images/addBookIcon.jpeg");//Icon for the button.
         JButton addBook = new JButton("Add Book");
         addBook.setFont(buttonFont);
         addBook.setFocusPainted(false);
@@ -413,7 +413,7 @@ public class LibraryManagementApp extends JFrame {
             addBookFrame.setVisible(true);
         });
         //Adding button that delete book.
-        ImageIcon deleteBookIcon = new ImageIcon("icon1.png");//Icon for the button.
+        ImageIcon deleteBookIcon = new ImageIcon("Images/deleteBookIcon.jpeg");//Icon for the button.
         JButton deleteBook = new JButton("Delete Book");
         deleteBook.setFont(buttonFont);
         deleteBook.setFocusPainted(false);
@@ -481,7 +481,7 @@ public class LibraryManagementApp extends JFrame {
         });
 
         //Adding delete user button.
-        ImageIcon deleteUserIcon = new ImageIcon("icon1.png");//Icon for the button.
+        ImageIcon deleteUserIcon = new ImageIcon("Images/icon1.png");//Icon for the button.
         JButton deleteUser = new JButton("Delete User");
         deleteUser.setFont(buttonFont);
         deleteUser.setFocusPainted(false);
@@ -548,7 +548,7 @@ public class LibraryManagementApp extends JFrame {
         });
 
         //Adding all users button.
-        ImageIcon allUsersIcon = new ImageIcon("icon1.png");//Icon for the button.
+        ImageIcon allUsersIcon = new ImageIcon("Images/allUsersIcon.jpeg");//Icon for the button.
         JButton usersButton = new JButton("All Users");
         usersButton.setFont(buttonFont);
         usersButton.setFocusPainted(false);
@@ -615,7 +615,7 @@ public class LibraryManagementApp extends JFrame {
             usersFrame.setVisible(true);
         });
     }
-
+    //Normal user page.
     private void openMainApplicationPage() {//Main page after logging in.
         JFrame mainFrame = new JFrame("Main page");
         mainFrame.setSize(700, 600);
@@ -623,13 +623,13 @@ public class LibraryManagementApp extends JFrame {
         mainFrame.setVisible(true);
         mainFrame.setResizable(false);
 
-        ImageIcon icon = new ImageIcon("icon.jpg");
+        ImageIcon icon = new ImageIcon("Images/icon.jpg");
         mainFrame.setIconImage(icon.getImage());//Set an icon to the frame.
         //Adding background image to the panel.
         JPanel panel = new JPanel() {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                ImageIcon backgroundImage = new ImageIcon("mainFrame.jpeg");
+                ImageIcon backgroundImage = new ImageIcon("Images/mainFrame.jpeg");
                 // Scale the image to fit the panel.
                 Image scaledImage = backgroundImage.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -639,7 +639,7 @@ public class LibraryManagementApp extends JFrame {
         mainFrame.add(panel);
         Font buttonFont = new Font("Rockwell", Font.BOLD, 20);//Set font for the buttons.
         //Making me button that shows the information of the user.
-        ImageIcon meIcon = new ImageIcon("icon1.png");//Icon for the button.
+        ImageIcon meIcon = new ImageIcon("Images/icon1.png");//Icon for the button.
         JButton userButton = new JButton("Me");
         userButton.setFocusPainted(false);//Remove the focus button.
         userButton.setPreferredSize(new Dimension(200, 80));//Set size of the button manually.
@@ -960,7 +960,7 @@ public class LibraryManagementApp extends JFrame {
         allBooksButton(panel);//Invoke all books button method.
 
         //Making button for seeing user's books.
-        ImageIcon myBooksButton = new ImageIcon("icon1.png");//Icon for the button.
+        ImageIcon myBooksButton = new ImageIcon("Images/myBooksIcon.jpeg");//Icon for the button.
         JButton mybooksButton = new JButton("My Books");
         mybooksButton.setFont(buttonFont);
         mybooksButton.setFocusPainted(false);
@@ -996,7 +996,7 @@ public class LibraryManagementApp extends JFrame {
         });
 
         //Button for borrowing books.
-        ImageIcon borrowBookIcon = new ImageIcon("icon1.png");//Icon for the button.
+        ImageIcon borrowBookIcon = new ImageIcon("Images/borrowIcon.jpeg");//Icon for the button.
         JButton borrowBook = new JButton("Borrow Book");
         borrowBook.setFont(buttonFont);
         borrowBook.setPreferredSize(new Dimension(200, 80));
@@ -1050,7 +1050,7 @@ public class LibraryManagementApp extends JFrame {
         });
 
         //Adding button for returning book.
-        ImageIcon returnBookIcon = new ImageIcon("icon1.png");//Icon for the button.
+        ImageIcon returnBookIcon = new ImageIcon("Images/returnIcon.jpeg");//Icon for the button.
         JButton returnBook = new JButton("Return Book");
         returnBook.setFont(buttonFont);
         returnBook.setFocusPainted(false);
