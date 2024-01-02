@@ -607,6 +607,9 @@ public class LibraryManagementApp extends JFrame {
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
         mainFrame.setResizable(false);
+
+        ImageIcon icon = new ImageIcon("icon.jpg");
+        mainFrame.setIconImage(icon.getImage());//Set an icon to the frame.
         //Adding background image to the panel.
         JPanel panel = new JPanel() {
             protected void paintComponent(Graphics g) {
@@ -633,6 +636,8 @@ public class LibraryManagementApp extends JFrame {
                     JFrame userFrame = new JFrame("User Info");
                     userFrame.setResizable(false);
                     userFrame.setSize(700, 600);
+                    userFrame.setIconImage(icon.getImage());//Set an icon to the frame.
+
                     JPanel userDetailPanel = new JPanel(new GridLayout(7,5,10,10)) {//Change user frame's background.
                         protected void paintComponent(Graphics g) {
                             super.paintComponent(g);
@@ -688,6 +693,8 @@ public class LibraryManagementApp extends JFrame {
                         updateNameFrame.setSize(350, 200);
                         updateNameFrame.setLocationRelativeTo(null);
                         updateNameFrame.setVisible(true);
+                        updateNameFrame.setIconImage(icon.getImage());//Set an icon to the frame.
+
 
                         JPanel updateNamePanel = new JPanel(new GridLayout(2, 2));
                         updateNameFrame.add(updateNamePanel);
@@ -723,10 +730,10 @@ public class LibraryManagementApp extends JFrame {
                                 }
                                 nameLabel1.setText(nameField.getText());
                                 LibraryManagementSystem.updateUserNameInFile(thisUser.getUserID(), nameField.getText());
-                                JOptionPane.showMessageDialog(null, "Name updated successfully");
+                                JOptionPane.showMessageDialog(null, "Name updated successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
                                 updateNameFrame.dispose();
                             } catch (CustomException exception){
-                                JOptionPane.showMessageDialog(null, exception.getMessage() + ": Name cannot be empty and can only be charachters!");
+                                JOptionPane.showMessageDialog(null, exception.getMessage() + ": Name cannot be empty and can only be charachters!", "Error", JOptionPane.ERROR_MESSAGE);
                             }
                         });
                         updateNameFrame.getRootPane().setDefaultButton(saveButton);
@@ -755,6 +762,8 @@ public class LibraryManagementApp extends JFrame {
                         updateEmailFrame.setSize(350, 200);
                         updateEmailFrame.setLocationRelativeTo(null);
                         updateEmailFrame.setVisible(true);
+                        updateEmailFrame.setIconImage(icon.getImage());//Set an icon to the frame.
+
 
                         JPanel updateEmailPanel = new JPanel(new GridLayout(2, 2));
                         updateEmailFrame.add(updateEmailPanel);
@@ -785,10 +794,10 @@ public class LibraryManagementApp extends JFrame {
                                 if (emailField.getText().isEmpty() || !emailField.getText().contains("@") || !emailField.getText().endsWith(".com")) throw new CustomException();
                                 LibraryManagementSystem.updateUserEmailInFile(thisUser.getUserID(), emailField.getText());
                                 emailLabel1.setText(emailField.getText());
-                                JOptionPane.showMessageDialog(null, "Email updated successfully");
+                                JOptionPane.showMessageDialog(null, "Email updated successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
                                 updateEmailFrame.dispose();
                             } catch (CustomException exception) {
-                                JOptionPane.showMessageDialog(null, exception.getMessage() + ": Email cannot be empty and should contain '@' with '.com'");
+                                JOptionPane.showMessageDialog(null, exception.getMessage() + ": Email cannot be empty and should contain '@' with '.com'", "Error", JOptionPane.ERROR_MESSAGE);
                             }
                         });
                         updateEmailFrame.getRootPane().setDefaultButton(saveButton);
@@ -817,6 +826,8 @@ public class LibraryManagementApp extends JFrame {
                         updateAgeFrame.setSize(350, 200);
                         updateAgeFrame.setLocationRelativeTo(null);
                         updateAgeFrame.setVisible(true);
+                        updateAgeFrame.setIconImage(icon.getImage());//Set an icon to the frame.
+
 
                         JPanel updateAgePanel = new JPanel(new GridLayout(2, 2));
                         updateAgeFrame.add(updateAgePanel);
@@ -847,12 +858,12 @@ public class LibraryManagementApp extends JFrame {
                                 if (ageField.getText().isEmpty()) throw new CustomException();
                                 LibraryManagementSystem.updateUserAgeInFile(thisUser.getUserID(), Integer.parseInt(ageField.getText()));
                                 ageLabel1.setText(ageField.getText());
-                                JOptionPane.showMessageDialog(null, "Age updated successfully");
+                                JOptionPane.showMessageDialog(null, "Age updated successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
                                 updateAgeFrame.dispose();
                             } catch (NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(null, "Input only integer values!");
+                                JOptionPane.showMessageDialog(null, "Input only integer values!", "Error", JOptionPane.ERROR_MESSAGE);
                             } catch (CustomException exception){
-                                JOptionPane.showMessageDialog(null,exception.getMessage() + ": Age cannot be empty!");
+                                JOptionPane.showMessageDialog(null,exception.getMessage() + ": Age cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
                             }
                         });
                         updateAgeFrame.getRootPane().setDefaultButton(saveButton);
@@ -881,6 +892,8 @@ public class LibraryManagementApp extends JFrame {
                         updatePasswordFrame.setSize(350, 200);
                         updatePasswordFrame.setLocationRelativeTo(null);
                         updatePasswordFrame.setVisible(true);
+                        updatePasswordFrame.setIconImage(icon.getImage());//Set an icon to the frame.
+
 
                         JPanel updatePasswordPanel = new JPanel(new GridLayout(2, 2));
                         updatePasswordFrame.add(updatePasswordPanel);
@@ -911,10 +924,10 @@ public class LibraryManagementApp extends JFrame {
                                 if (passwordField.getText().isEmpty()) throw new CustomException();
                                 LibraryManagementSystem.updateUserPasswordInFile(thisUser.getUserID(), passwordField.getText());
                                 passwordLabel1.setText(passwordField.getText());
-                                JOptionPane.showMessageDialog(null, "Password updated successfully");
+                                JOptionPane.showMessageDialog(null, "Password updated successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
                                 updatePasswordFrame.dispose();
                             } catch (CustomException exception) {
-                                JOptionPane.showMessageDialog(null,exception.getMessage() + ": Password cannot be empty");
+                                JOptionPane.showMessageDialog(null,exception.getMessage() + ": Password cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
                             }
 
                         });
@@ -937,13 +950,14 @@ public class LibraryManagementApp extends JFrame {
         panel.add(mybooksButton);
         //Shows the user's books when My books' button is clicked.
         mybooksButton.addActionListener(e -> {
-            JFrame mybookFrame = new JFrame("My Books");
-            mybookFrame.setResizable(false);
-            mybookFrame.setSize(700, 600);
+            JFrame myBookFrame = new JFrame("My Books");
+            myBookFrame.setResizable(false);
+            myBookFrame.setSize(700, 600);
+            myBookFrame.setIconImage(icon.getImage());//Set an icon to the frame.
 
             JPanel mybook = new JPanel(new BorderLayout());
             mybook.setBackground(Color.WHITE);
-            mybookFrame.add(mybook);
+            myBookFrame.add(mybook);
 
             JTextArea booksTextArea1 = new JTextArea();
             booksTextArea1.setEditable(false);//Makes it uneditable.
@@ -957,8 +971,8 @@ public class LibraryManagementApp extends JFrame {
             booksTextArea1.setText(booksText1.toString());
             mybook.add(new JScrollPane(booksTextArea1), BorderLayout.CENTER);//for scrolling books
 
-            mybookFrame.setLocationRelativeTo(null);
-            mybookFrame.setVisible(true);
+            myBookFrame.setLocationRelativeTo(null);
+            myBookFrame.setVisible(true);
         });
 
         //Button for borrowing books.
@@ -973,6 +987,8 @@ public class LibraryManagementApp extends JFrame {
             borrowFrame.setSize(700, 600);
             borrowFrame.setLocationRelativeTo(null);
             borrowFrame.setVisible(true);
+            borrowFrame.setIconImage(icon.getImage());//Set an icon to the frame.
+
 
             JPanel borrowPanel = new JPanel();
             borrowFrame.add(borrowPanel);
@@ -998,11 +1014,11 @@ public class LibraryManagementApp extends JFrame {
                     LocalDate thisDate = LocalDate.now();//The date of borrowed book.
                     LibraryManagementSystem.borrowBook(thisUser, bookToBorrow, thisDate);//Records the borrowed book's info.
                     LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions, transactionsFilePath);
-                    JOptionPane.showMessageDialog(null, "Book borrowed successfully");
+                    JOptionPane.showMessageDialog(null, "Book borrowed successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
                     LibraryManagementSystem.updateBookAvailabilityInFile(bookId, false);//After borrowing the book makes it unavailable.
                     borrowFrame.dispose();//Frame closes when the book is borrowed.
                 } else {
-                    JOptionPane.showMessageDialog(null, "Book not found");
+                    JOptionPane.showMessageDialog(null, "Book not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             borrowFrame.getRootPane().setDefaultButton(borrowButton);//Set the default(Enter) button to borrowButton.
@@ -1023,6 +1039,7 @@ public class LibraryManagementApp extends JFrame {
             returnFrame.setSize(400, 300);
             returnFrame.setLocationRelativeTo(null);
             returnFrame.setVisible(true);
+            returnFrame.setIconImage(icon.getImage());//Set an icon to the frame.
 
             JPanel returnPanel = new JPanel(new GridLayout(2, 2));
             returnFrame.add(returnPanel);
@@ -1062,11 +1079,11 @@ public class LibraryManagementApp extends JFrame {
                     LocalDate thisDate = LocalDate.now();//The date of returned book.
                     LibraryManagementSystem.returnBook(thisUser, bookToReturn, thisDate);//Records the returned book's info.
                     LibraryManagementSystem.updateBookAvailabilityInFile(true, bookId);//After returning the book makes it available.
-                    JOptionPane.showMessageDialog(null, "Book returned successfully");
+                    JOptionPane.showMessageDialog(null, "Book returned successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
                     Transaction.removeTransaction(thisUser.getUserID(), bookId);//removes the returned book from the file.
                     returnFrame.dispose();//Frame closes when the book is returned.
                 } else {
-                    JOptionPane.showMessageDialog(null, "Book not found");
+                    JOptionPane.showMessageDialog(null, "Book not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             returnFrame.getRootPane().setDefaultButton(returnButton);//Set the default(Enter) button to loginSubmitButton
