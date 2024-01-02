@@ -219,7 +219,7 @@ public class LibraryManagementApp extends JFrame {
         JButton booksButton = new JButton("All Books");
         booksButton.setFont(buttonFont);
         booksButton.setFocusPainted(false);
-        booksButton.setPreferredSize(new Dimension(150, 80));
+        booksButton.setPreferredSize(new Dimension(200, 80));
         booksButton.setIcon(allBooksIcon);//Set icon to button.
         booksButton.setIconTextGap(10);//Set gap between text and icon.
         panel.add(booksButton);
@@ -314,7 +314,7 @@ public class LibraryManagementApp extends JFrame {
         JButton addBook = new JButton("Add Book");
         addBook.setFont(buttonFont);
         addBook.setFocusPainted(false);
-        addBook.setPreferredSize(new Dimension(150, 80));
+        addBook.setPreferredSize(new Dimension(200, 80));
         addBook.setIcon(addBookIcon);//Set icon to button.
         addBook.setIconTextGap(10);//Set gap between text and icon.
         adminPanel.add(addBook);
@@ -417,7 +417,7 @@ public class LibraryManagementApp extends JFrame {
         JButton deleteBook = new JButton("Delete Book");
         deleteBook.setFont(buttonFont);
         deleteBook.setFocusPainted(false);
-        deleteBook.setPreferredSize(new Dimension(150,80));
+        deleteBook.setPreferredSize(new Dimension(200,80));
         deleteBook.setIcon(deleteBookIcon);//Set icon to button.
         deleteBook.setIconTextGap(10);//Set gap between text and icon.
         adminPanel.add(deleteBook);
@@ -485,7 +485,7 @@ public class LibraryManagementApp extends JFrame {
         JButton deleteUser = new JButton("Delete User");
         deleteUser.setFont(buttonFont);
         deleteUser.setFocusPainted(false);
-        deleteUser.setPreferredSize(new Dimension(150,80));
+        deleteUser.setPreferredSize(new Dimension(200,80));
         deleteUser.setIcon(deleteUserIcon);//Set icon to button.
         deleteUser.setIconTextGap(10);//Set gap between text and icon.
         adminPanel.add(deleteUser);
@@ -552,7 +552,7 @@ public class LibraryManagementApp extends JFrame {
         JButton usersButton = new JButton("All Users");
         usersButton.setFont(buttonFont);
         usersButton.setFocusPainted(false);
-        usersButton.setPreferredSize(new Dimension(150, 80));
+        usersButton.setPreferredSize(new Dimension(200, 80));
         usersButton.setIcon(allUsersIcon);//Set icon to button.
         usersButton.setIconTextGap(10);//Set gap between text and icon.
         adminPanel.add(usersButton);
@@ -642,7 +642,7 @@ public class LibraryManagementApp extends JFrame {
         ImageIcon meIcon = new ImageIcon("icon1.png");//Icon for the button.
         JButton userButton = new JButton("Me");
         userButton.setFocusPainted(false);//Remove the focus button.
-        userButton.setPreferredSize(new Dimension(150, 80));//Set size of the button manually.
+        userButton.setPreferredSize(new Dimension(200, 80));//Set size of the button manually.
         userButton.setFont(buttonFont);
         userButton.setIcon(meIcon);//Set an icon to the button.
         userButton.setIconTextGap(10);//Change the gap between text and icon.
@@ -964,7 +964,7 @@ public class LibraryManagementApp extends JFrame {
         JButton mybooksButton = new JButton("My Books");
         mybooksButton.setFont(buttonFont);
         mybooksButton.setFocusPainted(false);
-        mybooksButton.setPreferredSize(new Dimension(150, 80));
+        mybooksButton.setPreferredSize(new Dimension(200, 80));
         mybooksButton.setIcon(myBooksButton);//Set icon to the button.
         mybooksButton.setIconTextGap(10);//Set gap between text and icon.
         panel.add(mybooksButton);
@@ -997,9 +997,9 @@ public class LibraryManagementApp extends JFrame {
 
         //Button for borrowing books.
         ImageIcon borrowBookIcon = new ImageIcon("icon1.png");//Icon for the button.
-        JButton borrowBook = new JButton("Borrow a Book");
+        JButton borrowBook = new JButton("Borrow Book");
         borrowBook.setFont(buttonFont);
-        borrowBook.setPreferredSize(new Dimension(150, 80));
+        borrowBook.setPreferredSize(new Dimension(200, 80));
         borrowBook.setIcon(borrowBookIcon);//Set icon to the button.
         borrowBook.setIconTextGap(10);//Set gap between text and icon.
         panel.add(borrowBook);
@@ -1054,7 +1054,7 @@ public class LibraryManagementApp extends JFrame {
         JButton returnBook = new JButton("Return Book");
         returnBook.setFont(buttonFont);
         returnBook.setFocusPainted(false);
-        returnBook.setPreferredSize(new Dimension(150, 80));
+        returnBook.setPreferredSize(new Dimension(200, 80));
         returnBook.setIcon(returnBookIcon);//Set icon to the button.
         returnBook.setIconTextGap(10);//Set gap between text and icon.
         panel.add(returnBook);
