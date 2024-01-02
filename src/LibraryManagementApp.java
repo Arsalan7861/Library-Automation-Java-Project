@@ -180,7 +180,7 @@ public class LibraryManagementApp extends JFrame {
                 if (emailField.getText().contains("@") && emailField.getText().endsWith(".com")) {//Controlling the email.
                     email = emailField.getText();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Wrong mail.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Wrong mail. Should", "Error", JOptionPane.ERROR_MESSAGE);
                     emailField.setText("");
                 }
                 int age = Integer.parseInt(ageField.getText());
@@ -215,7 +215,7 @@ public class LibraryManagementApp extends JFrame {
     private void allBooksButton(JPanel panel){
         Font buttonFont = new Font("Rockwell", Font.BOLD, 20);//Set font for the buttons.
         //Making button for seeing the books.
-        ImageIcon allBooksIcon = new ImageIcon("icon1.png");//Icon for the button.
+        ImageIcon allBooksIcon = new ImageIcon("booksIcon.jpg");//Icon for the button.
         JButton booksButton = new JButton("All Books");
         booksButton.setFont(buttonFont);
         booksButton.setFocusPainted(false);
