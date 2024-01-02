@@ -215,10 +215,13 @@ public class LibraryManagementApp extends JFrame {
     private void allBooksButton(JPanel panel){
         Font buttonFont = new Font("Rockwell", Font.BOLD, 20);//Set font for the buttons.
         //Making button for seeing the books.
+        ImageIcon allBooksIcon = new ImageIcon("icon1.png");//Icon for the button.
         JButton booksButton = new JButton("All Books");
         booksButton.setFont(buttonFont);
         booksButton.setFocusPainted(false);
         booksButton.setPreferredSize(new Dimension(150, 80));
+        booksButton.setIcon(allBooksIcon);//Set icon to button.
+        booksButton.setIconTextGap(10);//Set gap between text and icon.
         panel.add(booksButton);
         //Shows the available books when All books' button is clicked. Also includes search books area.
         booksButton.addActionListener(e -> {
@@ -307,10 +310,13 @@ public class LibraryManagementApp extends JFrame {
 
         Font buttonFont = new Font("Rockwell", Font.BOLD, 20);//Set font for the buttons.
         //Adding button that adds the book.
+        ImageIcon addBookIcon = new ImageIcon("icon1.png");//Icon for the button.
         JButton addBook = new JButton("Add Book");
         addBook.setFont(buttonFont);
         addBook.setFocusPainted(false);
         addBook.setPreferredSize(new Dimension(150, 80));
+        addBook.setIcon(addBookIcon);//Set icon to button.
+        addBook.setIconTextGap(10);//Set gap between text and icon.
         adminPanel.add(addBook);
         //When clicked, It opens the frame for adding the book.
         addBook.addActionListener(e -> {
@@ -406,11 +412,14 @@ public class LibraryManagementApp extends JFrame {
             addBookFrame.setLocationRelativeTo(null);
             addBookFrame.setVisible(true);
         });
-        //Adding button that delete book
+        //Adding button that delete book.
+        ImageIcon deleteBookIcon = new ImageIcon("icon1.png");//Icon for the button.
         JButton deleteBook = new JButton("Delete Book");
         deleteBook.setFont(buttonFont);
         deleteBook.setFocusPainted(false);
         deleteBook.setPreferredSize(new Dimension(150,80));
+        deleteBook.setIcon(deleteBookIcon);//Set icon to button.
+        deleteBook.setIconTextGap(10);//Set gap between text and icon.
         adminPanel.add(deleteBook);
         deleteBook.addActionListener(e -> {
             //Making new frame for delete book
@@ -471,11 +480,14 @@ public class LibraryManagementApp extends JFrame {
             deleteBookFrame.getRootPane().setDefaultButton(deleteButton);
         });
 
-        //Adding delete user button
+        //Adding delete user button.
+        ImageIcon deleteUserIcon = new ImageIcon("icon1.png");//Icon for the button.
         JButton deleteUser = new JButton("Delete User");
         deleteUser.setFont(buttonFont);
         deleteUser.setFocusPainted(false);
         deleteUser.setPreferredSize(new Dimension(150,80));
+        deleteUser.setIcon(deleteUserIcon);//Set icon to button.
+        deleteUser.setIconTextGap(10);//Set gap between text and icon.
         adminPanel.add(deleteUser);
         deleteUser.addActionListener(e -> {
             //Making new frame for delete user.
@@ -535,11 +547,14 @@ public class LibraryManagementApp extends JFrame {
             deleteUserFrame.getRootPane().setDefaultButton(deleteButton);
         });
 
-        //Adding all users button
+        //Adding all users button.
+        ImageIcon allUsersIcon = new ImageIcon("icon1.png");//Icon for the button.
         JButton usersButton = new JButton("All Users");
         usersButton.setFont(buttonFont);
         usersButton.setFocusPainted(false);
         usersButton.setPreferredSize(new Dimension(150, 80));
+        usersButton.setIcon(allUsersIcon);//Set icon to button.
+        usersButton.setIconTextGap(10);//Set gap between text and icon.
         adminPanel.add(usersButton);
         //Shows the users when All users' button is clicked. Also includes search books area.
         usersButton.addActionListener(e -> {
@@ -624,10 +639,13 @@ public class LibraryManagementApp extends JFrame {
         mainFrame.add(panel);
         Font buttonFont = new Font("Rockwell", Font.BOLD, 20);//Set font for the buttons.
         //Making me button that shows the information of the user.
+        ImageIcon meIcon = new ImageIcon("icon1.png");//Icon for the button.
         JButton userButton = new JButton("Me");
         userButton.setFocusPainted(false);//Remove the focus button.
         userButton.setPreferredSize(new Dimension(150, 80));//Set size of the button manually.
         userButton.setFont(buttonFont);
+        userButton.setIcon(meIcon);//Set an icon to the button.
+        userButton.setIconTextGap(10);//Change the gap between text and icon.
         panel.add(userButton);
         //Actions me button do when clicked.
         userButton.addActionListener(e -> {
@@ -637,7 +655,6 @@ public class LibraryManagementApp extends JFrame {
                     userFrame.setResizable(false);
                     userFrame.setSize(700, 600);
                     userFrame.setIconImage(icon.getImage());//Set an icon to the frame.
-
                     JPanel userDetailPanel = new JPanel(new GridLayout(7,5,10,10)) {//Change user frame's background.
                         protected void paintComponent(Graphics g) {
                             super.paintComponent(g);
@@ -943,10 +960,13 @@ public class LibraryManagementApp extends JFrame {
         allBooksButton(panel);//Invoke all books button method.
 
         //Making button for seeing user's books.
+        ImageIcon myBooksButton = new ImageIcon("icon1.png");//Icon for the button.
         JButton mybooksButton = new JButton("My Books");
         mybooksButton.setFont(buttonFont);
         mybooksButton.setFocusPainted(false);
         mybooksButton.setPreferredSize(new Dimension(150, 80));
+        mybooksButton.setIcon(myBooksButton);//Set icon to the button.
+        mybooksButton.setIconTextGap(10);//Set gap between text and icon.
         panel.add(mybooksButton);
         //Shows the user's books when My books' button is clicked.
         mybooksButton.addActionListener(e -> {
@@ -976,9 +996,12 @@ public class LibraryManagementApp extends JFrame {
         });
 
         //Button for borrowing books.
+        ImageIcon borrowBookIcon = new ImageIcon("icon1.png");//Icon for the button.
         JButton borrowBook = new JButton("Borrow a Book");
         borrowBook.setFont(buttonFont);
         borrowBook.setPreferredSize(new Dimension(150, 80));
+        borrowBook.setIcon(borrowBookIcon);//Set icon to the button.
+        borrowBook.setIconTextGap(10);//Set gap between text and icon.
         panel.add(borrowBook);
         //Actions that the button do when clicking borrow a book button.
         borrowBook.addActionListener(e -> {
@@ -1027,10 +1050,13 @@ public class LibraryManagementApp extends JFrame {
         });
 
         //Adding button for returning book.
+        ImageIcon returnBookIcon = new ImageIcon("icon1.png");//Icon for the button.
         JButton returnBook = new JButton("Return Book");
         returnBook.setFont(buttonFont);
         returnBook.setFocusPainted(false);
         returnBook.setPreferredSize(new Dimension(150, 80));
+        returnBook.setIcon(returnBookIcon);//Set icon to the button.
+        returnBook.setIconTextGap(10);//Set gap between text and icon.
         panel.add(returnBook);
         //When return book button is clicked, actions that happen.
         returnBook.addActionListener(e -> {
