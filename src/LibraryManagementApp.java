@@ -23,10 +23,16 @@ public class LibraryManagementApp extends JFrame {
         ImageIcon icon = new ImageIcon("Images/icon.jpg");
         setIconImage(icon.getImage());//Set an icon to the frame.
 
+        ImageIcon loginIcon = new ImageIcon("Images/loginIcon.jpeg");
         loginButton = new JButton("Login");
+        loginButton.setIcon(loginIcon);
+        loginButton.setIconTextGap(10);
         loginButton.setFocusPainted(false);//Remove the button focus.
 
+        ImageIcon signupIcon = new ImageIcon("Images/signupIcon.jpeg");
         signUpButton = new JButton("Sign Up");
+        signUpButton.setIcon(signupIcon);
+        signUpButton.setIconTextGap(10);
         signUpButton.setFocusPainted(false);
 
         Font defaultFont = new Font("Rockwell", Font.PLAIN, 50);
