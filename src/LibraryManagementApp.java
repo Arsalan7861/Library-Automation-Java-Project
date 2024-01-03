@@ -1120,7 +1120,7 @@ public class LibraryManagementApp extends JFrame {
                         Transaction.removeTransaction(thisUser.getUserID(), bookId);//removes the returned book from the file.
                         returnFrame.dispose();//Frame closes when the book is returned.
                     } else {
-                        JOptionPane.showMessageDialog(null, "Book not found");
+                        JOptionPane.showMessageDialog(null, "Book not found","Error",JOptionPane.ERROR_MESSAGE);
                     }
                 }catch (NumberFormatException exception){
                     JOptionPane.showMessageDialog(null, "Can not be characters!", "Error", JOptionPane.ERROR_MESSAGE);
