@@ -185,7 +185,7 @@ public class LibraryManagementApp extends JFrame {
                 if (emailField.getText().contains("@") && emailField.getText().endsWith(".com")) {//Controlling the email.
                     email = emailField.getText();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Wrong mail. Should", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Wrong mail. Should contain '@' and ends with '.com'", "Error", JOptionPane.ERROR_MESSAGE);
                     emailField.setText("");
                 }
                 int age = Integer.parseInt(ageField.getText());
@@ -406,9 +406,8 @@ public class LibraryManagementApp extends JFrame {
                         JOptionPane.showMessageDialog(null, exception.getMessage() + ": Author cannot be a number!", "Error", JOptionPane.ERROR_MESSAGE);
                         authorField.setText("");//Clears the field after error.
                     }
-                } catch (
-                        NumberFormatException exception) {//When String value is entered in year field catches the error.
-                    JOptionPane.showMessageDialog(null, "Year can not be String", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (NumberFormatException exception) {//When String value is entered in year field catches the error.
+                    JOptionPane.showMessageDialog(null, "Year can not be characters!", "Error", JOptionPane.ERROR_MESSAGE);
                     yearField.setText("");//Clears the text field after the error.
                 } catch (CustomException customException) {//When the fields are empty catches the error.
                     JOptionPane.showMessageDialog(null, customException.getMessage() + ": Fields cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -480,7 +479,7 @@ public class LibraryManagementApp extends JFrame {
                     LibraryManagementSystem.dwriteBooksToFile(books, booksFilePath);
                 }
                 catch (NumberFormatException ex){
-                    JOptionPane.showMessageDialog(null,"Please enter an integer value!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null,"Can not be characters!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             deleteBookFrame.getRootPane().setDefaultButton(deleteButton);
@@ -547,7 +546,7 @@ public class LibraryManagementApp extends JFrame {
                     LibraryManagementSystem.dwriteUsersToFile(users,usersFilePAth);
                 }
                 catch (NumberFormatException ex){
-                    JOptionPane.showMessageDialog(null,"Please enter an integer value", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null,"Can not be characters!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             deleteUserFrame.getRootPane().setDefaultButton(deleteButton);
@@ -664,7 +663,7 @@ public class LibraryManagementApp extends JFrame {
                     JPanel userDetailPanel = new JPanel(new GridLayout(7,5,10,10)) {//Change user frame's background.
                         protected void paintComponent(Graphics g) {
                             super.paintComponent(g);
-                            ImageIcon backgroundImage = new ImageIcon("user1.jpeg");
+                            ImageIcon backgroundImage = new ImageIcon("Images/user1.jpeg");
                             // Scale the image to fit the panel.
                             Image scaledImage = backgroundImage.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
                             ImageIcon scaledIcon = new ImageIcon(scaledImage);
@@ -884,7 +883,7 @@ public class LibraryManagementApp extends JFrame {
                                 JOptionPane.showMessageDialog(null, "Age updated successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
                                 updateAgeFrame.dispose();
                             } catch (NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(null, "Input only integer values!", "Error", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Input only numeric value!", "Error", JOptionPane.ERROR_MESSAGE);
                             } catch (CustomException exception){
                                 JOptionPane.showMessageDialog(null,exception.getMessage() + ": Age cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
                             }
@@ -992,6 +991,8 @@ public class LibraryManagementApp extends JFrame {
             for (Transaction transaction : mytransactionsList) {//Writes borrowed books' info and last delivery date.
                 if (transaction.getBorrower().getUserID() == thisUser.getUserID()) {
                     booksText1.append(transaction.getBook().toString() + ", Last Delivery Date = " + transaction.getBorrowdate().plusDays(14)).append("\n");
+                }else {
+                    booksTextArea1.setText("You haven't borrowed any book yet");
                 }
             }
             booksTextArea1.setText(booksText1.toString());
@@ -1031,23 +1032,27 @@ public class LibraryManagementApp extends JFrame {
             borrowPanel.add(borrowButton);
             //When borrowButton is clicked
             borrowButton.addActionListener(e1 -> {
-                int bookId = Integer.parseInt(bookIdTextField.getText());
-                Books bookToBorrow = LibraryManagementSystem.findBookById(bookId);
-                boolean isAvailable;
-                if (bookToBorrow != null) {//Controls availability of the book.
-                    isAvailable = bookToBorrow.isAvailable();//Checks if the book is available or not.
-                } else {
-                    isAvailable = false;
-                }
-                if (bookToBorrow != null && isAvailable) {
-                    LocalDate thisDate = LocalDate.now();//The date of borrowed book.
-                    LibraryManagementSystem.borrowBook(thisUser, bookToBorrow, thisDate);//Records the borrowed book's info.
-                    LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions, transactionsFilePath);
-                    JOptionPane.showMessageDialog(null, "Book borrowed successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
-                    LibraryManagementSystem.updateBookAvailabilityInFile(bookId, false);//After borrowing the book makes it unavailable.
-                    borrowFrame.dispose();//Frame closes when the book is borrowed.
-                } else {
-                    JOptionPane.showMessageDialog(null, "Book not found", "Error", JOptionPane.ERROR_MESSAGE);
+                try {
+                    int bookId = Integer.parseInt(bookIdTextField.getText());
+                    Books bookToBorrow = LibraryManagementSystem.findBookById(bookId);
+                    boolean isAvailable;
+                    if (bookToBorrow != null) {//Controls availability of the book.
+                        isAvailable = bookToBorrow.isAvailable();//Checks if the book is available or not.
+                    } else {
+                        isAvailable = false;
+                    }
+                    if (bookToBorrow != null && isAvailable) {
+                        LocalDate thisDate = LocalDate.now();//The date of borrowed book.
+                        LibraryManagementSystem.borrowBook(thisUser, bookToBorrow, thisDate);//Records the borrowed book's info.
+                        LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions, transactionsFilePath);
+                        JOptionPane.showMessageDialog(null, "Book borrowed successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
+                        LibraryManagementSystem.updateBookAvailabilityInFile(bookId, false);//After borrowing the book makes it unavailable.
+                        borrowFrame.dispose();//Frame closes when the book is borrowed.
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Book not found", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }catch (NumberFormatException ex){
+                    JOptionPane.showMessageDialog(null,"Can not be characters!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             borrowFrame.getRootPane().setDefaultButton(borrowButton);//Set the default(Enter) button to borrowButton.
@@ -1098,24 +1103,27 @@ public class LibraryManagementApp extends JFrame {
 
             //Updates the Transaction file after clicking return button.
             returnButton.addActionListener(e1 -> {
-                int bookId = Integer.parseInt(idField.getText());
-                Books bookToReturn = LibraryManagementSystem.findBorrowedBookById(bookId);//Checks if the book exists or not.
-                boolean isAvailable;
-                if (bookToReturn != null) {//Controls availability of the book.
-                    isAvailable = bookToReturn.isAvailable();//Checks if the book is available or not.
-                } else {
-                    isAvailable = true;
-                }
-
-                if (bookToReturn != null && !isAvailable) {
-                    LocalDate thisDate = LocalDate.now();//The date of returned book.
-                    LibraryManagementSystem.returnBook(thisUser, bookToReturn, thisDate);//Records the returned book's info.
-                    LibraryManagementSystem.updateBookAvailabilityInFile(true, bookId);//After returning the book makes it available.
-                    JOptionPane.showMessageDialog(null, "Book returned successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
-                    Transaction.removeTransaction(thisUser.getUserID(), bookId);//removes the returned book from the file.
-                    returnFrame.dispose();//Frame closes when the book is returned.
-                } else {
-                    JOptionPane.showMessageDialog(null, "Book not found", "Error", JOptionPane.ERROR_MESSAGE);
+                try {
+                    int bookId = Integer.parseInt(idField.getText());
+                    Books bookToReturn = LibraryManagementSystem.findBorrowedBookById(bookId);//Checks if the book exists or not.
+                    boolean isAvailable;
+                    if (bookToReturn != null) {//Controls availability of the book.
+                        isAvailable = bookToReturn.isAvailable();//Checks if the book is available or not.
+                    } else {
+                        isAvailable = true;
+                    }
+                    if (bookToReturn != null && !isAvailable) {
+                        LocalDate thisDate = LocalDate.now();//The date of returned book.
+                        LibraryManagementSystem.returnBook(thisUser, bookToReturn, thisDate);//Records the returned book's info.
+                        LibraryManagementSystem.updateBookAvailabilityInFile(true, bookId);//After returning the book makes it available.
+                        JOptionPane.showMessageDialog(null, "Book returned successfully");
+                        Transaction.removeTransaction(thisUser.getUserID(), bookId);//removes the returned book from the file.
+                        returnFrame.dispose();//Frame closes when the book is returned.
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Book not found");
+                    }
+                }catch (NumberFormatException exception){
+                    JOptionPane.showMessageDialog(null, "Can not be characters!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             });
             returnFrame.getRootPane().setDefaultButton(returnButton);//Set the default(Enter) button to loginSubmitButton
