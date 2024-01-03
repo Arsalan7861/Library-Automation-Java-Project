@@ -13,7 +13,7 @@ public class LibraryManagementSystem {
     public static ArrayList<Transaction> alltransactions = new ArrayList<>();
     public static ArrayList<Admin> admins = new ArrayList<>();
 
-    public static List<Books> getAllbooks() {
+    public static ArrayList<Books> getAllbooks() {
         return allbooks;
     }
     //Adds user to allusers ArrayList
@@ -50,34 +50,6 @@ public class LibraryManagementSystem {
     public static void returnBook(NormalUser borrower, Books book, LocalDate returndate) {
         BorrowedBooks.returnBook(book);//Removes returned book from the borrowed books ArrayList.
         borrowers.remove(borrower);//Removes borrower from ArrayList.
-        System.out.println("Book returned successfully.");
-    }
-    public static Transaction findTransaction(NormalUser borrower, Books book) {
-        for (Transaction transaction : alltransactions) {
-            if (transaction.getBorrower().equals(borrower) && transaction.getBook().equals(book)) {
-                return transaction;
-            }
-        }
-        return null;
-    }
-
-    public void updateBook(String bookId, String nameofBook, int newYear, String newAuthor, String genre) {
-        for (Books book : allbooks) {
-            if (bookId.equals(book.getBookId())) {
-                book.setTitle(nameofBook);
-                book.setYearPublished(newYear);
-                book.setAuthor(newAuthor);
-                book.setGenre(genre);
-            }
-        }
-
-    }
-
-    public void writeBorrowers() {
-        for (User user : borrowers) {
-            System.out.print(user.getUserID() + " ");
-            System.out.println(user.getName());
-        }
     }
     //Writes user information to the file.
     public static void writeUsersToFile(List<NormalUser> users, String usersFilePath){
@@ -105,7 +77,6 @@ public class LibraryManagementSystem {
             e.printStackTrace();
         }
     }
-
     //Used in writeUsersToFile method checking the user ID if they are equal or not.
     private static boolean containsUsersWithId(List<NormalUser> users, int userId) {
         for (NormalUser user : users) {

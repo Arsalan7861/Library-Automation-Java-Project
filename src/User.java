@@ -59,6 +59,5 @@ public abstract class User{
                 ", Email: " + getEmail() +
                 ", Age: " + getAge() +
                 ", Password: " + getPassword();
-        // Add other fields as needed
     }
 }

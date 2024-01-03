@@ -27,13 +27,6 @@ public class Transaction {
         this.book = book;
         this.borrowdate = borrowdate;
     }
-    public boolean isLAte(){
-        if (returndate!=null && returndate.isAfter(borrowdate.plusDays(14))){
-            return true;
-        }
-       return false;
-    }
-
     //Removes the returned book from the ArrayList and updates the Transaction file.
     public static void removeTransaction(int userId, int bookId){
         ArrayList<Transaction> updatedTransactions = LibraryManagementSystem.readTransactionsFromFile(LibraryManagementApp.transactionsFilePath, userId, bookId);

@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
-
 public class BorrowedBooks extends Books {
     public static ArrayList<Books> borrowedBooks = new ArrayList<>();//Borrowed Books' ArrayList.
 
@@ -15,15 +13,5 @@ public class BorrowedBooks extends Books {
     //Remove borrowed books from the ArrayList.
     public static void returnBook(Books book) {
         borrowedBooks.remove(book);
-    }
-
-    //Find books by ID.
-    public static Books findBorrowedBookById(int id){
-        for (Books book :  borrowedBooks){
-            if (book.getBookId() == (id)){
-                return book;
-            }
-        }
-        return null;
     }
 }
