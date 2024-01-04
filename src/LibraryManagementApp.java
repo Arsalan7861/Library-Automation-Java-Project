@@ -65,6 +65,7 @@ public class LibraryManagementApp extends JFrame {
         JFrame loginFrame = new JFrame("Login Page");
         loginFrame.setSize(600, 400);
         loginFrame.setLocationRelativeTo(null);
+        loginFrame.setResizable(false);
 
         ImageIcon icon = new ImageIcon("Images/icon.jpg");
         loginFrame.setIconImage(icon.getImage());//Set an icon to the frame.
