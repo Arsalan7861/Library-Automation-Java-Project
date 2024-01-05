@@ -1130,7 +1130,7 @@ public class LibraryManagementApp extends JFrame {
                     }
                     if (bookToReturn != null && !isAvailable && thisUser.getUserID() == checkUserId) {
                         LocalDate thisDate = LocalDate.now();//The date of returned book.
-                        LibraryManagementSystem.returnBook(thisUser, bookToReturn, thisDate);//Records the returned book's info.
+                        LibraryManagementSystem.returnBook(thisUser, bookToReturn);//Records the returned book's info.
                         LibraryManagementSystem.updateBookAvailabilityInFile(true, bookId);//After returning the book makes it available.
                         JOptionPane.showMessageDialog(null, "Book returned successfully");
                         Transaction.removeTransaction(thisUser.getUserID(), bookId);//removes the returned book from the file.

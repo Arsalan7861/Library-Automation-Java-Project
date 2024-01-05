@@ -47,7 +47,7 @@ public class LibraryManagementSystem {
         }
         return null;
     }
-    public static void returnBook(NormalUser borrower, Books book, LocalDate returndate) {
+    public static void returnBook(NormalUser borrower, Books book) {
         BorrowedBooks.returnBook(book);//Removes returned book from the borrowed books ArrayList.
         borrowers.remove(borrower);//Removes borrower from ArrayList.
     }
