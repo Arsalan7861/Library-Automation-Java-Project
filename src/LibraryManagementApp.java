@@ -1013,24 +1013,32 @@ public class LibraryManagementApp extends JFrame {
         panel.add(borrowBook);
         //Actions that the button do when clicking borrow a book button.
         borrowBook.addActionListener(e -> {
-            JFrame borrowFrame = new JFrame();
+            JFrame borrowFrame = new JFrame("Borrow Book");
             borrowFrame.setResizable(false);
-            borrowFrame.setSize(700, 600);
+            borrowFrame.setSize(400, 300);
             borrowFrame.setLocationRelativeTo(null);
             borrowFrame.setVisible(true);
             borrowFrame.setIconImage(icon.getImage());//Set an icon to the frame.
 
-
-            JPanel borrowPanel = new JPanel();
+            JPanel borrowPanel = new JPanel(new GridLayout(2,2));
             borrowFrame.add(borrowPanel);
 
-            JLabel bookIdLabel = new JLabel("Enter Book ID");
-            JTextField bookIdTextField = new JTextField(10);
-            JButton borrowButton = new JButton("Borrow book");
+            Font labelFont = new Font("Rockwell", Font.PLAIN, 22);//Set font for the labels.
+            Font textFieldFont = new Font("Arial", Font.PLAIN, 22);//Set font for textFields.
 
+            JLabel bookIdLabel = new JLabel("Enter Book ID");
+            bookIdLabel.setFont(labelFont);
             borrowPanel.add(bookIdLabel);
+            JTextField bookIdTextField = new JTextField(10);
+            bookIdTextField.setFont(textFieldFont);
             borrowPanel.add(bookIdTextField);
+
+            borrowPanel.add(new JLabel());
+
+            JButton borrowButton = new JButton("Borrow book");
+            borrowButton.setFont(textFieldFont);//
             borrowPanel.add(borrowButton);
+
             //When borrowButton is clicked
             borrowButton.addActionListener(e1 -> {
                 try {
