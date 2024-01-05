@@ -530,17 +530,20 @@ public class LibraryManagementApp extends JFrame {
                     int userId = Integer.parseInt(idField.getText());
                     ArrayList<NormalUser> users = LibraryManagementSystem.readUsersFromFile(usersFilePAth);
                     Iterator<NormalUser> iterator = users.iterator();
+                    int check = 0;
                     while (iterator.hasNext()) {
                         NormalUser user = iterator.next();
                         if (user.getUserID() == userId) {
                             iterator.remove();
                             JOptionPane.showMessageDialog(null, "User deleted successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
                             deleteUserFrame.dispose();
+                            check = 1;
                             break;
                         }
-                        if (!iterator.hasNext()) {
-                            JOptionPane.showMessageDialog(null, "User not found!", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
+                    }
+                    if (!iterator.hasNext() && check == 0) {
+                        JOptionPane.showMessageDialog(null, "User not found!", "Error", JOptionPane.ERROR_MESSAGE);
+                        idField.setText("");
                     }
                     LibraryManagementSystem.dwriteUsersToFile(users,usersFilePAth);
                 }
