@@ -6,17 +6,14 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
-public class LibraryManagementSystem {
+public class LibraryManagementSystem{
     public static ArrayList<Books> allbooks = new ArrayList<>();
     public static ArrayList<NormalUser> borrowers = new ArrayList<>();
     public static ArrayList<NormalUser> allusers = new ArrayList<>();
     public static ArrayList<Transaction> alltransactions = new ArrayList<>();
     public static ArrayList<Admin> admins = new ArrayList<>();
 
-    public static ArrayList<Books> getAllbooks() {
-        return allbooks;
-    }
-    //Adds user to allusers ArrayList
+    //Adds user to allusers ArrayList.
     public static void addUser(NormalUser user) {
         ArrayList<NormalUser> existingUsers = readUsersFromFile(LibraryManagementApp.usersFilePAth);
         allusers.add(user);
@@ -38,15 +35,7 @@ public class LibraryManagementSystem {
         addBorrower(borrower);
         BorrowedBooks.addBorrowBook(book);//Adds borrowed books to the ArrayList in BorrowedBooks' class.
     }
-    //Searches book with id.
-    public static Books findBookById(int id){
-        for (Books book :  allbooks){
-            if (book.getBookId() == (id)){
-                return book;
-            }
-        }
-        return null;
-    }
+    //Removes returned book and borrower from ArrayList.
     public static void returnBook(NormalUser borrower, Books book) {
         BorrowedBooks.returnBook(book);//Removes returned book from the borrowed books ArrayList.
         borrowers.remove(borrower);//Removes borrower from ArrayList.
@@ -121,7 +110,7 @@ public class LibraryManagementSystem {
             e.printStackTrace();
         }
     }
-    //it writes books after all cleaning the file
+    //It writes books after cleaning the file.
     public static void dwriteBooksToFile(ArrayList<Books> books, String booksFilePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(booksFilePath))) {
             for (Books book : books) {
@@ -162,6 +151,67 @@ public class LibraryManagementSystem {
             e.printStackTrace();
         }
         return books;
+    }
+    //Writes the borrowed books' info to the Transctions.txt file.
+    public static void writeTransactionsToFile(ArrayList<Transaction> transactions, String transactionsFilePath){
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(transactionsFilePath))){
+            for (Transaction transaction : transactions){
+                writer.write(transaction.getBorrower().getUserID() + "," + transaction.getBook().getBookId() + "," + transaction.getBorrowdate());
+                writer.newLine();
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    //Reads the transactions' info from the Transaction.txt file.
+    public static ArrayList<Transaction> readTransactionsFromFile(String transactionsFilePath) {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(transactionsFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 3) {
+                    String userIdString = parts[0];
+                    int userId = Integer.parseInt(userIdString);
+                    NormalUser borrower = findUserById(userId);
+                    Books book = findBookById(Integer.parseInt(parts[1]));
+                    LocalDate borrowDate = LocalDate.parse(parts[2]);
+                    transactions.add(new Transaction(borrower, book, borrowDate));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return transactions;
+    }
+    //Read the transactions and remove the returned books. Method overload.
+    public static ArrayList<Transaction> readTransactionsFromFile(String transactionsFilePath, int userId, int bookId) {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(transactionsFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 3) {
+                    String userIdString = parts[0];
+                    int userId1 = Integer.parseInt(userIdString);
+                    NormalUser borrower = findUserById(userId1);
+                    Books book = findBookById(Integer.parseInt(parts[1]));
+                    LocalDate borrowDate = LocalDate.parse(parts[2]);
+                    transactions.add(new Transaction(borrower, book, borrowDate));//Add it to the ArrayList.
+                }
+            }
+            //Removes existing transaction.
+            Iterator<Transaction> iterator = transactions.iterator();
+            while (iterator.hasNext()) {
+                Transaction tr = iterator.next();
+                if (tr.getBorrower().getUserID() == userId && tr.getBook().getBookId() == bookId) {
+                    iterator.remove();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return transactions;
     }
     //When the book is borrowed makes it unavailable.
     public static void updateBookAvailabilityInFile(int bookId, boolean isAvailable){
@@ -307,84 +357,6 @@ public class LibraryManagementSystem {
             return;
         }
     }
-    //return book from books file by bookId
-    public static Books findBorrowedBookById(int bookId) {
-        Path filePath = Paths.get("books.txt");
-        try {
-            List<String> lines = Files.readAllLines(filePath);
-            for (String line : lines) {
-                String[] parts = line.split(",");
-                if (Integer.parseInt(parts[0]) == bookId) {
-                    // Assuming your constructor is (bookId, title, author, genre, available, yearPublished)
-                    return new Books(Integer.parseInt(parts[0]), parts[1], parts[2], parts[3], Boolean.parseBoolean(parts[4]), Integer.parseInt(parts[5]));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null; // Book not found
-    }
-    //Writes the borrowed books' info to the Transctions.txt file.
-    public static void writeTransactionsToFile(ArrayList<Transaction> transactions, String transactionsFilePath){
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(transactionsFilePath))){
-            for (Transaction transaction : transactions){
-                    writer.write(transaction.getBorrower().getUserID() + "," + transaction.getBook().getBookId() + "," + transaction.getBorrowdate());
-                    writer.newLine();
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-    //Reads the transactions' info from the Transaction.txt file.
-    public static ArrayList<Transaction> readTransactionsFromFile(String transactionsFilePath) {
-        ArrayList<Transaction> transactions = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(transactionsFilePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    String userIdString = parts[0];
-                    int userId = Integer.parseInt(userIdString);
-                    NormalUser borrower = findUserById(userId);
-                    Books book = findBookById(Integer.parseInt(parts[1]));
-                    LocalDate borrowDate = LocalDate.parse(parts[2]);
-                    transactions.add(new Transaction(borrower, book, borrowDate));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return transactions;
-    }
-    //Read the transactions and remove the returned books. Method overload.
-    public static ArrayList<Transaction> readTransactionsFromFile(String transactionsFilePath, int userId, int bookId) {
-        ArrayList<Transaction> transactions = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(transactionsFilePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    String userIdString = parts[0];
-                    int userId1 = Integer.parseInt(userIdString);
-                    NormalUser borrower = findUserById(userId1);
-                    Books book = findBookById(Integer.parseInt(parts[1]));
-                    LocalDate borrowDate = LocalDate.parse(parts[2]);
-                    transactions.add(new Transaction(borrower, book, borrowDate));//Add it to the ArrayList.
-                }
-            }
-            //Removes existing transaction.
-            Iterator<Transaction> iterator = transactions.iterator();
-            while (iterator.hasNext()) {
-                Transaction tr = iterator.next();
-                if (tr.getBorrower().getUserID() == userId && tr.getBook().getBookId() == bookId) {
-                    iterator.remove();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return transactions;
-    }
     //When logging in checks the userId and the password if it is correct or not.
     public static boolean authenticateUserbyPassword(int userId,String password){
         for (NormalUser user : allusers){
@@ -409,6 +381,32 @@ public class LibraryManagementSystem {
         for (NormalUser user : allusers){
             if (user.getUserID() == userId){
                 return user;
+            }
+        }
+        return null;
+    }
+    //return book from books file by bookId
+    public static Books findBorrowedBookById(int bookId) {
+        Path filePath = Paths.get("books.txt");
+        try {
+            List<String> lines = Files.readAllLines(filePath);
+            for (String line : lines) {
+                String[] parts = line.split(",");
+                if (Integer.parseInt(parts[0]) == bookId) {
+                    // Assuming your constructor is (bookId, title, author, genre, available, yearPublished)
+                    return new Books(Integer.parseInt(parts[0]), parts[1], parts[2], parts[3], Boolean.parseBoolean(parts[4]), Integer.parseInt(parts[5]));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null; // Book not found
+    }
+    //Searches book with id.
+    public static Books findBookById(int id){
+        for (Books book :  allbooks){
+            if (book.getBookId() == (id)){
+                return book;
             }
         }
         return null;

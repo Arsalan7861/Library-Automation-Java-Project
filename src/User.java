@@ -50,9 +50,6 @@ public abstract class User{
         this.password = password;
 
     }
-    public User(){
-
-    }
     public String toString() {
         return "User ID: " + getUserID() +
                 ", Name: " + getName() +

@@ -11,7 +11,6 @@ public class LibraryManagementApp extends JFrame {
     private JButton signUpButton;
     public int timelyUserId;//to keep user's ID when logged in.
     public NormalUser thisUser;
-
     public LibraryManagementApp() {
         setTitle("Library");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
