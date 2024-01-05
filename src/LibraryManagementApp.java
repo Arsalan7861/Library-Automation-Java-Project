@@ -41,7 +41,7 @@ public class LibraryManagementApp extends JFrame {
         signUpButton.setFont(defaultFont);
 
         //Adding actionListener to buttons.
-        loginButton.addActionListener(e -> openLoginPage());
+        loginButton.addActionListener(e->  openLoginPage());
         signUpButton.addActionListener(e -> openSignUpPage());
         //Adding background image to the panel.
         JPanel mainPanel = new JPanel() {
@@ -1006,6 +1006,7 @@ public class LibraryManagementApp extends JFrame {
         ImageIcon borrowBookIcon = new ImageIcon("Images/borrowIcon.jpeg");//Icon for the button.
         JButton borrowBook = new JButton("Borrow Book");
         borrowBook.setFont(buttonFont);
+        borrowBook.setFocusPainted(false);//Turns off focus of the button.
         borrowBook.setPreferredSize(new Dimension(200, 80));
         borrowBook.setIcon(borrowBookIcon);//Set icon to the button.
         borrowBook.setIconTextGap(10);//Set gap between text and icon.
@@ -1107,12 +1108,19 @@ public class LibraryManagementApp extends JFrame {
                     int bookId = Integer.parseInt(idField.getText());
                     Books bookToReturn = LibraryManagementSystem.findBorrowedBookById(bookId);//Checks if the book exists or not.
                     boolean isAvailable;
+                    int checkUserId = 0;
                     if (bookToReturn != null) {//Controls availability of the book.
                         isAvailable = bookToReturn.isAvailable();//Checks if the book is available or not.
+                        ArrayList<Transaction> transactions = LibraryManagementSystem.readTransactionsFromFile(transactionsFilePath);
+                        for (Transaction transaction : transactions){//Controls the user for returning the book.
+                            if (transaction.getBook().getBookId() == bookToReturn.getBookId()){
+                                checkUserId = transaction.getBorrower().getUserID();
+                            }
+                        }
                     } else {
                         isAvailable = true;
                     }
-                    if (bookToReturn != null && !isAvailable) {
+                    if (bookToReturn != null && !isAvailable && thisUser.getUserID() == checkUserId) {
                         LocalDate thisDate = LocalDate.now();//The date of returned book.
                         LibraryManagementSystem.returnBook(thisUser, bookToReturn, thisDate);//Records the returned book's info.
                         LibraryManagementSystem.updateBookAvailabilityInFile(true, bookId);//After returning the book makes it available.
@@ -1132,13 +1140,14 @@ public class LibraryManagementApp extends JFrame {
     public static void main(String[] args){
         Admin admin1 = new Admin(1, "Kazybek", "kazy@gmail.com", 21, "gazi", "admin");//Creating admin.
         LibraryManagementSystem.admins.add(admin1);
-        Books book1 = new Books(101, "The tale of two cities", "Charles Dickens", "historical fiction", true, 1859);
+
+        Books book1 = new Books(11, "The tale of two cities", "Charles Dickens", "historical fiction", true, 1859);
         LibraryManagementSystem.addBook(book1);//Add book to book Array List.
-        Books book2 = new Books(102, "The little prince", "Antoine de Saint Exupery", "Fantasy", true, 1943);
+        Books book2 = new Books(12, "The little prince", "Antoine de Saint Exupery", "Fantasy", true, 1943);
         LibraryManagementSystem.addBook(book2);
-        Books book3 = new Books(103, " Hobbit", "J.R TolkienThe", "Fantasy", true, 1937);
+        Books book3 = new Books(13, " Hobbit", "J.R TolkienThe", "Fantasy", true, 1937);
         LibraryManagementSystem.addBook(book3);
-        Books book4 = new Books(104, "The Alchemist", "Paulo Coelho", "Fantasy", true, 1988);
+        Books book4 = new Books(14, "The Alchemist", "Paulo Coelho", "Fantasy", true, 1988);
         LibraryManagementSystem.addBook(book4);
 
         LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks, booksFilePath);

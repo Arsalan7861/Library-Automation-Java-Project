@@ -428,7 +428,7 @@ public class LibraryManagementSystem {
     public static int generateBookId(){
         int bookId;
         if (allbooks.isEmpty()){
-            bookId = 101;
+            bookId = 11;
         }else {
             bookId = allbooks.getLast().getBookId() + 1;
         }
