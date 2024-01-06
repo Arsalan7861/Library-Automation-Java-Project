@@ -193,7 +193,7 @@ public class LibraryManagementApp extends JFrame {
                 if (emailField.getText().isEmpty() || nameField.getText().isEmpty() || password.isEmpty()) throw new CustomException();
                 int userId = LibraryManagementSystem.generateUserId();//Giving new ID to new user.
                 NormalUser newUser = new NormalUser(name, email, age, password);
-                newUser.setUserID(userId);
+                newUser.setUserID(userId);//Gives ID to new user.
                 LibraryManagementSystem.addUser(newUser);
                 JOptionPane.showMessageDialog(null, "User registrated successfully");
                 signUpFrame.dispose();//Closing the signup frame when registration is completed.
