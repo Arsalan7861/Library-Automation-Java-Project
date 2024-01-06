@@ -105,7 +105,7 @@ public class LibraryManagementApp extends JFrame {
                 if (LibraryManagementSystem.authenticateAdminByPassword(userId, password)){//Controls admins' IDs and passwords.
                     adminPage();
                     loginFrame.dispose();
-                }else if (LibraryManagementSystem.authenticateUserbyPassword(userId, password)){
+                }else if (LibraryManagementSystem.authenticateUserByPassword(userId, password)){
                     timelyUserId = userId;
                     thisUser = LibraryManagementSystem.findUserById(userId);
                     JOptionPane.showMessageDialog(null, "Login successful!", "Login", JOptionPane.INFORMATION_MESSAGE);
@@ -398,7 +398,7 @@ public class LibraryManagementApp extends JFrame {
                         }
                         Books book = new Books(bookId, nameField.getText(), authorField.getText(), genreField.getText(), true, publishedYear);//Makes a book object.
                         LibraryManagementSystem.addBook(book);//Adds the books to the ArrayList.
-                        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks, booksFilePath);//Writes the added book to the file.
+                        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allBooks, booksFilePath);//Writes the added book to the file.
                         JOptionPane.showMessageDialog(null, "The book has been added.", "Done", JOptionPane.INFORMATION_MESSAGE);
                         addBookFrame.dispose();//Frame closes after adding the book.
                     } catch (CustomException exception) {
@@ -656,7 +656,7 @@ public class LibraryManagementApp extends JFrame {
         panel.add(userButton);
         //Actions me button do when clicked.
         userButton.addActionListener(e -> {
-            for (NormalUser user : LibraryManagementSystem.allusers) {
+            for (NormalUser user : LibraryManagementSystem.allUsers) {
                 if (timelyUserId == user.getUserID()) {
                     JFrame userFrame = new JFrame("User Info");
                     userFrame.setResizable(false);
@@ -1055,7 +1055,7 @@ public class LibraryManagementApp extends JFrame {
                     if (bookToBorrow != null && isAvailable) {
                         LocalDate thisDate = LocalDate.now();//The date of borrowed book.
                         LibraryManagementSystem.borrowBook(thisUser, bookToBorrow, thisDate);//Records the borrowed book's info.
-                        LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.alltransactions, transactionsFilePath);
+                        LibraryManagementSystem.writeTransactionsToFile(LibraryManagementSystem.allTransactions, transactionsFilePath);
                         JOptionPane.showMessageDialog(null, "Book borrowed successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
                         LibraryManagementSystem.updateBookAvailabilityInFile(bookId, false);//After borrowing the book makes it unavailable.
                         borrowFrame.dispose();//Frame closes when the book is borrowed.
@@ -1131,7 +1131,6 @@ public class LibraryManagementApp extends JFrame {
                         isAvailable = true;
                     }
                     if (bookToReturn != null && !isAvailable && thisUser.getUserID() == checkUserId) {
-                        LocalDate thisDate = LocalDate.now();//The date of returned book.
                         LibraryManagementSystem.returnBook(thisUser, bookToReturn);//Records the returned book's info.
                         LibraryManagementSystem.updateBookAvailabilityInFile(true, bookId);//After returning the book makes it available.
                         JOptionPane.showMessageDialog(null, "Book returned successfully");
@@ -1160,11 +1159,11 @@ public class LibraryManagementApp extends JFrame {
         Books book4 = new Books(14, "The Alchemist", "Paulo Coelho", "Fantasy", true, 1988);
         LibraryManagementSystem.addBook(book4);
 
-        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allbooks, booksFilePath);
-        LibraryManagementSystem.allbooks = LibraryManagementSystem.readBooksFromFile(booksFilePath);
+        LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allBooks, booksFilePath);
+        LibraryManagementSystem.allBooks = LibraryManagementSystem.readBooksFromFile(booksFilePath);
 
-        LibraryManagementSystem.writeUsersToFile(LibraryManagementSystem.allusers, usersFilePAth);
-        LibraryManagementSystem.allusers = LibraryManagementSystem.readUsersFromFile(usersFilePAth);
+        LibraryManagementSystem.writeUsersToFile(LibraryManagementSystem.allUsers, usersFilePAth);
+        LibraryManagementSystem.allUsers = LibraryManagementSystem.readUsersFromFile(usersFilePAth);
 
         EventQueue.invokeLater(() -> {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {

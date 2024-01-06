@@ -7,17 +7,17 @@ import java.util.*;
 import java.util.List;
 
 public class LibraryManagementSystem{
-    public static ArrayList<Books> allbooks = new ArrayList<>();
+    public static ArrayList<Books> allBooks = new ArrayList<>();
     public static ArrayList<NormalUser> borrowers = new ArrayList<>();
-    public static ArrayList<NormalUser> allusers = new ArrayList<>();
-    public static ArrayList<Transaction> alltransactions = new ArrayList<>();
+    public static ArrayList<NormalUser> allUsers = new ArrayList<>();
+    public static ArrayList<Transaction> allTransactions = new ArrayList<>();
     public static ArrayList<Admin> admins = new ArrayList<>();
 
     //Adds user to allusers ArrayList.
     public static void addUser(NormalUser user) {
         ArrayList<NormalUser> existingUsers = readUsersFromFile(LibraryManagementApp.usersFilePAth);
-        allusers.add(user);
-        writeUsersToFile(allusers,LibraryManagementApp.usersFilePAth);
+        allUsers.add(user);
+        writeUsersToFile(allUsers,LibraryManagementApp.usersFilePAth);
     }
     //Add borrowers to the borrowers ArrayList.
     public static void addBorrower(NormalUser borrower) {
@@ -25,13 +25,13 @@ public class LibraryManagementSystem{
     }
     //Add books to the allbooks ArrayList.
     public static void addBook(Books book) {
-        allbooks.add(book);
+        allBooks.add(book);
     }
     //Records the borrowed books and the borrowers to ArrayLists.
     public static void borrowBook(NormalUser borrower, Books book, LocalDate borrowdate) {
         book.checkout();
         Transaction transaction = new Transaction(borrower, book, borrowdate);
-        alltransactions.add(transaction);
+        allTransactions.add(transaction);
         addBorrower(borrower);
         BorrowedBooks.addBorrowBook(book);//Adds borrowed books to the ArrayList in BorrowedBooks' class.
     }
@@ -41,8 +41,8 @@ public class LibraryManagementSystem{
         borrowers.remove(borrower);//Removes borrower from ArrayList.
     }
     //Writes user information to the file.
-    public static void writeUsersToFile(List<NormalUser> users, String usersFilePath){
-        List<NormalUser> existingUsers = readUsersFromFile(usersFilePath);
+    public static void writeUsersToFile(ArrayList<NormalUser> users, String usersFilePath){
+        ArrayList<NormalUser> existingUsers = readUsersFromFile(usersFilePath);
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(usersFilePath,true))){
             for (NormalUser user : users){
                 if (!containsUsersWithId(existingUsers,user.getUserID())){
@@ -67,7 +67,7 @@ public class LibraryManagementSystem{
         }
     }
     //Used in writeUsersToFile method checking the user ID if they are equal or not.
-    private static boolean containsUsersWithId(List<NormalUser> users, int userId) {
+    private static boolean containsUsersWithId(ArrayList<NormalUser> users, int userId) {
         for (NormalUser user : users) {
             if (user.getUserID() == userId) {
                 return true;
@@ -358,8 +358,8 @@ public class LibraryManagementSystem{
         }
     }
     //When logging in checks the userId and the password if it is correct or not.
-    public static boolean authenticateUserbyPassword(int userId,String password){
-        for (NormalUser user : allusers){
+    public static boolean authenticateUserByPassword(int userId, String password){
+        for (NormalUser user : allUsers){
             if (user.getUserID() == userId && user.getPassword().equals(password)){
                 return true;
             }
@@ -404,7 +404,7 @@ public class LibraryManagementSystem{
     }
     //Searches book with id.
     public static Books findBookById(int id){
-        for (Books book :  allbooks){
+        for (Books book : allBooks){
             if (book.getBookId() == (id)){
                 return book;
             }
@@ -414,21 +414,21 @@ public class LibraryManagementSystem{
     //Gives an ID to new user.
     public static int generateUserId(){
         int newUserId;
-        if (allusers.isEmpty()){
+        if (allUsers.isEmpty()){
             newUserId = 101;
         }
         else {
-            newUserId = allusers.getLast().getUserID() + 1;
+            newUserId = allUsers.getLast().getUserID() + 1;
         }
         return newUserId;
     }
     //Gives an ID to new added book.
     public static int generateBookId(){
         int bookId;
-        if (allbooks.isEmpty()){
+        if (allBooks.isEmpty()){
             bookId = 11;
         }else {
-            bookId = allbooks.getLast().getBookId() + 1;
+            bookId = allBooks.getLast().getBookId() + 1;
         }
         return bookId;
     }

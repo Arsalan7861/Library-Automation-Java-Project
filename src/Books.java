@@ -1,26 +1,11 @@
 public class Books{
+    private int bookId;//Book ID number.
     private String title;
     private String author;
-    private int bookId;//Book ID number.
     private String genre;//genre of the book.
     private boolean available;
     private int yearPublished;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
-    }
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-    public void setYearPublished(int yearPublished) {
-        this.yearPublished = yearPublished;
-    }
     public int getBookId() {
         return bookId;
     }
