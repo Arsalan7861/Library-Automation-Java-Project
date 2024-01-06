@@ -16,12 +16,6 @@ public class Transaction {
     public LocalDate getBorrowdate() {
         return borrowdate;
     }
-    public LocalDate getReturndate() {
-        return returndate;
-    }
-    public void setReturndate(LocalDate returndate){
-        this.returndate=returndate;
-    }
     public Transaction(NormalUser borrower, Books book, LocalDate borrowdate){
         this.borrower = borrower;
         this.book = book;
