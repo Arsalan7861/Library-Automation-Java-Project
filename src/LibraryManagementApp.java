@@ -189,9 +189,8 @@ public class LibraryManagementApp extends JFrame {
                     emailField.setText("");
                 }
                 int age = Integer.parseInt(ageField.getText());
-                String password1 = new String(passwordField.getPassword());//Casting password to String to check if it is empty or not.
-                if (emailField.getText().isEmpty() || nameField.getText().isEmpty() || password1.isEmpty()) throw new CustomException();
-                String password = new String(passwordField.getPassword());//Changes char to String.
+                String password = new String(passwordField.getPassword());//Casting password to String.
+                if (emailField.getText().isEmpty() || nameField.getText().isEmpty() || password.isEmpty()) throw new CustomException();
                 int userId = LibraryManagementSystem.generateUserId();//Giving new ID to new user.
                 NormalUser newUser = new NormalUser(name, email, age, password);
                 newUser.setUserID(userId);
