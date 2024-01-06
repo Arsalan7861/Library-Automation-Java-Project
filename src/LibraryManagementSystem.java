@@ -29,7 +29,7 @@ public class LibraryManagementSystem{
     }
     //Records the borrowed books and the borrowers to ArrayLists.
     public static void borrowBook(NormalUser borrower, Books book, LocalDate borrowdate) {
-        book.checkout();
+        book.checkout();//Checks the availability of the book.
         Transaction transaction = new Transaction(borrower, book, borrowdate);
         allTransactions.add(transaction);
         addBorrower(borrower);
