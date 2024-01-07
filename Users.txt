@@ -1,2 +1,0 @@
-101, Ali, ali@mail.com,23,123
-102, Aslan, asl@mail.com,21,123
