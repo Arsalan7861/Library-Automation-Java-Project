@@ -1118,12 +1118,19 @@ public class LibraryManagementApp extends JFrame {
                     int bookId = Integer.parseInt(idField.getText());
                     Books bookToReturn = LibraryManagementSystem.findBorrowedBookById(bookId);//Checks if the book exists or not.
                     boolean isAvailable;
+                    int chekUserId = 0;
                     if (bookToReturn != null) {//Controls availability of the book.
                         isAvailable = bookToReturn.isAvailable();//Checks if the book is available or not.
+                        ArrayList<Transaction> transactions = LibraryManagementSystem.readTransactionsFromFile(transactionsFilePath);
+                        for (Transaction transaction : transactions){//Controls the borrowed book if it belongs to the user.
+                            if (transaction.getBook().getBookId() == bookToReturn.getBookId()){
+                                chekUserId = transaction.getBorrower().getUserID();
+                            }
+                        }
                     } else {
                         isAvailable = true;
                     }
-                    if (bookToReturn != null && !isAvailable) {
+                    if (bookToReturn != null && !isAvailable && chekUserId == thisUser.getUserID()) {
                         LibraryManagementSystem.returnBook(thisUser, bookToReturn);//Records the returned book's info.
                         LibraryManagementSystem.updateBookAvailabilityInFile(true, bookId);//After returning the book makes it available.
                         JOptionPane.showMessageDialog(null, "Book returned successfully");
