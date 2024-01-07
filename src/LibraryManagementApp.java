@@ -185,7 +185,8 @@ public class LibraryManagementApp extends JFrame {
                 if (emailField.getText().contains("@") && emailField.getText().endsWith(".com")) {//Controlling the email.
                     email = emailField.getText();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Wrong mail. Should contain '@' and ends with '.com'", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Wrong mail. Should contain '@' and ends with '.com'",
+                            "Error", JOptionPane.ERROR_MESSAGE);
                     emailField.setText("");
                 }
                 int age = Integer.parseInt(ageField.getText());
@@ -207,7 +208,8 @@ public class LibraryManagementApp extends JFrame {
                 JOptionPane.showMessageDialog(null, exception.getMessage() + ": Fields cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 ageField.setText("");//Clearing the field after the error.
             } catch (NumberFormatException exception) {
-                JOptionPane.showMessageDialog(null, "String value is not accepted in the age field!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "String value is not accepted in the age field!",
+                        "Error", JOptionPane.ERROR_MESSAGE);
                 ageField.setText("");//Clearing the field after the error.
             }
         });
@@ -534,7 +536,8 @@ public class LibraryManagementApp extends JFrame {
                         NormalUser user = iterator.next();
                         if (user.getUserID() == userId) {
                             iterator.remove();
-                            JOptionPane.showMessageDialog(null, "User deleted successfully", "Done", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "User deleted successfully",
+                                    "Done", JOptionPane.INFORMATION_MESSAGE);
                             deleteUserFrame.dispose();
                             check = 1;
                             break;
@@ -1149,14 +1152,26 @@ public class LibraryManagementApp extends JFrame {
     public static void main(String[] args){
         Admin admin1 = new Admin(1, "Kazybek", "kazy@gmail.com", 21, "gazi", "admin");//Creating admin.
         LibraryManagementSystem.admins.add(admin1);
-        Books book1 = new Books(11, "The tale of two cities", "Charles Dickens", "historical fiction", true, 1859);
+        Books book1 = new Books(11, "Harry Potter ve Ölüm Yadigarları", "J.K Rowlıng", "Fantastik", true, 1997);
         LibraryManagementSystem.addBook(book1);//Add book to book Array List.
-        Books book2 = new Books(12, "The little prince", "Antoine de Saint Exupery", "Fantasy", true, 1943);
+        Books book2 = new Books(12, "İki Şehrin Hikayesi", "C. Dickens", "Tarihsel kurgu", true, 1859);
         LibraryManagementSystem.addBook(book2);
-        Books book3 = new Books(13, "Hobbit", "J.R TolkienThe", "Fantasy", true, 1937);
+        Books book3 = new Books(13, "On Kişiydiler", "A. Christie", "Gizem", true, 1939);
         LibraryManagementSystem.addBook(book3);
-        Books book4 = new Books(14, "The Alchemist", "Paulo Coelho", "Fantasy", true, 1988);
+        Books book4 = new Books(14, "Don Kişot", "M. Cervantes", "Satire", true, 1605);
         LibraryManagementSystem.addBook(book4);
+        Books book5 = new Books(15,"Küçük Prens","A. Saint-Exupery","Fantastik",true,1943);
+        LibraryManagementSystem.addBook(book5);
+        Books book6 = new Books(16, "Lolita", "V. Nabokov", "Roman", true, 1955);
+        LibraryManagementSystem.addBook(book6);
+        Books book7 = new Books(17, "Melekler ve Şeytanlar", "D. Brown", "Hikaye", true, 2000);
+        LibraryManagementSystem.addBook(book7);
+        Books book8 = new Books(18, "Savaş ve Barış", "L. Tolstoy", "Tarihsel Roman", true, 1869);
+        LibraryManagementSystem.addBook(book8);
+        Books book9 = new Books(19, "Aşk Hikayesi", "E. Segal", "Roman", true, 1970);
+        LibraryManagementSystem.addBook(book9);
+        Books book10 = new Books(20, "Altın Balık", "A. Puşkin", "Öykü", true, 1835);
+        LibraryManagementSystem.addBook(book10);
 
         LibraryManagementSystem.writeBooksToFile(LibraryManagementSystem.allBooks, booksFilePath);
         LibraryManagementSystem.allBooks = LibraryManagementSystem.readBooksFromFile(booksFilePath);
