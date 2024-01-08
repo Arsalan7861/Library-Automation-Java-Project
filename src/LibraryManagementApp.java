@@ -190,7 +190,10 @@ public class LibraryManagementApp extends JFrame {
                     emailField.setText("");
                 }
                 int age = Integer.parseInt(ageField.getText());
-                if(age < 0) JOptionPane.showMessageDialog(null, "Age can not be negative!", "Error", JOptionPane.ERROR_MESSAGE);
+                if(age < 0) {//Controls the afe if its negative.
+                    JOptionPane.showMessageDialog(null, "Age can not be negative!", "Error", JOptionPane.ERROR_MESSAGE);
+                    ageField.setText("");
+                }
                 String password = new String(passwordField.getPassword());//Casting password to String.
                 if (emailField.getText().isEmpty() || nameField.getText().isEmpty() || password.isEmpty()) throw new CustomException();
                 int userId = LibraryManagementSystem.generateUserId();//Giving new ID to new user.
@@ -391,6 +394,10 @@ public class LibraryManagementApp extends JFrame {
                 try {
                     int bookId = LibraryManagementSystem.generateBookId();//Generates new ID for the book.
                     int publishedYear = Integer.parseInt((yearField.getText()));//Change the published year to integer value.
+                    if (publishedYear > 2024) {//Controls the year.
+                        JOptionPane.showMessageDialog(null, "Invalid year!", "Error", JOptionPane.ERROR_MESSAGE);
+                        yearField.setText("");
+                    }
                     if (nameField.getText().isEmpty() || authorField.getText().isEmpty() || genreField.getText().isEmpty())
                         throw new CustomException();//If the fields are empty throws the exception.
                     try {
