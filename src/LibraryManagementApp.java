@@ -189,25 +189,26 @@ public class LibraryManagementApp extends JFrame {
                             "Error", JOptionPane.ERROR_MESSAGE);
                     emailField.setText("");
                 }
+                String password = new String(passwordField.getPassword());//Casting password to String.
+                if (emailField.getText().isEmpty() || nameField.getText().isEmpty() || password.isEmpty()) throw new CustomException();
                 int age = Integer.parseInt(ageField.getText());
                 if(age < 0) {//Controls the afe if its negative.
                     JOptionPane.showMessageDialog(null, "Age can not be negative!", "Error", JOptionPane.ERROR_MESSAGE);
                     ageField.setText("");
+                } else {
+                    int userId = LibraryManagementSystem.generateUserId();//Giving new ID to new user.
+                    NormalUser newUser = new NormalUser(name, email, age, password);
+                    newUser.setUserID(userId);//Gives ID to new user.
+                    LibraryManagementSystem.addUser(newUser);
+                    JOptionPane.showMessageDialog(null, "User registrated successfully");
+                    signUpFrame.dispose();//Closing the signup frame when registration is completed.
+                    JOptionPane.showMessageDialog(null, "Your User Id: " + userId);//Showing user Id to user.
                 }
-                String password = new String(passwordField.getPassword());//Casting password to String.
-                if (emailField.getText().isEmpty() || nameField.getText().isEmpty() || password.isEmpty()) throw new CustomException();
-                int userId = LibraryManagementSystem.generateUserId();//Giving new ID to new user.
-                NormalUser newUser = new NormalUser(name, email, age, password);
-                newUser.setUserID(userId);//Gives ID to new user.
-                LibraryManagementSystem.addUser(newUser);
-                JOptionPane.showMessageDialog(null, "User registrated successfully");
-                signUpFrame.dispose();//Closing the signup frame when registration is completed.
                 //Clearing the fields to register another user.
                 nameField.setText("");
                 emailField.setText("");
                 ageField.setText("");
                 passwordField.setText("");
-                JOptionPane.showMessageDialog(null, "Your User Id: " + userId);//Showing user Id to user.
             } catch (CustomException exception) {
                 JOptionPane.showMessageDialog(null, exception.getMessage() + ": Fields cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 ageField.setText("");//Clearing the field after the error.
