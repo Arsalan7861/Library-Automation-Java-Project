@@ -46,7 +46,8 @@ public class LibraryManagementSystem{
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(usersFilePath,true))){
             for (NormalUser user : users){
                 if (!containsUsersWithId(existingUsers,user.getUserID())){
-                    writer.write(user.getUserID() + ", " + user.getName() + ", " + user.getEmail() + "," + user.getAge() + "," + user.getPassword());
+                    writer.write(user.getUserID() + ", " + user.getName() + ", " + user.getEmail() + ","
+                            + user.getAge() + "," + user.getPassword());
                     writer.newLine();
                 }
             }
@@ -59,7 +60,8 @@ public class LibraryManagementSystem{
     public static void dwriteUsersToFile(ArrayList<NormalUser> users, String usersFilePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(usersFilePath))) {
             for (NormalUser user : users) {
-                writer.write(user.getUserID() + "," + user.getName() + "," + user.getEmail() + "," + user.getAge() + "," + user.getPassword());
+                writer.write(user.getUserID() + "," + user.getName() + "," + user.getEmail() + "," + user.getAge() +
+                        "," + user.getPassword());
                 writer.newLine();
             }
         } catch (IOException e) {

@@ -5,7 +5,6 @@ public class Transaction {
     private NormalUser borrower;
     private Books book;
     private LocalDate borrowdate;
-    private LocalDate returndate;
 
     public NormalUser getBorrower() {
         return borrower;
