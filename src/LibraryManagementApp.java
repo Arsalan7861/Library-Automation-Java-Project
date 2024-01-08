@@ -190,6 +190,7 @@ public class LibraryManagementApp extends JFrame {
                     emailField.setText("");
                 }
                 int age = Integer.parseInt(ageField.getText());
+                if(age < 0) JOptionPane.showMessageDialog(null, "Age can not be negative!", "Error", JOptionPane.ERROR_MESSAGE);
                 String password = new String(passwordField.getPassword());//Casting password to String.
                 if (emailField.getText().isEmpty() || nameField.getText().isEmpty() || password.isEmpty()) throw new CustomException();
                 int userId = LibraryManagementSystem.generateUserId();//Giving new ID to new user.
@@ -1152,6 +1153,7 @@ public class LibraryManagementApp extends JFrame {
     public static void main(String[] args){
         Admin admin1 = new Admin(1, "Kazybek", "kazy@gmail.com", 21, "gazi", "admin");//Creating admin.
         LibraryManagementSystem.admins.add(admin1);
+
         Books book1 = new Books(11, "Harry Potter ve Ölüm Yadigarları", "J.K Rowlıng", "Fantastik", true, 1997);
         LibraryManagementSystem.addBook(book1);//Add book to book Array List.
         Books book2 = new Books(12, "İki Şehrin Hikayesi", "C. Dickens", "Tarihsel kurgu", true, 1859);
